@@ -1,0 +1,27 @@
+{
+  "name": "@vipsolucoes/dynamic-form",
+  "version": "1.0.0",
+  "description": "Biblioteca de formularios dinamicos para Angular com PrimeNG",
+  "license": "MIT",
+  "keywords": [
+    "angular",
+    "primeng",
+    "dynamic-form",
+    "forms",
+    "reactive-forms"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vipsolucoes/dynamic-form.git"
+  },
+  "peerDependencies": {
+    "@angular/common": "^19.0.0 || ^20.0.0 || ^21.0.0",
+    "@angular/core": "^19.0.0 || ^20.0.0 || ^21.0.0",
+    "@angular/forms": "^19.0.0 || ^20.0.0 || ^21.0.0",
+    "primeng": "^19.0.0 || ^20.0.0 || ^21.0.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false
+}

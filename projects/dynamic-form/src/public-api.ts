@@ -1,0 +1,26 @@
+/*
+ * Public API Surface of @vipsolucoes/dynamic-form
+ */
+
+// Componentes
+export { DynamicFormComponent } from './lib/components/dynamic-form/dynamic-form.component';
+export { DynamicFormErrorComponent } from './lib/components/form-field-error/form-field-error.component';
+
+// Fields (para uso standalone)
+export { InputTextFieldComponent } from './lib/fields/input-text-field.component';
+export { SelectFieldComponent } from './lib/fields/select-field.component';
+export { DatePickerFieldComponent } from './lib/fields/datepicker-field.component';
+export { NumberInputFieldComponent } from './lib/fields/number-input-field.component';
+export { PasswordFieldComponent } from './lib/fields/password-field.component';
+export { TextareaFieldComponent } from './lib/fields/textarea-field.component';
+export { ToggleSwitchFieldComponent } from './lib/fields/toggleswitch-field.component';
+
+// Interfaces
+export { iFormConfig, iFieldOption } from './lib/interfaces/form-config.interface';
+export { DynamicFormErrorMessages, DYNAMIC_FORM_ERROR_MESSAGES } from './lib/interfaces/error-messages.interface';
+
+// Services
+export { FieldRegistryService } from './lib/services/field-registry.service';
+
+// Utility functions
+export { provideDynamicFormConfig } from './lib/providers/dynamic-form.providers';

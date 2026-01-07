@@ -1,0 +1,53 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.dynamic-form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  
+  /* Espaçamento entre os campos */
+  padding: 1rem;
+  border: 1px solid var(--p-surface-border);
+  border-radius: var(--p-border-radius);
+  background-color: var(--p-surface-section);
+}
+
+.form-field-wrapper {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Garante que os componentes da PrimeNG e IftaLabel ocupem toda a largura */
+:is(p-inputNumber, p-password, p-select, p-iftalabel) {
+  width: 100%;
+}
+
+:host ::ng-deep {
+  .p-password,
+  .p-password input,
+  .p-inputnumber,
+  .p-inputnumber input,
+  .p-datepicker input,
+  .p-select {
+    width: 100% !important;
+  }
+}
+
+input[pInputText] {
+  width: 100%;
+}
+
+.hint-text {
+  margin-top: 0.5rem;
+  color: var(--p-text-muted-color);
+}
+
+.error-messages {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+}

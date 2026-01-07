@@ -1,0 +1,29 @@
+# Changelog
+
+Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
+
+O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
+e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
+
+## [1.0.0] - 2025-07-01
+
+### Adicionado
+
+- Versão inicial da biblioteca
+- Componente `DynamicFormComponent` para criação de formulários dinâmicos
+- Componente `DynamicFormErrorComponent` para exibição de mensagens de erro
+- Componentes de campo: Text, Email, Password, Number, Select, Datepicker, Textarea, ToggleSwitch
+- Suporte a validação via `ValidatorFn[]`
+- Propriedade `enabledWhen` para campos condicionais
+- Propriedade `disabled` para desabilitar campos
+- Sistema de registro de campos customizados (`FieldRegistryService`)
+- Mensagens de erro customizáveis via `provideDynamicFormConfig`
+- Suporte a objetos aninhados via notação de ponto
+- Layout customizado via `styleClass`
+- ChangeDetectionStrategy.OnPush em todos os componentes
+- Output `formReady` para notificar quando o formulário está pronto
+
+### Documentação
+
+- Documentação completa em `docs/dynamic-form.md`
+- README.md com quick start e exemplos básicos

@@ -1,0 +1,15 @@
+<form [formGroup]="form" class="dynamic-form-container">
+   @for (field of config(); track field.key) {
+      <div [class]="'form-field-wrapper ' + (field.styleClass || '')">
+         <!-- Dynamically render the correct field component -->
+         <ng-container [ngComponentOutlet]="getFieldComponent(field.controlType)" [ngComponentOutletInputs]="{ form: form, field: field }" />
+
+         @if (field.hint) {
+            <small class="hint-text">{{ field.hint }}</small>
+         }
+
+         <!-- Reusable error display component -->
+         <vp-form-field-error [control]="getControl(field.key)" />
+      </div>
+   }
+</form>

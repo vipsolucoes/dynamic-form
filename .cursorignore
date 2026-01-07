@@ -1,0 +1,33 @@
+# Node / Angular
+node_modules/
+dist/
+.angular/
+coverage/
+*.log
+
+# Builds .NET
+bin/
+obj/
+artifacts/
+
+# IDE / OS
+.vscode/
+.idea/
+*.user
+*.suo
+.DS_Store
+
+# Segredos / configs locais
+.env
+.env.*
+*.pfx
+*.snk
+secrets.json
+appsettings.*.json
+
+# Dumps, backups, exports
+*.bak
+*.zip
+*.7z
+*.rar
+*.dmp
