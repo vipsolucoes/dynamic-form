@@ -6,6 +6,9 @@
     "paths": {
       "dynamic-form": [
         "./dist/dynamic-form"
+      ],
+      "@vipsolucoes/dynamic-form": [
+        "./projects/dynamic-form/src/public-api.ts"
       ]
     },
     "strict": true,

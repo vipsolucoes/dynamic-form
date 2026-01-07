@@ -16,8 +16,9 @@ export { TextareaFieldComponent } from './lib/fields/textarea-field.component';
 export { ToggleSwitchFieldComponent } from './lib/fields/toggleswitch-field.component';
 
 // Interfaces
-export { iFormConfig, iFieldOption } from './lib/interfaces/form-config.interface';
-export { DynamicFormErrorMessages, DYNAMIC_FORM_ERROR_MESSAGES } from './lib/interfaces/error-messages.interface';
+export type { iFormConfig, iFieldOption } from './lib/interfaces/form-config.interface';
+export type { DynamicFormErrorMessages } from './lib/interfaces/error-messages.interface';
+export { DYNAMIC_FORM_ERROR_MESSAGES } from './lib/interfaces/error-messages.interface';
 
 // Services
 export { FieldRegistryService } from './lib/services/field-registry.service';

@@ -1,15 +1,21 @@
 <form [formGroup]="form" class="dynamic-form-container">
    @for (field of config(); track field.key) {
-      <div [class]="'form-field-wrapper ' + (field.styleClass || '')">
-         <!-- Dynamically render the correct field component -->
-         <ng-container [ngComponentOutlet]="getFieldComponent(field.controlType)" [ngComponentOutletInputs]="{ form: form, field: field }" />
+      @if (getFieldComponent(field.controlType); as fieldComponent) {
+         <div [class]="'form-field-wrapper ' + (field.styleClass || '')">
+            <!-- Dynamically render the correct field component -->
+            <ng-container [ngComponentOutlet]="fieldComponent" [ngComponentOutletInputs]="{ form: form, field: field }" />
 
-         @if (field.hint) {
-            <small class="hint-text">{{ field.hint }}</small>
-         }
+            @if (field.hint) {
+               <small class="hint-text">{{ field.hint }}</small>
+            }
 
-         <!-- Reusable error display component -->
-         <vp-form-field-error [control]="getControl(field.key)" />
-      </div>
+            <!-- Reusable error display component -->
+            <vp-form-field-error [control]="getControl(field.key)" />
+         </div>
+      } @else {
+         <div class="form-field-wrapper">
+            <small class="p-error">Tipo de campo '{{ field.controlType }}' não encontrado.</small>
+         </div>
+      }
    }
 </form>

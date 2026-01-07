@@ -159,7 +159,7 @@ export class DynamicFormComponent implements OnInit {
    * Obtém o componente a ser renderizado para um tipo de campo.
    * Primeiro verifica no registro customizado, depois nos componentes padrão.
    */
-  getFieldComponent(controlType: string): Type<any> | undefined {
+  getFieldComponent(controlType: string): Type<any> | null {
     // Verifica primeiro no registro customizado
     const customComponent = this.fieldRegistry.getField(controlType);
     if (customComponent) {
@@ -167,7 +167,7 @@ export class DynamicFormComponent implements OnInit {
     }
 
     // Fallback para componentes padrão
-    return this.fieldComponents[controlType];
+    return this.fieldComponents[controlType] || null;
   }
 
   getControl(key: string): AbstractControl {
