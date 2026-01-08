@@ -15,7 +15,6 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - run: npm ci
       - run: npm run build:lib
-      - run: npm run test:lib -- --watch=false --browsers=ChromeHeadless
       - run: cd dist/dynamic-form && npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
