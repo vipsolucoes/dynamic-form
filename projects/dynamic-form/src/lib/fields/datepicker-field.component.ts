@@ -21,7 +21,6 @@ import { iFormConfig } from '../interfaces/form-config.interface';
           [placeholder]="field().placeholder || ''"
           [dateFormat]="dateFormat()"
           [view]="field().dateViewType || 'date'"
-          [disabled]="field().disabled ?? false"
         />
         <label [for]="field().key">{{ field().label }}</label>
       </p-iftalabel>

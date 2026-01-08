@@ -15,7 +15,6 @@ import { iFormConfig } from '../interfaces/form-config.interface';
         [formControlName]="field().key"
         [inputId]="field().key"
         [invalid]="isInvalid()"
-        [disabled]="field().disabled ?? false"
         [trueValue]="field().toggleTrueValue ?? true"
         [falseValue]="field().toggleFalseValue ?? false" />
       <label [for]="field().key" class="toggleswitch-label">{{ field().label }}</label>

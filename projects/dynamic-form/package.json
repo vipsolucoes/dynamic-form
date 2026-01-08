@@ -1,6 +1,6 @@
 {
   "name": "@vipsolucoes/dynamic-form",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Biblioteca de formularios dinamicos para Angular com PrimeNG",
   "license": "MIT",
   "keywords": [
