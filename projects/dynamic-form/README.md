@@ -1,64 +1,376 @@
-# DynamicForm
+# @vipsolucoes/dynamic-form
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.0.
+Biblioteca Angular para criação de formulários dinâmicos baseados em configuração, construída com PrimeNG e Reactive Forms.
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## 📦 Instalação
 
 ```bash
-ng generate component component-name
+npm install @vipsolucoes/dynamic-form
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### Dependências
 
-```bash
-ng generate --help
+Esta biblioteca requer as seguintes dependências peer:
+
+- `@angular/core`: ^19.0.0 || ^20.0.0 || ^21.0.0
+- `@angular/common`: ^19.0.0 || ^20.0.0 || ^21.0.0
+- `@angular/forms`: ^19.0.0 || ^20.0.0 || ^21.0.0
+- `primeng`: ^19.0.0 || ^20.0.0 || ^21.0.0
+
+## 🚀 Uso Básico
+
+### 1. Importe o módulo no seu componente
+
+```typescript
+import { Component } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { DynamicFormComponent, iFormConfig } from '@vipsolucoes/dynamic-form';
+import { Validators } from '@angular/forms';
+
+@Component({
+  selector: 'app-example',
+  standalone: true,
+  imports: [DynamicFormComponent],
+  template: `
+    <vp-dynamic-form 
+      [config]="formConfig" 
+      (formReady)="onFormReady($event)">
+    </vp-dynamic-form>
+  `
+})
+export class ExampleComponent {
+  formConfig: iFormConfig[] = [
+    {
+      key: 'nome',
+      controlType: 'text',
+      label: 'Nome',
+      placeholder: 'Digite seu nome',
+      validators: [Validators.required, Validators.minLength(3)]
+    },
+    {
+      key: 'email',
+      controlType: 'email',
+      label: 'E-mail',
+      placeholder: 'Digite seu e-mail',
+      validators: [Validators.required, Validators.email]
+    },
+    {
+      key: 'idade',
+      controlType: 'number',
+      label: 'Idade',
+      validators: [Validators.required, Validators.min(18)]
+    }
+  ];
+
+  onFormReady(form: FormGroup): void {
+    console.log('Formulário pronto:', form);
+    // Acesse o formulário e seus valores
+    form.valueChanges.subscribe(values => {
+      console.log('Valores do formulário:', values);
+    });
+  }
+}
 ```
 
-## Building
+### 2. Controle de Submissão
 
-To build the library, run:
+O componente **não possui botão de submit interno**. O controle de submissão deve ser feito pelo componente pai usando `@ViewChild`:
+
+```typescript
+import { Component, ViewChild } from '@angular/core';
+import { DynamicFormComponent } from '@vipsolucoes/dynamic-form';
+import { FormGroup } from '@angular/forms';
+
+@Component({
+  selector: 'app-example',
+  standalone: true,
+  imports: [DynamicFormComponent],
+  template: `
+    <vp-dynamic-form #myForm [config]="formConfig" />
+    <button (click)="onSubmit()">Enviar</button>
+  `
+})
+export class ExampleComponent {
+  @ViewChild('myForm') myForm!: DynamicFormComponent;
+  
+  formConfig: iFormConfig[] = [
+    // ... sua configuração
+  ];
+
+  onSubmit(): void {
+    if (this.myForm.form.valid) {
+      console.log('Dados:', this.myForm.form.value);
+      // Enviar dados ao backend
+    } else {
+      this.myForm.form.markAllAsTouched();
+    }
+  }
+}
+```
+
+## 📝 Tipos de Campos Suportados
+
+A biblioteca suporta os seguintes tipos de campos:
+
+- `text` - Campo de texto
+- `email` - Campo de e-mail
+- `password` - Campo de senha
+- `number` - Campo numérico
+- `select` - Dropdown/Select
+- `datepicker` - Seletor de data
+- `textarea` - Área de texto
+- `toggleswitch` - Switch/Toggle
+
+## 🎯 Exemplos de Configuração
+
+### Campo de Texto
+
+```typescript
+{
+  key: 'nome',
+  controlType: 'text',
+  label: 'Nome Completo',
+  placeholder: 'Digite seu nome',
+  value: '', // Valor inicial
+  hint: 'Este campo é obrigatório',
+  validators: [Validators.required]
+}
+```
+
+### Campo Select
+
+```typescript
+{
+  key: 'pais',
+  controlType: 'select',
+  label: 'País',
+  placeholder: 'Selecione um país',
+  options: [
+    { label: 'Brasil', value: 'BR' },
+    { label: 'Estados Unidos', value: 'US' },
+    { label: 'Portugal', value: 'PT' }
+  ],
+  validators: [Validators.required]
+}
+```
+
+### Campo DatePicker
+
+```typescript
+{
+  key: 'dataNascimento',
+  controlType: 'datepicker',
+  label: 'Data de Nascimento',
+  dateFormat: 'dd/mm/yyyy',
+  dateViewType: 'date', // 'date' | 'month' | 'year'
+  validators: [Validators.required]
+}
+```
+
+### Campo Textarea
+
+```typescript
+{
+  key: 'observacoes',
+  controlType: 'textarea',
+  label: 'Observações',
+  placeholder: 'Digite suas observações',
+  textareaAutoResize: true,
+  textareaRows: 5,
+  validators: [Validators.maxLength(500)]
+}
+```
+
+### Campo ToggleSwitch
+
+```typescript
+{
+  key: 'aceitaTermos',
+  controlType: 'toggleswitch',
+  label: 'Aceito os termos e condições',
+  value: false,
+  toggleTrueValue: true,
+  toggleFalseValue: false
+}
+```
+
+### Campos Condicionais
+
+Você pode fazer campos serem habilitados/desabilitados baseado no valor de um toggle switch:
+
+```typescript
+{
+  key: 'notificacoes',
+  controlType: 'toggleswitch',
+  label: 'Receber notificações'
+},
+{
+  key: 'emailNotificacao',
+  controlType: 'email',
+  label: 'E-mail para notificações',
+  placeholder: 'Digite seu e-mail',
+  enabledWhen: 'notificacoes', // Campo será habilitado quando 'notificacoes' for true
+  validators: [Validators.required, Validators.email]
+}
+```
+
+### Layout Customizado com styleClass
+
+Use a propriedade `styleClass` para criar layouts customizados em grid:
+
+```typescript
+const layoutConfig: iFormConfig[] = [
+  {
+    key: 'firstName',
+    controlType: 'text',
+    label: 'Primeiro Nome',
+    validators: [Validators.required],
+    styleClass: 'grid-col-6' // Ocupa 6 colunas (50%)
+  },
+  {
+    key: 'lastName',
+    controlType: 'text',
+    label: 'Sobrenome',
+    validators: [Validators.required],
+    styleClass: 'grid-col-6' // Ocupa 6 colunas (50%)
+  },
+  {
+    key: 'email',
+    controlType: 'email',
+    label: 'E-mail',
+    validators: [Validators.required, Validators.email],
+    styleClass: 'grid-col-12' // Ocupa 12 colunas (100%)
+  }
+];
+```
+
+Você precisará definir as classes CSS no seu componente ou globalmente:
+
+```css
+.form-grid-layout {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1rem;
+}
+
+.grid-col-12 { grid-column: span 12; }
+.grid-col-6 { grid-column: span 6; }
+.grid-col-4 { grid-column: span 4; }
+.grid-col-3 { grid-column: span 3; }
+```
+
+## 🔧 API
+
+### DynamicFormComponent
+
+#### Inputs
+
+- `config: iFormConfig[]` (obrigatório) - Array com a configuração dos campos do formulário
+
+#### Outputs
+
+- `formReady: FormGroup` - Emite o FormGroup quando o formulário está pronto
+
+#### Métodos Públicos
+
+- `getControl(key: string): AbstractControl` - Obtém um controle do formulário pela chave
+
+### Interface iFormConfig
+
+```typescript
+interface iFormConfig {
+  key: string; // Identificador único do campo
+  controlType: 'text' | 'password' | 'email' | 'number' | 'select' | 'datepicker' | 'textarea' | 'toggleswitch';
+  label: string; // Texto do label
+  value?: any; // Valor inicial
+  placeholder?: string; // Texto de placeholder
+  hint?: string; // Texto de ajuda
+  disabled?: boolean; // Campo desabilitado
+  enabledWhen?: string; // Chave do toggle que controla este campo
+  styleClass?: string; // Classes CSS customizadas
+  options?: iFieldOption[]; // Opções para select (obrigatório se controlType for 'select')
+  validators?: ValidatorFn[]; // Validadores Angular
+  dateFormat?: string; // Formato da data (default: 'dd/mm/yyyy')
+  dateViewType?: 'date' | 'month' | 'year'; // Tipo de visualização da data (default: 'date')
+  textareaAutoResize?: boolean; // Auto-resize do textarea (default: false)
+  textareaRows?: number; // Número de linhas do textarea
+  textareaCols?: number; // Número de colunas do textarea
+  toggleTrueValue?: any; // Valor quando toggle está ativo (default: true)
+  toggleFalseValue?: any; // Valor quando toggle está inativo (default: false)
+}
+```
+
+## 🎨 Customização de Campos
+
+Você pode registrar campos customizados usando o `FieldRegistryService`:
+
+```typescript
+import { FieldRegistryService } from '@vipsolucoes/dynamic-form';
+import { CustomFieldComponent } from './custom-field.component';
+
+export class AppComponent {
+  constructor(private fieldRegistry: FieldRegistryService) {
+    // Registra um campo customizado
+    this.fieldRegistry.registerField('custom', CustomFieldComponent);
+  }
+}
+```
+
+Depois, use o tipo customizado na configuração:
+
+```typescript
+{
+  key: 'campoCustom',
+  controlType: 'custom',
+  label: 'Campo Customizado'
+}
+```
+
+## 🌐 Customização de Mensagens de Erro
+
+Você pode personalizar as mensagens de erro através do provider:
+
+```typescript
+import { provideDynamicFormConfig } from '@vipsolucoes/dynamic-form';
+import { ApplicationConfig } from '@angular/core';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideDynamicFormConfig({
+      required: 'Este campo é obrigatório',
+      email: 'E-mail inválido',
+      minlength: (requiredLength: number) => `Mínimo de ${requiredLength} caracteres necessários`,
+      maxlength: (requiredLength: number) => `Máximo de ${requiredLength} caracteres permitidos`,
+      custom: (error: any) => error.message || 'Erro de validação'
+    })
+  ]
+};
+```
+
+**Nota:** As mensagens `minlength` e `maxlength` são funções que recebem o comprimento requerido como parâmetro. A função `custom` permite tratar erros de validação personalizados.
+
+## 🛠️ Desenvolvimento
+
+### Build da biblioteca
 
 ```bash
 ng build dynamic-form
 ```
 
-This command will compile your project, and the build artifacts will be placed in the `dist/` directory.
+### Publicação no npm
 
-### Publishing the Library
-
-Once the project is built, you can publish your library by following these steps:
-
-1. Navigate to the `dist` directory:
-
-   ```bash
-   cd dist/dynamic-form
-   ```
-
-2. Run the `npm publish` command to publish your library to the npm registry:
-   ```bash
-   npm publish
-   ```
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+Após o build:
 
 ```bash
-ng test
+cd dist/dynamic-form
+npm publish
 ```
 
-## Running end-to-end tests
+## 📄 Licença
 
-For end-to-end (e2e) testing, run:
+MIT
 
-```bash
-ng e2e
-```
+## 🔗 Links
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- [Repositório](https://github.com/vipsolucoes/dynamic-form)
+- [Issues](https://github.com/vipsolucoes/dynamic-form/issues)
