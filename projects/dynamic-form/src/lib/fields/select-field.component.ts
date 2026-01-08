@@ -18,7 +18,6 @@ import { iFormConfig } from '../interfaces/form-config.interface';
           [formControlName]="field().key"
           [options]="field().options!"
           [placeholder]="field().placeholder || 'Selecione'"
-          [disabled]="field().disabled ?? false"
           optionLabel="label"
           optionValue="value"
           class="w-full" />

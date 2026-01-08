@@ -13,7 +13,7 @@ import { iFormConfig } from '../interfaces/form-config.interface';
   template: `
     <div [formGroup]="form()">
       <p-iftalabel>
-        <p-inputNumber [id]="field().key" [formControlName]="field().key" [placeholder]="field().placeholder || ''" [disabled]="field().disabled ?? false" styleClass="w-full" class="w-full" />
+        <p-inputNumber [id]="field().key" [formControlName]="field().key" [placeholder]="field().placeholder || ''" styleClass="w-full" class="w-full" />
         <label [for]="field().key">{{ field().label }}</label>
       </p-iftalabel>
     </div>

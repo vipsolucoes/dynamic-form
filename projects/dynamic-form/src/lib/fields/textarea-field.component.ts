@@ -21,7 +21,6 @@ import { iFormConfig } from '../interfaces/form-config.interface';
           [rows]="field().textareaRows ?? 1"
           [cols]="field().textareaCols"
           [autoResize]="field().textareaAutoResize ?? false"
-          [disabled]="field().disabled ?? false"
         ></textarea>
         <label [for]="field().key">{{ field().label }}</label>
       </p-iftalabel>

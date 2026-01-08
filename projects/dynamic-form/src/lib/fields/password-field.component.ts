@@ -19,7 +19,6 @@ import { iFormConfig } from '../interfaces/form-config.interface';
           [feedback]="false"
           [toggleMask]="true"
           [placeholder]="field().placeholder || ''"
-          [disabled]="field().disabled ?? false"
           styleClass="w-full"
           class="w-full" />
         <label [for]="field().key">{{ field().label }}</label>

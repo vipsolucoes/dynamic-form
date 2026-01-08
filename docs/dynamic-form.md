@@ -107,7 +107,7 @@ Exemplos: `InputTextFieldComponent`, `PasswordFieldComponent`, `NumberInputField
     - O `FormGroup` pai ao qual o controle pertence.
   - `field`: `input.required<iFormConfig>()`
     - A configuração específica para este campo.
-- **Responsabilidade**: Renderizar o elemento HTML de formulário apropriado (geralmente um componente PrimeNG) e vinculá-lo ao `FormGroup` através de `formControlName`. Eles também aplicam `id`, `placeholder` e `disabled` com base na `field` configuration.
+- **Responsabilidade**: Renderizar o elemento HTML de formulário apropriado (geralmente um componente PrimeNG) e vinculá-lo ao `FormGroup` através de `formControlName`. Eles também aplicam `id` e `placeholder` com base na `field` configuration. O estado `disabled` é gerenciado exclusivamente pelo `FormControl` através do Angular Reactive Forms.
 - **PrimeNG**: Cada componente de campo importa e utiliza os módulos PrimeNG relevantes para o seu tipo (e.g., `InputTextModule`, `PasswordModule`, `InputNumberModule`, `SelectModule`, `DatePickerModule`, `TextareaModule`, `ToggleSwitch`).
 - **IftaLabel**: A maioria dos componentes de campo utiliza `p-iftalabel` do PrimeNG para renderizar labels no estilo "infield top aligned", proporcionando uma melhor experiência visual. **Exceção**: `ToggleSwitchFieldComponent` utiliza label inline ao lado do componente, seguindo o padrão UX recomendado para toggles.
 
@@ -225,7 +225,7 @@ export interface iFormConfig {
 3.  No template do `DynamicFormComponent`, um `@for` itera sobre a mesma `config`:
     - Para cada `field`, o `controlType` é usado para lookup no método `getFieldComponent()` que verifica primeiro o registro customizado e depois os componentes padrão.
     - `ngComponentOutlet` renderiza dinamicamente o componente de campo correspondente, passando o `FormGroup` principal e a configuração específica do campo (`field`) como inputs.
-    - Cada componente de campo aplica a propriedade `disabled` ao componente PrimeNG correspondente através do binding `[disabled]="field().disabled ?? false"`.
+    - O estado `disabled` é gerenciado exclusivamente pelo `FormControl` através do Angular Reactive Forms. O Angular automaticamente aplica o atributo `disabled` no DOM quando o `FormControl` está desabilitado.
     - O `DynamicFormErrorComponent` é incluído para cada campo, recebendo o `FormControl` associado para exibir erros.
 
 ## Implementações Chave
@@ -821,7 +821,7 @@ const disabledFormConfig: iFormConfig[] = [
 
 - Quando `disabled: true`, o `FormControl` é criado usando `new FormControl({ value, disabled: true })`, garantindo que o campo esteja desabilitado tanto no nível do formulário reativo quanto na interface do usuário.
 - Campos desabilitados não podem ser editados pelo usuário e não participam da validação do formulário (campos desabilitados são excluídos de `form.value` por padrão do Angular).
-- A propriedade `disabled` é aplicada diretamente aos componentes PrimeNG através do binding `[disabled]`, garantindo que o estado visual do componente reflita o estado desabilitado.
+- O Angular Reactive Forms gerencia automaticamente o atributo `disabled` no DOM quando o `FormControl` está desabilitado, garantindo que o estado visual do componente reflita o estado desabilitado sem necessidade de binding explícito no template.
 - Útil para campos de visualização apenas, campos pré-preenchidos que não devem ser alterados, ou campos que dependem de condições específicas para serem habilitados.
 
 ### Campos de Toggle Switch
