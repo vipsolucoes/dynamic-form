@@ -1,3 +1,4 @@
+import { PRIMENG_PTBR } from './lib/i18n/primeng-ptbr';
 /*
  * Public API Surface of @vipsolucoes/dynamic-form
  */
@@ -24,4 +25,5 @@ export { DYNAMIC_FORM_ERROR_MESSAGES } from './lib/interfaces/error-messages.int
 export { FieldRegistryService } from './lib/services/field-registry.service';
 
 // Utility functions
+export { PRIMENG_PTBR } from './lib/i18n/primeng-ptbr';
 export { provideDynamicFormConfig } from './lib/providers/dynamic-form.providers';

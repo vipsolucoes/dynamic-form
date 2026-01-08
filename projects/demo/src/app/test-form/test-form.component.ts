@@ -561,7 +561,7 @@ export class TestFormComponent {
       validators: [Validators.required],
       placeholder: 'Selecione a data',
       dateViewType: 'date',
-      hint: 'Formato: dd/mm/yyyy',
+      hint: 'Formato: dd/mm/yy',
     },
     {
       key: 'cardExpiry',

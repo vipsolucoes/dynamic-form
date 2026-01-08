@@ -24,6 +24,7 @@ npm install @vipsolucoes/dynamic-form primeng
 ```
 
 **Requisitos:**
+
 - Angular 19+ ou 20+ ou 21+
 - PrimeNG 19+ ou 20+ ou 21+
 
@@ -38,9 +39,7 @@ import { Validators } from '@angular/forms';
   selector: 'app-example',
   standalone: true,
   imports: [DynamicFormComponent],
-  template: `
-    <vp-dynamic-form [config]="formConfig" />
-  `
+  template: ` <vp-dynamic-form [config]="formConfig" /> `,
 })
 export class ExampleComponent {
   formConfig: iFormConfig[] = [
@@ -133,6 +132,20 @@ import { FieldRegistryService } from '@vipsolucoes/dynamic-form';
 constructor(private fieldRegistry: FieldRegistryService) {
   this.fieldRegistry.registerField('custom', MyCustomFieldComponent);
 }
+```
+
+## 🌐 Tradução das mensagens para PT-BR
+
+A biblioteca disponibiliza uma tradução completa para português do Brasil das mensagens padrão do PrimeNG, garantindo consistência de idioma em todos os componentes (DatePicker, Table, Dialog, FileUpload, etc.).
+
+Para habilitar a tradução globalmente na aplicação, basta utilizar o provider do PrimeNG conforme o exemplo abaixo:
+
+```typescript
+import { PRIMENG_PTBR } from '@vipsolucoes/dynamic-form';
+
+providePrimeNG({
+  translation: PRIMENG_PTBR,
+});
 ```
 
 ## Contribuindo

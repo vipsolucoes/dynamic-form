@@ -5,7 +5,14 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
-## [v1.0.1] - 2025-07-01
+## [v1.0.2] - 2025-01-08
+
+### Adicionado
+
+- Tradução completa das mensagens do PrimeNG através da classe `PRIMENG_PTBR`
+- Corrige formato padrão para datas
+
+## [v1.0.1] - 2025-01-07
 
 ### Adicionado
 

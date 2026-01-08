@@ -5,6 +5,7 @@ import Aura from '@primeng/themes/aura';
 import { providePrimeNG } from 'primeng/config';
 
 import { routes } from './app.routes';
+import { PRIMENG_PTBR } from '@vipsolucoes/dynamic-form';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -19,6 +20,7 @@ export const appConfig: ApplicationConfig = {
           darkModeSelector: false,
         },
       },
+      translation: PRIMENG_PTBR,
     }),
   ],
 };

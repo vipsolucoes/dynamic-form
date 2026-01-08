@@ -21,7 +21,8 @@ import { iFormConfig } from '../interfaces/form-config.interface';
           [placeholder]="field().placeholder || ''"
           [dateFormat]="dateFormat()"
           [view]="field().dateViewType || 'date'"
-          [disabled]="field().disabled ?? false" />
+          [disabled]="field().disabled ?? false"
+        />
         <label [for]="field().key">{{ field().label }}</label>
       </p-iftalabel>
     </div>
@@ -57,6 +58,6 @@ export class DatePickerFieldComponent {
       return 'yy';
     }
 
-    return customFormat || 'dd/mm/yyyy';
+    return customFormat || 'dd/mm/yy';
   });
 }

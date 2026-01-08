@@ -19,7 +19,15 @@ export interface iFormConfig {
   /**
    * O tipo de controle a ser renderizado.
    */
-  controlType: 'text' | 'password' | 'email' | 'number' | 'select' | 'datepicker' | 'textarea' | 'toggleswitch';
+  controlType:
+    | 'text'
+    | 'password'
+    | 'email'
+    | 'number'
+    | 'select'
+    | 'datepicker'
+    | 'textarea'
+    | 'toggleswitch';
   /**
    * Texto a ser exibido no label do campo.
    */
@@ -59,7 +67,7 @@ export interface iFormConfig {
    */
   validators?: ValidatorFn[];
   /**
-   * Formato da data para o campo de data. Default: 'dd/mm/yyyy'.
+   * Formato da data para o campo de data. Default: 'dd/mm/yy'.
    */
   dateFormat?: string;
   /**

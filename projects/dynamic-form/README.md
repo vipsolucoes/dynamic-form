@@ -158,7 +158,7 @@ A biblioteca suporta os seguintes tipos de campos:
   key: 'dataNascimento',
   controlType: 'datepicker',
   label: 'Data de Nascimento',
-  dateFormat: 'dd/mm/yyyy',
+  dateFormat: 'dd/mm/yy',
   dateViewType: 'date', // 'date' | 'month' | 'year'
   validators: [Validators.required]
 }
@@ -303,7 +303,7 @@ interface iFormConfig {
   styleClass?: string; // Classes CSS customizadas
   options?: iFieldOption[]; // Opções para select (obrigatório se controlType for 'select')
   validators?: ValidatorFn[]; // Validadores Angular
-  dateFormat?: string; // Formato da data (default: 'dd/mm/yyyy')
+  dateFormat?: string; // Formato da data (default: 'dd/mm/yy')
   dateViewType?: 'date' | 'month' | 'year'; // Tipo de visualização da data (default: 'date')
   textareaAutoResize?: boolean; // Auto-resize do textarea (default: false)
   textareaRows?: number; // Número de linhas do textarea
@@ -361,6 +361,22 @@ export const appConfig: ApplicationConfig = {
 ```
 
 **Nota:** As mensagens `minlength` e `maxlength` são funções que recebem o comprimento requerido como parâmetro. A função `custom` permite tratar erros de validação personalizados.
+
+## 🌐 Internacionalização (PT-BR)
+
+A biblioteca já disponibiliza uma tradução completa para português do Brasil das mensagens padrão do PrimeNG, garantindo consistência de idioma em todos os componentes (DatePicker, Table, Dialog, FileUpload, etc.).
+
+Para habilitar a tradução globalmente na aplicação, basta utilizar o provider do PrimeNG conforme o exemplo abaixo:
+
+```typescript
+import { PRIMENG_PTBR } from '@vipsolucoes/dynamic-form';
+
+providePrimeNG({
+  translation: PRIMENG_PTBR,
+});
+```
+
+**Nota:** a tradução é aplicada de forma global e deve ser configurada durante o bootstrap da aplicação.
 
 ## 🛠️ Desenvolvimento
 
