@@ -32,11 +32,8 @@ import { Validators } from '@angular/forms';
   standalone: true,
   imports: [DynamicFormComponent],
   template: `
-    <vp-dynamic-form 
-      [config]="formConfig" 
-      (formReady)="onFormReady($event)">
-    </vp-dynamic-form>
-  `
+    <vp-dynamic-form [config]="formConfig" (formReady)="onFormReady($event)"> </vp-dynamic-form>
+  `,
 })
 export class ExampleComponent {
   formConfig: iFormConfig[] = [
@@ -45,27 +42,27 @@ export class ExampleComponent {
       controlType: 'text',
       label: 'Nome',
       placeholder: 'Digite seu nome',
-      validators: [Validators.required, Validators.minLength(3)]
+      validators: [Validators.required, Validators.minLength(3)],
     },
     {
       key: 'email',
       controlType: 'email',
       label: 'E-mail',
       placeholder: 'Digite seu e-mail',
-      validators: [Validators.required, Validators.email]
+      validators: [Validators.required, Validators.email],
     },
     {
       key: 'idade',
       controlType: 'number',
       label: 'Idade',
-      validators: [Validators.required, Validators.min(18)]
-    }
+      validators: [Validators.required, Validators.min(18)],
+    },
   ];
 
   onFormReady(form: FormGroup): void {
     console.log('Formulário pronto:', form);
     // Acesse o formulário e seus valores
-    form.valueChanges.subscribe(values => {
+    form.valueChanges.subscribe((values) => {
       console.log('Valores do formulário:', values);
     });
   }
@@ -88,11 +85,11 @@ import { FormGroup } from '@angular/forms';
   template: `
     <vp-dynamic-form #myForm [config]="formConfig" />
     <button (click)="onSubmit()">Enviar</button>
-  `
+  `,
 })
 export class ExampleComponent {
   @ViewChild('myForm') myForm!: DynamicFormComponent;
-  
+
   formConfig: iFormConfig[] = [
     // ... sua configuração
   ];
@@ -225,22 +222,22 @@ const layoutConfig: iFormConfig[] = [
     controlType: 'text',
     label: 'Primeiro Nome',
     validators: [Validators.required],
-    styleClass: 'grid-col-6' // Ocupa 6 colunas (50%)
+    styleClass: 'grid-col-6', // Ocupa 6 colunas (50%)
   },
   {
     key: 'lastName',
     controlType: 'text',
     label: 'Sobrenome',
     validators: [Validators.required],
-    styleClass: 'grid-col-6' // Ocupa 6 colunas (50%)
+    styleClass: 'grid-col-6', // Ocupa 6 colunas (50%)
   },
   {
     key: 'email',
     controlType: 'email',
     label: 'E-mail',
     validators: [Validators.required, Validators.email],
-    styleClass: 'grid-col-12' // Ocupa 12 colunas (100%)
-  }
+    styleClass: 'grid-col-12', // Ocupa 12 colunas (100%)
+  },
 ];
 ```
 
@@ -253,10 +250,18 @@ Você precisará definir as classes CSS no seu componente ou globalmente:
   gap: 1rem;
 }
 
-.grid-col-12 { grid-column: span 12; }
-.grid-col-6 { grid-column: span 6; }
-.grid-col-4 { grid-column: span 4; }
-.grid-col-3 { grid-column: span 3; }
+.grid-col-12 {
+  grid-column: span 12;
+}
+.grid-col-6 {
+  grid-column: span 6;
+}
+.grid-col-4 {
+  grid-column: span 4;
+}
+.grid-col-3 {
+  grid-column: span 3;
+}
 ```
 
 ## 🔧 API
@@ -280,7 +285,15 @@ Você precisará definir as classes CSS no seu componente ou globalmente:
 ```typescript
 interface iFormConfig {
   key: string; // Identificador único do campo
-  controlType: 'text' | 'password' | 'email' | 'number' | 'select' | 'datepicker' | 'textarea' | 'toggleswitch';
+  controlType:
+    | 'text'
+    | 'password'
+    | 'email'
+    | 'number'
+    | 'select'
+    | 'datepicker'
+    | 'textarea'
+    | 'toggleswitch';
   label: string; // Texto do label
   value?: any; // Valor inicial
   placeholder?: string; // Texto de placeholder
@@ -341,9 +354,9 @@ export const appConfig: ApplicationConfig = {
       email: 'E-mail inválido',
       minlength: (requiredLength: number) => `Mínimo de ${requiredLength} caracteres necessários`,
       maxlength: (requiredLength: number) => `Máximo de ${requiredLength} caracteres permitidos`,
-      custom: (error: any) => error.message || 'Erro de validação'
-    })
-  ]
+      custom: (error: any) => error.message || 'Erro de validação',
+    }),
+  ],
 };
 ```
 
