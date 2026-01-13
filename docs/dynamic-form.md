@@ -97,7 +97,7 @@ A arquitetura do sistema de formulário dinâmico é modular e desacoplada, cent
 
 ### 2. Componentes de Campo Específicos
 
-Exemplos: `InputTextFieldComponent`, `PasswordFieldComponent`, `NumberInputFieldComponent`, `SelectFieldComponent`, `DatePickerFieldComponent`, `TextareaFieldComponent`, `ToggleSwitchFieldComponent`.
+Exemplos: `InputTextFieldComponent`, `PasswordFieldComponent`, `NumberInputFieldComponent`, `SelectFieldComponent`, `DatePickerFieldComponent`, `TextareaFieldComponent`, `ToggleSwitchFieldComponent`, `InputButtonFieldComponent`.
 
 **Características Comuns**:
 
@@ -134,6 +134,34 @@ Componente especializado para campos de toggle switch (liga/desliga).
 - **Valores Customizados**: Suporta valores customizados através de `toggleTrueValue` e `toggleFalseValue` da `iFormConfig`.
 - **Valor Padrão**: O valor padrão para campos de toggle switch é `false` (não string vazia).
 - **Validação Visual**: Exibe estado inválido através da propriedade `invalid` do `p-toggleswitch` quando o campo está inválido e foi tocado/modificado.
+
+#### `InputButtonFieldComponent`
+
+**Seletor**: `vp-input-button-field`
+**Tipo**: Standalone Component
+**Módulos PrimeNG Utilizados**: `InputGroupModule`, `InputGroupAddonModule`, `ButtonModule`, `IftaLabelModule`, `TooltipModule`
+
+Renderiza um campo de input text combinado com um botão usando `p-inputgroup`.
+
+**Entradas (`input`)**:
+- `form`: `input.required<FormGroup>()` - O FormGroup reativo.
+- `field`: `input.required<iFormConfig>()` - A configuração do campo.
+
+**Configuração Específica (`iFormConfig`)**:
+- `buttonConfig`: Configuração do botão
+  - `icon`: Ícone PrimeIcons (ex: 'pi pi-search')
+  - `label`: Texto do botão (opcional)
+  - `tooltip`: Tooltip do botão
+  - `position`: Posição do botão ('left' | 'right'), padrão 'right'
+  - `severity`: Estilo do botão ('primary' | 'secondary' | 'success' | 'info' | 'warning' | 'danger' | 'help' | 'contrast'), padrão 'primary'
+- `buttonCallback`: Função executada no click do botão, recebe `(fieldKey: string, fieldValue: any) => void | Promise<void>`
+
+**Comportamento**:
+- O botão pode ser posicionado à esquerda ou direita do input
+- O botão é desabilitado quando o campo está desabilitado
+- Ao clicar no botão, executa a função `buttonCallback` passando a key e o valor atual do campo
+- Utiliza IftaLabel para manter consistência visual com outros campos
+- Utiliza InputGroup do PrimeNG para agrupar o input e o botão
 
 ### 3. `DynamicFormErrorComponent`
 
@@ -176,7 +204,8 @@ export interface iFormConfig {
     | 'select'
     | 'datepicker'
     | 'textarea'
-    | 'toggleswitch';
+    | 'toggleswitch'
+    | 'input-button';
   label: string;
   value?: any;
   placeholder?: string;
@@ -193,6 +222,14 @@ export interface iFormConfig {
   textareaCols?: number; // Para controlType: 'textarea'
   toggleTrueValue?: any; // Para controlType: 'toggleswitch'
   toggleFalseValue?: any; // Para controlType: 'toggleswitch'
+  buttonConfig?: { // Para controlType: 'input-button'
+    icon?: string; // Ícone do PrimeIcons
+    label?: string; // Texto do botão
+    tooltip?: string; // Tooltip do botão
+    position?: 'left' | 'right'; // Posição do botão (default: 'right')
+    severity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'danger' | 'help' | 'contrast'; // Estilo do botão
+  };
+  buttonCallback?: (fieldKey: string, fieldValue: any) => void | Promise<void>; // Callback executado ao clicar no botão
 }
 ```
 
@@ -214,6 +251,8 @@ export interface iFormConfig {
 - `textareaCols?`: Número de colunas do textarea. Opcional, sem default. Aplicável apenas para `controlType: 'textarea'`.
 - `toggleTrueValue?`: Valor quando o toggle switch está ativado. Default: `true`. Aplicável apenas para `controlType: 'toggleswitch'`.
 - `toggleFalseValue?`: Valor quando o toggle switch está desativado. Default: `false`. Aplicável apenas para `controlType: 'toggleswitch'`.
+- `buttonConfig?`: Configuração do botão para campos do tipo `'input-button'`. Contém propriedades para personalizar o botão (ícone, label, tooltip, posição, severity).
+- `buttonCallback?`: Função callback executada ao clicar no botão do campo `'input-button'`. Recebe a key do campo e o valor atual como parâmetros. Pode ser síncrona ou assíncrona (`Promise<void>`).
 
 ### De Configuração a Formulário Renderizado
 

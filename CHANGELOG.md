@@ -5,6 +5,12 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
+## [v1.0.4] - 2025-01-13
+
+### Adicionado
+
+- Campo `InputButtonField` do tipo `input-button` com possibilidade de capturar o click do botão via callback
+
 ## [v1.0.3] - 2025-01-08
 
 ### Corrigido

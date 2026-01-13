@@ -1,234 +1,332 @@
 <div class="test-form-page">
-   <h1>Exemplos do DynamicFormComponent</h1>
-   <p class="page-description">
-      Esta página demonstra todas as funcionalidades disponíveis no componente de formulário dinâmico, incluindo todos os tipos de campos, validações e
-      variações de layout.
-   </p>
+  <h1>Exemplos do DynamicFormComponent</h1>
+  <p class="page-description">
+    Esta página demonstra todas as funcionalidades disponíveis no componente de formulário dinâmico,
+    incluindo todos os tipos de campos, validações e variações de layout.
+  </p>
 
-   <!-- Índice de Navegação -->
-   <nav class="examples-index">
-      <h2>Índice de Exemplos</h2>
-      <ul>
-         <li><a (click)="scrollToExample('exemplo-1'); $event.preventDefault()" href="#exemplo-1">1. Formulário Básico</a></li>
-         <li><a (click)="scrollToExample('exemplo-2'); $event.preventDefault()" href="#exemplo-2">2. Formulário com Validações Avançadas</a></li>
-         <li><a (click)="scrollToExample('exemplo-3'); $event.preventDefault()" href="#exemplo-3">3. Formulário com Layout Customizado</a></li>
-         <li><a (click)="scrollToExample('exemplo-4'); $event.preventDefault()" href="#exemplo-4">4. Formulário Pré-preenchido</a></li>
-         <li><a (click)="scrollToExample('exemplo-5'); $event.preventDefault()" href="#exemplo-5">5. Formulário Completo</a></li>
-         <li><a (click)="scrollToExample('exemplo-6'); $event.preventDefault()" href="#exemplo-6">6. Formulário com Submit</a></li>
-         <li><a (click)="scrollToExample('exemplo-7'); $event.preventDefault()" href="#exemplo-7">7. Objeto Aninhado (Pessoa com Endereco)</a></li>
-         <li><a (click)="scrollToExample('exemplo-8'); $event.preventDefault()" href="#exemplo-8">8. Formulário com Campos de Data</a></li>
-         <li><a (click)="scrollToExample('exemplo-9'); $event.preventDefault()" href="#exemplo-9">9. Formulário com Campos de Textarea</a></li>
-         <li><a (click)="scrollToExample('exemplo-10'); $event.preventDefault()" href="#exemplo-10">10. Formulário com Campos de Toggle Switch</a></li>
-         <li>
-            <a (click)="scrollToExample('exemplo-11'); $event.preventDefault()" href="#exemplo-11">11. Formulário com Toggle Switch em Layout Grid</a>
-         </li>
-         <li><a (click)="scrollToExample('exemplo-12'); $event.preventDefault()" href="#exemplo-12">12. Formulário usando propriedade disabled</a></li>
-         <li>
-            <a (click)="scrollToExample('exemplo-13'); $event.preventDefault()" href="#exemplo-13"
-               >13. Formulário com Dependência entre ToggleSwitch e Campos</a
-            >
-         </li>
-      </ul>
-   </nav>
+  <!-- Índice de Navegação -->
+  <nav class="examples-index">
+    <h2>Índice de Exemplos</h2>
+    <ul>
+      <li>
+        <a (click)="scrollToExample('exemplo-1'); $event.preventDefault()" href="#exemplo-1"
+          >1. Formulário Básico</a
+        >
+      </li>
+      <li>
+        <a (click)="scrollToExample('exemplo-2'); $event.preventDefault()" href="#exemplo-2"
+          >2. Formulário com Validações Avançadas</a
+        >
+      </li>
+      <li>
+        <a (click)="scrollToExample('exemplo-3'); $event.preventDefault()" href="#exemplo-3"
+          >3. Formulário com Layout Customizado</a
+        >
+      </li>
+      <li>
+        <a (click)="scrollToExample('exemplo-4'); $event.preventDefault()" href="#exemplo-4"
+          >4. Formulário Pré-preenchido</a
+        >
+      </li>
+      <li>
+        <a (click)="scrollToExample('exemplo-5'); $event.preventDefault()" href="#exemplo-5"
+          >5. Formulário Completo</a
+        >
+      </li>
+      <li>
+        <a (click)="scrollToExample('exemplo-6'); $event.preventDefault()" href="#exemplo-6"
+          >6. Formulário com Submit</a
+        >
+      </li>
+      <li>
+        <a (click)="scrollToExample('exemplo-7'); $event.preventDefault()" href="#exemplo-7"
+          >7. Objeto Aninhado (Pessoa com Endereco)</a
+        >
+      </li>
+      <li>
+        <a (click)="scrollToExample('exemplo-8'); $event.preventDefault()" href="#exemplo-8"
+          >8. Formulário com Campos de Data</a
+        >
+      </li>
+      <li>
+        <a (click)="scrollToExample('exemplo-9'); $event.preventDefault()" href="#exemplo-9"
+          >9. Formulário com Campos de Textarea</a
+        >
+      </li>
+      <li>
+        <a (click)="scrollToExample('exemplo-10'); $event.preventDefault()" href="#exemplo-10"
+          >10. Formulário com Campos de Toggle Switch</a
+        >
+      </li>
+      <li>
+        <a (click)="scrollToExample('exemplo-11'); $event.preventDefault()" href="#exemplo-11"
+          >11. Formulário com Toggle Switch em Layout Grid</a
+        >
+      </li>
+      <li>
+        <a (click)="scrollToExample('exemplo-12'); $event.preventDefault()" href="#exemplo-12"
+          >12. Formulário usando propriedade disabled</a
+        >
+      </li>
+      <li>
+        <a (click)="scrollToExample('exemplo-13'); $event.preventDefault()" href="#exemplo-13"
+          >13. Formulário com Dependência entre ToggleSwitch e Campos</a
+        >
+      </li>
+      <li>
+        <a (click)="scrollToExample('exemplo-14'); $event.preventDefault()" href="#exemplo-14"
+          >14. Campo Input-Button (Busca de CEP)</a
+        >
+      </li>
+    </ul>
+  </nav>
 
-   <!-- ============================================ -->
-   <!-- EXEMPLO 1: Formulário Básico -->
-   <!-- ============================================ -->
-   <section id="exemplo-1" class="example-section">
-      <h2>1. Formulário Básico</h2>
-      <p class="section-description">
-         Demonstra todos os tipos de campos disponíveis: text, email, password, number, select e datepicker. Inclui validações básicas, placeholders e
-         hints.
+  <!-- ============================================ -->
+  <!-- EXEMPLO 1: Formulário Básico -->
+  <!-- ============================================ -->
+  <section id="exemplo-1" class="example-section">
+    <h2>1. Formulário Básico</h2>
+    <p class="section-description">
+      Demonstra todos os tipos de campos disponíveis: text, email, password, number, select e
+      datepicker. Inclui validações básicas, placeholders e hints.
+    </p>
+    <div class="form-container">
+      <vp-dynamic-form [config]="basicFormConfig()" />
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- EXEMPLO 2: Formulário com Validações Avançadas -->
+  <!-- ============================================ -->
+  <section id="exemplo-2" class="example-section">
+    <h2>2. Formulário com Validações Avançadas</h2>
+    <p class="section-description">
+      Demonstra diferentes tipos de validação: minLength, maxLength, min, max. Mostra como usar
+      múltiplas validações em um único campo.
+    </p>
+    <div class="form-container">
+      <vp-dynamic-form [config]="advancedValidationConfig()" />
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- EXEMPLO 3: Formulário com Layout Customizado -->
+  <!-- ============================================ -->
+  <section id="exemplo-3" class="example-section">
+    <h2>3. Formulário com Layout Customizado</h2>
+    <p class="section-description">
+      Demonstra o uso da propriedade <code>styleClass</code> para criar layouts em grid. Campos
+      podem ocupar diferentes larguras (grid-col-6, grid-col-4, grid-col-12, etc.).
+    </p>
+    <div class="form-container form-grid-layout">
+      <vp-dynamic-form [config]="customLayoutConfig()" />
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- EXEMPLO 4: Formulário Pré-preenchido -->
+  <!-- ============================================ -->
+  <section id="exemplo-4" class="example-section">
+    <h2>4. Formulário Pré-preenchido</h2>
+    <p class="section-description">
+      Demonstra campos com valores iniciais usando a propriedade <code>value</code>. Útil para
+      formulários de edição onde os dados já existem.
+    </p>
+    <div class="form-container">
+      <vp-dynamic-form [config]="preFilledFormConfig()" />
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- EXEMPLO 5: Formulário Completo -->
+  <!-- ============================================ -->
+  <section id="exemplo-5" class="example-section">
+    <h2>5. Formulário Completo</h2>
+    <p class="section-description">
+      Combinação de todas as funcionalidades: todos os tipos de campos (incluindo datepicker com
+      diferentes visualizações), validações avançadas, placeholders, hints e diferentes
+      configurações. Este é um exemplo completo e realista.
+    </p>
+    <div class="form-container">
+      <vp-dynamic-form [config]="completeFormConfig()" />
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- EXEMPLO 6: Formulário com Submit -->
+  <!-- ============================================ -->
+  <section id="exemplo-6" class="example-section">
+    <h2>6. Formulário com Submit</h2>
+    <p class="section-description">
+      Demonstra como o componente pai controla a submissão do formulário usando
+      <code>@ViewChild</code>. O botão de submit está no componente pai, que acessa o
+      <code>FormGroup</code> do DynamicFormComponent. Valida o formulário e exibe o resultado em
+      JSON.
+    </p>
+    <div class="form-container">
+      <vp-dynamic-form #formWithSubmit [config]="submitFormConfig()" />
+    </div>
+    <div class="submit-actions">
+      <p-button
+        label="Enviar Formulário"
+        icon="pi pi-send"
+        (onClick)="onSubmitForm()"
+        [disabled]="!formWithSubmit || formWithSubmit.form.invalid"
+      />
+    </div>
+    @if (submitResult()) {
+    <div class="result-container">
+      <h3>Resultado da Submissão:</h3>
+      <pre class="json-result">{{ submitResult() | json }}</pre>
+    </div>
+    }
+  </section>
+
+  <!-- ============================================ -->
+  <!-- EXEMPLO 7: Objeto Aninhado (Pessoa com Endereco) -->
+  <!-- ============================================ -->
+  <section id="exemplo-7" class="example-section">
+    <h2>7. Objeto Aninhado (Pessoa com Endereco)</h2>
+    <p class="section-description">
+      Demonstra como trabalhar com objetos complexos/aninhados usando notação de ponto nas keys (ex:
+      <code>endereco.rua</code>, <code>endereco.cidade</code>). O formulário retorna dados flat, mas
+      uma função utilitária transforma automaticamente em objeto aninhado. Útil para estruturas de
+      dados complexas como Pessoa que contém um objeto Endereco.
+    </p>
+    <div class="form-container form-grid-layout">
+      <vp-dynamic-form #nestedForm [config]="nestedObjectConfig()" />
+    </div>
+    <div class="submit-actions">
+      <p-button
+        label="Salvar Pessoa"
+        icon="pi pi-save"
+        (onClick)="onSubmitNestedForm()"
+        [disabled]="!nestedForm || nestedForm.form.invalid"
+      />
+    </div>
+    @if (nestedResult()) {
+    <div class="result-container">
+      <h3>Dados da Pessoa (Objeto Aninhado):</h3>
+      <pre class="json-result">{{ nestedResult() | json }}</pre>
+      <p class="result-note">
+        <strong>Nota:</strong> O formulário trabalha internamente com keys flat (ex:
+        "endereco.rua"), mas o resultado é automaticamente transformado em objeto aninhado para
+        facilitar o uso.
       </p>
-      <div class="form-container">
-         <vp-dynamic-form [config]="basicFormConfig()" />
-      </div>
-   </section>
+    </div>
+    }
+  </section>
 
-   <!-- ============================================ -->
-   <!-- EXEMPLO 2: Formulário com Validações Avançadas -->
-   <!-- ============================================ -->
-   <section id="exemplo-2" class="example-section">
-      <h2>2. Formulário com Validações Avançadas</h2>
-      <p class="section-description">
-         Demonstra diferentes tipos de validação: minLength, maxLength, min, max. Mostra como usar múltiplas validações em um único campo.
-      </p>
-      <div class="form-container">
-         <vp-dynamic-form [config]="advancedValidationConfig()" />
-      </div>
-   </section>
+  <!-- ============================================ -->
+  <!-- EXEMPLO 8: Formulário com Campos de Data -->
+  <!-- ============================================ -->
+  <section id="exemplo-8" class="example-section">
+    <h2>8. Formulário com Campos de Data</h2>
+    <p class="section-description">
+      Demonstra os três tipos de visualização de data: data completa (date), mês/ano (month) e ano
+      (year). O formato é ajustado automaticamente baseado no tipo de visualização.
+    </p>
+    <div class="form-container">
+      <vp-dynamic-form [config]="dateFormConfig()" />
+    </div>
+  </section>
 
-   <!-- ============================================ -->
-   <!-- EXEMPLO 3: Formulário com Layout Customizado -->
-   <!-- ============================================ -->
-   <section id="exemplo-3" class="example-section">
-      <h2>3. Formulário com Layout Customizado</h2>
-      <p class="section-description">
-         Demonstra o uso da propriedade <code>styleClass</code> para criar layouts em grid. Campos podem ocupar diferentes larguras (grid-col-6,
-         grid-col-4, grid-col-12, etc.).
-      </p>
-      <div class="form-container form-grid-layout">
-         <vp-dynamic-form [config]="customLayoutConfig()" />
-      </div>
-   </section>
+  <!-- ============================================ -->
+  <!-- EXEMPLO 9: Formulário com Campos de Textarea -->
+  <!-- ============================================ -->
+  <section id="exemplo-9" class="example-section">
+    <h2>9. Formulário com Campos de Textarea</h2>
+    <p class="section-description">
+      Demonstra diferentes configurações de textarea: número de linhas fixas, redimensionamento
+      automático e definição de colunas. Mostra como usar textarea para campos de texto longo.
+    </p>
+    <div class="form-container">
+      <vp-dynamic-form [config]="textareaFormConfig()" />
+    </div>
+  </section>
 
-   <!-- ============================================ -->
-   <!-- EXEMPLO 4: Formulário Pré-preenchido -->
-   <!-- ============================================ -->
-   <section id="exemplo-4" class="example-section">
-      <h2>4. Formulário Pré-preenchido</h2>
-      <p class="section-description">
-         Demonstra campos com valores iniciais usando a propriedade <code>value</code>. Útil para formulários de edição onde os dados já existem.
-      </p>
-      <div class="form-container">
-         <vp-dynamic-form [config]="preFilledFormConfig()" />
-      </div>
-   </section>
+  <!-- ============================================ -->
+  <!-- EXEMPLO 10: Formulário com Campos de Toggle Switch -->
+  <!-- ============================================ -->
+  <section id="exemplo-10" class="example-section">
+    <h2>10. Formulário com Campos de Toggle Switch</h2>
+    <p class="section-description">
+      Demonstra diferentes configurações de toggle switch: toggle básico, toggle pré-selecionado,
+      toggle com valores customizados (S/N, 1/0). Mostra como usar toggle switches para campos
+      booleanos ou campos com valores específicos.
+    </p>
+    <div class="form-container">
+      <vp-dynamic-form [config]="toggleSwitchFormConfig()" />
+    </div>
+  </section>
 
-   <!-- ============================================ -->
-   <!-- EXEMPLO 5: Formulário Completo -->
-   <!-- ============================================ -->
-   <section id="exemplo-5" class="example-section">
-      <h2>5. Formulário Completo</h2>
-      <p class="section-description">
-         Combinação de todas as funcionalidades: todos os tipos de campos (incluindo datepicker com diferentes visualizações), validações avançadas,
-         placeholders, hints e diferentes configurações. Este é um exemplo completo e realista.
-      </p>
-      <div class="form-container">
-         <vp-dynamic-form [config]="completeFormConfig()" />
-      </div>
-   </section>
+  <!-- ============================================ -->
+  <!-- EXEMPLO 11: Formulário com Toggle Switch em Layout Grid -->
+  <!-- ============================================ -->
+  <section id="exemplo-11" class="example-section">
+    <h2>11. Formulário com Toggle Switch em Layout Grid</h2>
+    <p class="section-description">
+      Demonstra toggle switches em layout customizado usando <code>styleClass</code> para criar
+      grids. Mostra como organizar múltiplos toggles em diferentes larguras (grid-col-6, grid-col-4,
+      etc.).
+    </p>
+    <div class="form-container form-grid-layout">
+      <vp-dynamic-form [config]="toggleSwitchLayoutConfig()" />
+    </div>
+  </section>
 
-   <!-- ============================================ -->
-   <!-- EXEMPLO 6: Formulário com Submit -->
-   <!-- ============================================ -->
-   <section id="exemplo-6" class="example-section">
-      <h2>6. Formulário com Submit</h2>
-      <p class="section-description">
-         Demonstra como o componente pai controla a submissão do formulário usando <code>@ViewChild</code>. O botão de submit está no componente pai, que
-         acessa o <code>FormGroup</code> do DynamicFormComponent. Valida o formulário e exibe o resultado em JSON.
-      </p>
-      <div class="form-container">
-         <vp-dynamic-form #formWithSubmit [config]="submitFormConfig()" />
-      </div>
-      <div class="submit-actions">
-         <p-button label="Enviar Formulário" icon="pi pi-send" (onClick)="onSubmitForm()" [disabled]="!formWithSubmit || formWithSubmit.form.invalid" />
-      </div>
-      @if (submitResult()) {
-         <div class="result-container">
-            <h3>Resultado da Submissão:</h3>
-            <pre class="json-result">{{ submitResult() | json }}</pre>
-         </div>
-      }
-   </section>
+  <!-- ============================================ -->
+  <!-- EXEMPLO 12: Formulário com componentes usando disabled -->
+  <!-- ============================================ -->
+  <section id="exemplo-12" class="example-section">
+    <h2>12. Formulário usando propriedade disabled</h2>
+    <p class="section-description">
+      Demonstra diferentes tipos de campos com propriedade disabled.
+    </p>
+    <div class="form-container">
+      <vp-dynamic-form [config]="disabledFormConfig()" />
+    </div>
+  </section>
 
-   <!-- ============================================ -->
-   <!-- EXEMPLO 7: Objeto Aninhado (Pessoa com Endereco) -->
-   <!-- ============================================ -->
-   <section id="exemplo-7" class="example-section">
-      <h2>7. Objeto Aninhado (Pessoa com Endereco)</h2>
-      <p class="section-description">
-         Demonstra como trabalhar com objetos complexos/aninhados usando notação de ponto nas keys (ex: <code>endereco.rua</code>,
-         <code>endereco.cidade</code>). O formulário retorna dados flat, mas uma função utilitária transforma automaticamente em objeto aninhado. Útil para
-         estruturas de dados complexas como Pessoa que contém um objeto Endereco.
-      </p>
-      <div class="form-container form-grid-layout">
-         <vp-dynamic-form #nestedForm [config]="nestedObjectConfig()" />
-      </div>
-      <div class="submit-actions">
-         <p-button label="Salvar Pessoa" icon="pi pi-save" (onClick)="onSubmitNestedForm()" [disabled]="!nestedForm || nestedForm.form.invalid" />
-      </div>
-      @if (nestedResult()) {
-         <div class="result-container">
-            <h3>Dados da Pessoa (Objeto Aninhado):</h3>
-            <pre class="json-result">{{ nestedResult() | json }}</pre>
-            <p class="result-note">
-               <strong>Nota:</strong> O formulário trabalha internamente com keys flat (ex: "endereco.rua"), mas o resultado é automaticamente transformado
-               em objeto aninhado para facilitar o uso.
-            </p>
-         </div>
-      }
-   </section>
+  <!-- ============================================ -->
+  <!-- EXEMPLO 13: Formulário com Dependência entre ToggleSwitch e Campos -->
+  <!-- ============================================ -->
+  <section id="exemplo-13" class="example-section">
+    <h2>13. Formulário com Dependência entre ToggleSwitch e Campos</h2>
+    <p class="section-description">
+      Demonstra campos que são habilitados/desabilitados dinamicamente baseado no estado de um
+      toggleSwitch usando a propriedade
+      <code>enabledWhen</code>. Quando o toggle referenciado está ativado (true), o campo dependente
+      fica habilitado. Quando desativado (false), o campo fica desabilitado.
+    </p>
+    <div class="form-container">
+      <vp-dynamic-form [config]="dependencyFormConfig()" />
+    </div>
+  </section>
 
-   <!-- ============================================ -->
-   <!-- EXEMPLO 8: Formulário com Campos de Data -->
-   <!-- ============================================ -->
-   <section id="exemplo-8" class="example-section">
-      <h2>8. Formulário com Campos de Data</h2>
-      <p class="section-description">
-         Demonstra os três tipos de visualização de data: data completa (date), mês/ano (month) e ano (year). O formato é ajustado automaticamente baseado
-         no tipo de visualização.
-      </p>
-      <div class="form-container">
-         <vp-dynamic-form [config]="dateFormConfig()" />
-      </div>
-   </section>
-
-   <!-- ============================================ -->
-   <!-- EXEMPLO 9: Formulário com Campos de Textarea -->
-   <!-- ============================================ -->
-   <section id="exemplo-9" class="example-section">
-      <h2>9. Formulário com Campos de Textarea</h2>
-      <p class="section-description">
-         Demonstra diferentes configurações de textarea: número de linhas fixas, redimensionamento automático e definição de colunas. Mostra como usar
-         textarea para campos de texto longo.
-      </p>
-      <div class="form-container">
-         <vp-dynamic-form [config]="textareaFormConfig()" />
-      </div>
-   </section>
-
-   <!-- ============================================ -->
-   <!-- EXEMPLO 10: Formulário com Campos de Toggle Switch -->
-   <!-- ============================================ -->
-   <section id="exemplo-10" class="example-section">
-      <h2>10. Formulário com Campos de Toggle Switch</h2>
-      <p class="section-description">
-         Demonstra diferentes configurações de toggle switch: toggle básico, toggle pré-selecionado, toggle com valores customizados (S/N, 1/0). Mostra
-         como usar toggle switches para campos booleanos ou campos com valores específicos.
-      </p>
-      <div class="form-container">
-         <vp-dynamic-form [config]="toggleSwitchFormConfig()" />
-      </div>
-   </section>
-
-   <!-- ============================================ -->
-   <!-- EXEMPLO 11: Formulário com Toggle Switch em Layout Grid -->
-   <!-- ============================================ -->
-   <section id="exemplo-11" class="example-section">
-      <h2>11. Formulário com Toggle Switch em Layout Grid</h2>
-      <p class="section-description">
-         Demonstra toggle switches em layout customizado usando <code>styleClass</code> para criar grids. Mostra como organizar múltiplos toggles em
-         diferentes larguras (grid-col-6, grid-col-4, etc.).
-      </p>
-      <div class="form-container form-grid-layout">
-         <vp-dynamic-form [config]="toggleSwitchLayoutConfig()" />
-      </div>
-   </section>
-
-   <!-- ============================================ -->
-   <!-- EXEMPLO 12: Formulário com componentes usando disabled -->
-   <!-- ============================================ -->
-   <section id="exemplo-12" class="example-section">
-      <h2>12. Formulário usando propriedade disabled</h2>
-      <p class="section-description">Demonstra diferentes tipos de campos com propriedade disabled.</p>
-      <div class="form-container">
-         <vp-dynamic-form [config]="disabledFormConfig()" />
-      </div>
-   </section>
-
-   <!-- ============================================ -->
-   <!-- EXEMPLO 13: Formulário com Dependência entre ToggleSwitch e Campos -->
-   <!-- ============================================ -->
-   <section id="exemplo-13" class="example-section">
-      <h2>13. Formulário com Dependência entre ToggleSwitch e Campos</h2>
-      <p class="section-description">
-         Demonstra campos que são habilitados/desabilitados dinamicamente baseado no estado de um toggleSwitch usando a propriedade
-         <code>enabledWhen</code>. Quando o toggle referenciado está ativado (true), o campo dependente fica habilitado. Quando desativado (false), o campo
-         fica desabilitado.
-      </p>
-      <div class="form-container">
-         <vp-dynamic-form [config]="dependencyFormConfig()" />
-      </div>
-   </section>
+  <!-- ============================================ -->
+  <!-- EXEMPLO 14: Input-Button (Busca de CEP) -->
+  <!-- ============================================ -->
+  <section id="exemplo-14" class="example-section">
+    <h2>14. Campo Input-Button (Busca de CEP)</h2>
+    <p class="section-description">
+      Campo que combina input text com botão de ação usando InputGroup do PrimeNG. Demonstra busca
+      de CEP e produtos com callback.
+    </p>
+    <div class="form-container">
+      <vp-dynamic-form #inputButtonForm [config]="inputButtonFormConfig()" />
+    </div>
+    @if (isSearching()) {
+    <div class="loading-indicator">
+      <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+      <p>Buscando...</p>
+    </div>
+    } @if (inputButtonResult()) {
+    <div class="result-container">
+      <h3>Resultado da Busca: {{ inputButtonResult().tipo }}</h3>
+      <pre class="json-result">{{ inputButtonResult().dados | json }}</pre>
+    </div>
+    }
+  </section>
 </div>

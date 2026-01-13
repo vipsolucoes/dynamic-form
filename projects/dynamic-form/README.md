@@ -117,6 +117,7 @@ A biblioteca suporta os seguintes tipos de campos:
 - `datepicker` - Seletor de data
 - `textarea` - Área de texto
 - `toggleswitch` - Switch/Toggle
+- `input-button` - Campo de texto com botão de ação
 
 ## 🎯 Exemplos de Configuração
 
@@ -190,6 +191,40 @@ A biblioteca suporta os seguintes tipos de campos:
   toggleFalseValue: false
 }
 ```
+
+### Campo Input-Button (Input com Botão de Ação)
+
+O campo `input-button` combina um input text com um botão de ação usando o componente InputGroup do PrimeNG:
+
+```typescript
+{
+  key: 'cep',
+  controlType: 'input-button',
+  label: 'CEP',
+  placeholder: '00000-000',
+  validators: [Validators.required],
+  buttonConfig: {
+    icon: 'pi pi-search',
+    tooltip: 'Buscar endereço',
+    position: 'right',
+    severity: 'primary'
+  },
+  buttonCallback: async (fieldKey, value) => {
+    console.log(`Buscando ${fieldKey}:`, value);
+    // Implementar lógica de busca
+  }
+}
+```
+
+Propriedades do `buttonConfig`:
+
+- `icon`: Ícone do PrimeIcons (ex: 'pi pi-search')
+- `label`: Texto do botão (opcional, pode usar apenas ícone)
+- `tooltip`: Texto do tooltip ao passar o mouse
+- `position`: Posição do botão ('left' | 'right'), padrão 'right'
+- `severity`: Estilo do botão, padrão 'primary'
+
+A função `buttonCallback` é executada quando o botão é clicado e recebe a key do campo e o valor atual como parâmetros.
 
 ### Campos Condicionais
 
@@ -293,7 +328,8 @@ interface iFormConfig {
     | 'select'
     | 'datepicker'
     | 'textarea'
-    | 'toggleswitch';
+    | 'toggleswitch'
+    | 'input-button';
   label: string; // Texto do label
   value?: any; // Valor inicial
   placeholder?: string; // Texto de placeholder
@@ -310,6 +346,14 @@ interface iFormConfig {
   textareaCols?: number; // Número de colunas do textarea
   toggleTrueValue?: any; // Valor quando toggle está ativo (default: true)
   toggleFalseValue?: any; // Valor quando toggle está inativo (default: false)
+  buttonConfig?: { // Configuração do botão para campos 'input-button'
+    icon?: string; // Ícone do PrimeIcons
+    label?: string; // Texto do botão
+    tooltip?: string; // Tooltip do botão
+    position?: 'left' | 'right'; // Posição do botão (default: 'right')
+    severity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'danger' | 'help' | 'contrast'; // Estilo do botão
+  };
+  buttonCallback?: (fieldKey: string, fieldValue: any) => void | Promise<void>; // Callback executado ao clicar no botão
 }
 ```
 
