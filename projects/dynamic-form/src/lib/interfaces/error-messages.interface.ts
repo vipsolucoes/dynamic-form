@@ -14,4 +14,6 @@ export interface DynamicFormErrorMessages {
 /**
  * InjectionToken para prover mensagens de erro customizadas.
  */
-export const DYNAMIC_FORM_ERROR_MESSAGES = new InjectionToken<DynamicFormErrorMessages>('DYNAMIC_FORM_ERROR_MESSAGES');
+export const DYNAMIC_FORM_ERROR_MESSAGES = new InjectionToken<DynamicFormErrorMessages>(
+  'DYNAMIC_FORM_ERROR_MESSAGES'
+);

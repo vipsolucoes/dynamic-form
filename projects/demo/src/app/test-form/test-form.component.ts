@@ -896,4 +896,165 @@ export class TestFormComponent {
       hint: 'Este campo só fica habilitado quando "Aceitar Termos" estiver ativo',
     },
   ]);
+
+  // ============================================
+  // EXEMPLO 14: Formulário com Input-Button (Busca de CEP)
+  // Demonstra o uso do campo input-button com callback
+  // ============================================
+  @ViewChild('inputButtonForm') inputButtonForm!: DynamicFormComponent;
+  inputButtonResult = signal<any>(null);
+  isSearching = signal<boolean>(false);
+
+  inputButtonFormConfig = signal<iFormConfig[]>([
+    {
+      key: 'nome',
+      label: 'Nome Completo',
+      controlType: 'text',
+      validators: [Validators.required],
+      placeholder: 'Digite seu nome',
+    },
+    {
+      key: 'cep',
+      controlType: 'input-button' as any,
+      label: 'CEP',
+      placeholder: '00000-000',
+      validators: [Validators.required, Validators.pattern(/^\d{5}-?\d{3}$/)],
+      hint: 'Digite o CEP e clique no botão para buscar',
+      buttonConfig: {
+        icon: 'pi pi-search',
+        tooltip: 'Buscar endereço pelo CEP',
+        position: 'right',
+        severity: 'primary',
+      },
+      buttonCallback: async (fieldKey: string, value: any) => {
+        await this.buscarCep(value);
+      },
+    } as any,
+    {
+      key: 'rua',
+      label: 'Rua',
+      controlType: 'text',
+      placeholder: 'Nome da rua',
+    },
+    {
+      key: 'bairro',
+      label: 'Bairro',
+      controlType: 'text',
+      placeholder: 'Nome do bairro',
+    },
+    {
+      key: 'cidade',
+      label: 'Cidade',
+      controlType: 'text',
+      placeholder: 'Nome da cidade',
+    },
+    {
+      key: 'estado',
+      label: 'Estado',
+      controlType: 'select',
+      options: [
+        { label: 'São Paulo', value: 'SP' },
+        { label: 'Rio de Janeiro', value: 'RJ' },
+        { label: 'Minas Gerais', value: 'MG' },
+        { label: 'Paraná', value: 'PR' },
+      ],
+      placeholder: 'Selecione o estado',
+    },
+    {
+      key: 'busca',
+      controlType: 'input-button' as any,
+      label: 'Buscar Produto',
+      placeholder: 'Digite o nome do produto',
+      hint: 'Busque produtos por nome',
+      buttonConfig: {
+        icon: 'pi pi-shopping-cart',
+        label: 'Buscar',
+        tooltip: 'Buscar produtos',
+        position: 'right',
+        severity: 'success',
+      },
+      buttonCallback: async (fieldKey: string, value: any) => {
+        await this.buscarProduto(value);
+      },
+    } as any,
+  ]);
+
+  async buscarCep(cep: string): Promise<void> {
+    if (!cep) {
+      alert('Por favor, digite um CEP');
+      return;
+    }
+
+    this.isSearching.set(true);
+    this.inputButtonResult.set(null);
+
+    try {
+      const cepLimpo = cep.replace(/\D/g, '');
+
+      if (cepLimpo.length !== 8) {
+        alert('CEP inválido. Digite 8 dígitos.');
+        return;
+      }
+
+      const response = await fetch(`https://viacep.com.br/ws/${cepLimpo}/json/`);
+      const data = await response.json();
+
+      if (data.erro) {
+        alert('CEP não encontrado');
+        return;
+      }
+
+      // Preenche os campos do formulário
+      this.inputButtonForm?.form.patchValue({
+        rua: data.logradouro,
+        bairro: data.bairro,
+        cidade: data.localidade,
+        estado: data.uf,
+      });
+
+      this.inputButtonResult.set({
+        tipo: 'CEP',
+        dados: data,
+      });
+
+      console.log('Endereço encontrado:', data);
+    } catch (error) {
+      console.error('Erro ao buscar CEP:', error);
+      alert('Erro ao buscar CEP. Tente novamente.');
+    } finally {
+      this.isSearching.set(false);
+    }
+  }
+
+  async buscarProduto(termo: string): Promise<void> {
+    if (!termo || termo.trim().length < 3) {
+      alert('Digite pelo menos 3 caracteres para buscar');
+      return;
+    }
+
+    this.isSearching.set(true);
+
+    try {
+      // Simula uma busca (em produção, chamaria uma API real)
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      const produtosSimulados = [
+        { id: 1, nome: `${termo} Premium`, preco: 99.9 },
+        { id: 2, nome: `${termo} Standard`, preco: 59.9 },
+        { id: 3, nome: `${termo} Básico`, preco: 29.9 },
+      ];
+
+      this.inputButtonResult.set({
+        tipo: 'Produtos',
+        dados: produtosSimulados,
+      });
+
+      console.log('Produtos encontrados:', produtosSimulados);
+    } catch (error) {
+      console.error('Erro ao buscar produtos:', error);
+      alert('Erro ao buscar produtos. Tente novamente.');
+    } finally {
+      this.isSearching.set(false);
+    }
+  }
 }

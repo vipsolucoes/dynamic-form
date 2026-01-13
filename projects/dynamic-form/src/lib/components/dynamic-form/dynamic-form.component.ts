@@ -6,6 +6,7 @@ import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule } from '@a
 import { DynamicFormErrorComponent } from '../form-field-error/form-field-error.component';
 import { DatePickerFieldComponent } from '../../fields/datepicker-field.component';
 import { InputTextFieldComponent } from '../../fields/input-text-field.component';
+import { InputButtonFieldComponent } from '../../fields/input-button-field.component';
 import { NumberInputFieldComponent } from '../../fields/number-input-field.component';
 import { PasswordFieldComponent } from '../../fields/password-field.component';
 import { SelectFieldComponent } from '../../fields/select-field.component';
@@ -40,6 +41,7 @@ export class DynamicFormComponent implements OnInit {
     datepicker: DatePickerFieldComponent,
     textarea: TextareaFieldComponent,
     toggleswitch: ToggleSwitchFieldComponent,
+    'input-button': InputButtonFieldComponent,
   };
 
   ngOnInit(): void {
@@ -143,6 +145,7 @@ export class DynamicFormComponent implements OnInit {
       case 'email':
       case 'password':
       case 'textarea':
+      case 'input-button':
         return '';
       case 'number':
         return null;

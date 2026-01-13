@@ -1,4 +1,5 @@
 import { ValidatorFn } from '@angular/forms';
+import { ButtonSeverity } from 'primeng/button';
 
 /**
  * Define a estrutura para opções de campos como 'select' (dropdown).
@@ -27,7 +28,8 @@ export interface iFormConfig {
     | 'select'
     | 'datepicker'
     | 'textarea'
-    | 'toggleswitch';
+    | 'toggleswitch'
+    | 'input-button';
   /**
    * Texto a ser exibido no label do campo.
    */
@@ -94,4 +96,34 @@ export interface iFormConfig {
    * Valor quando o toggle switch está desativado. Default: false. Aplicável apenas para controlType 'toggleswitch'.
    */
   toggleFalseValue?: any;
+  /**
+   * Configuração do botão para campos do tipo 'input-button'
+   */
+  buttonConfig?: {
+    /**
+     * Ícone do botão (PrimeIcons). Ex: 'pi pi-search'
+     */
+    icon?: string;
+    /**
+     * Label/texto do botão
+     */
+    label?: string;
+    /**
+     * Tooltip do botão
+     */
+    tooltip?: string;
+    /**
+     * Posição do botão. Default: 'right'
+     */
+    position?: 'left' | 'right';
+    /**
+     * Severity do botão. Default: 'primary'
+     */
+    severity?: ButtonSeverity;
+  };
+  /**
+   * Função callback executada ao clicar no botão do campo 'input-button'.
+   * Recebe a key do campo e o valor atual como parâmetros.
+   */
+  buttonCallback?: (fieldKey: string, fieldValue: any) => void | Promise<void>;
 }
