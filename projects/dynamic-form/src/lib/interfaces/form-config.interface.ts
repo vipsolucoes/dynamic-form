@@ -30,7 +30,8 @@ export interface iFormConfig {
     | 'textarea'
     | 'toggleswitch'
     | 'input-button'
-    | 'divider';
+    | 'divider'
+    | 'radiobutton';
   /**
    * Texto a ser exibido no label do campo.
    * Não obrigatório para controlType 'divider'.
@@ -68,7 +69,7 @@ export interface iFormConfig {
    */
   styleClass?: string;
   /**
-   * Array de opções, obrigatório para o controlType 'select'.
+   * Array de opções, obrigatório para o controlType 'select' e 'radiobutton'.
    */
   options?: iFieldOption[];
   /**
@@ -161,4 +162,9 @@ export interface iFormConfig {
      */
     content?: string;
   };
+  /**
+   * Orientação do layout dos radio buttons. Default: 'vertical'.
+   * Aplicável apenas para controlType 'radiobutton'.
+   */
+  radioLayout?: 'horizontal' | 'vertical';
 }

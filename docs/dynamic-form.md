@@ -97,7 +97,7 @@ A arquitetura do sistema de formulário dinâmico é modular e desacoplada, cent
 
 ### 2. Componentes de Campo Específicos
 
-Exemplos: `InputTextFieldComponent`, `PasswordFieldComponent`, `NumberInputFieldComponent`, `SelectFieldComponent`, `DatePickerFieldComponent`, `TextareaFieldComponent`, `ToggleSwitchFieldComponent`, `InputButtonFieldComponent`.
+Exemplos: `InputTextFieldComponent`, `PasswordFieldComponent`, `NumberInputFieldComponent`, `SelectFieldComponent`, `DatePickerFieldComponent`, `TextareaFieldComponent`, `ToggleSwitchFieldComponent`, `InputButtonFieldComponent`, `RadioButtonFieldComponent`.
 
 **Características Comuns**:
 
@@ -109,7 +109,7 @@ Exemplos: `InputTextFieldComponent`, `PasswordFieldComponent`, `NumberInputField
     - A configuração específica para este campo.
 - **Responsabilidade**: Renderizar o elemento HTML de formulário apropriado (geralmente um componente PrimeNG) e vinculá-lo ao `FormGroup` através de `formControlName`. Eles também aplicam `id` e `placeholder` com base na `field` configuration. O estado `disabled` é gerenciado exclusivamente pelo `FormControl` através do Angular Reactive Forms.
 - **PrimeNG**: Cada componente de campo importa e utiliza os módulos PrimeNG relevantes para o seu tipo (e.g., `InputTextModule`, `PasswordModule`, `InputNumberModule`, `SelectModule`, `DatePickerModule`, `TextareaModule`, `ToggleSwitch`).
-- **IftaLabel**: A maioria dos componentes de campo utiliza `p-iftalabel` do PrimeNG para renderizar labels no estilo "infield top aligned", proporcionando uma melhor experiência visual. **Exceção**: `ToggleSwitchFieldComponent` utiliza label inline ao lado do componente, seguindo o padrão UX recomendado para toggles.
+- **IftaLabel**: A maioria dos componentes de campo utiliza `p-iftalabel` do PrimeNG para renderizar labels no estilo "infield top aligned", proporcionando uma melhor experiência visual. **Exceções**: `ToggleSwitchFieldComponent` utiliza label inline ao lado do componente, e `RadioButtonFieldComponent` utiliza label simples acima do grupo de opções, seguindo o padrão UX recomendado para esses tipos de componentes.
 
 #### `DatePickerFieldComponent`
 
@@ -134,6 +134,21 @@ Componente especializado para campos de toggle switch (liga/desliga).
 - **Valores Customizados**: Suporta valores customizados através de `toggleTrueValue` e `toggleFalseValue` da `iFormConfig`.
 - **Valor Padrão**: O valor padrão para campos de toggle switch é `false` (não string vazia).
 - **Validação Visual**: Exibe estado inválido através da propriedade `invalid` do `p-toggleswitch` quando o campo está inválido e foi tocado/modificado.
+
+#### `RadioButtonFieldComponent`
+
+**Seletor**: `vp-radiobutton-field`
+**Tipo**: Standalone Component
+**Módulos PrimeNG Utilizados**: `RadioButtonModule`
+
+Componente especializado para campos de radio button (botões de opção).
+
+**Características Especiais**:
+
+- **Label Simples**: Utiliza uma label HTML padrão posicionada acima do grupo de opções, ao invés de `p-iftalabel`. Isso segue o padrão UX recomendado para grupos de radio buttons.
+- **Layout Configurável**: Suporta layouts horizontal e vertical através da propriedade `radioLayout` da `iFormConfig`. Default: `'vertical'`.
+- **Validação Visual**: Exibe estado inválido através da propriedade `invalid` do `p-radiobutton` quando o campo está inválido e foi tocado/modificado.
+- **Opções Dinâmicas**: Itera sobre `options` usando `@for` para renderizar cada opção como um `p-radiobutton` separado.
 
 #### `InputButtonFieldComponent`
 
@@ -208,7 +223,8 @@ export interface iFormConfig {
     | 'datepicker'
     | 'textarea'
     | 'toggleswitch'
-    | 'input-button';
+    | 'input-button'
+    | 'radiobutton';
   label: string;
   value?: any;
   placeholder?: string;
@@ -217,7 +233,7 @@ export interface iFormConfig {
   visible?: boolean; // Indica se o campo deve estar visível. Default: true. Quando false, o campo não é renderizado, mas ainda é criado no FormGroup.
   enabledWhen?: string; // Chave (key) do campo toggleSwitch que controla a habilitação deste campo.
   styleClass?: string;
-  options?: iFieldOption[];
+  options?: iFieldOption[]; // Necessário para controlType: 'select' e 'radiobutton'
   validators?: ValidatorFn[]; // Array de ValidatorFn diretamente
   dateFormat?: string; // Para controlType: 'datepicker'
   dateViewType?: 'date' | 'month' | 'year'; // Para controlType: 'datepicker'
@@ -243,6 +259,7 @@ export interface iFormConfig {
       | 'contrast'; // Estilo do botão
   };
   buttonCallback?: (fieldKey: string, fieldValue: any) => void | Promise<void>; // Callback executado ao clicar no botão
+  radioLayout?: 'horizontal' | 'vertical'; // Para controlType: 'radiobutton'. Default: 'vertical'
 }
 ```
 
@@ -256,7 +273,7 @@ export interface iFormConfig {
 - `visible?`: Indica se o campo deve estar visível. Quando `false`, o campo não é renderizado no template, mas ainda é criado no `FormGroup`. Default: `true`. Aplicável a todos os tipos de campo. Útil para formulários condicionais onde campos podem aparecer/desaparecer dinamicamente.
 - `enabledWhen?`: Chave (key) do campo toggleSwitch que controla a habilitação deste campo. Quando o toggle referenciado estiver ativado (true), este campo será habilitado. Quando desativado (false), este campo será desabilitado e seu valor será limpo automaticamente. Aplicável a todos os tipos de campo exceto `toggleswitch`. O campo referenciado deve existir no formulário e ser do tipo `toggleswitch`.
 - `styleClass?`: Classes CSS adicionais para o wrapper do campo. Útil para criar layouts customizados (ex: `'grid-col-6'` para campos lado a lado em um grid de 12 colunas).
-- `options?`: Necessário para `controlType: 'select'`, fornecendo as opções do dropdown.
+- `options?`: Necessário para `controlType: 'select'` e `controlType: 'radiobutton'`, fornecendo as opções do dropdown ou do grupo de radio buttons.
 - `validators?`: Um array de funções `ValidatorFn` do Angular Forms, aplicadas diretamente ao `FormControl`.
 - `dateFormat?`: Formato de data customizado para `controlType: 'datepicker'`. Default: `'dd/mm/yy'` quando `dateViewType` é `'date'`. Para `'month'` e `'year'`, o formato é calculado automaticamente (`'mm/yy'` e `'yy'` respectivamente).
 - `dateViewType?`: Tipo de visualização do datepicker. Opções: `'date'` (data completa), `'month'` (mês/ano), `'year'` (ano). Default: `'date'`. O formato é ajustado automaticamente baseado neste valor.
@@ -265,6 +282,7 @@ export interface iFormConfig {
 - `textareaCols?`: Número de colunas do textarea. Opcional, sem default. Aplicável apenas para `controlType: 'textarea'`.
 - `toggleTrueValue?`: Valor quando o toggle switch está ativado. Default: `true`. Aplicável apenas para `controlType: 'toggleswitch'`.
 - `toggleFalseValue?`: Valor quando o toggle switch está desativado. Default: `false`. Aplicável apenas para `controlType: 'toggleswitch'`.
+- `radioLayout?`: Orientação do layout dos radio buttons. Opções: `'horizontal'` (opções lado a lado) ou `'vertical'` (opções uma abaixo da outra). Default: `'vertical'`. Aplicável apenas para `controlType: 'radiobutton'`.
 - `buttonConfig?`: Configuração do botão para campos do tipo `'input-button'`. Contém propriedades para personalizar o botão (ícone, label, tooltip, posição, severity).
 - `buttonCallback?`: Função callback executada ao clicar no botão do campo `'input-button'`. Recebe a key do campo e o valor atual como parâmetros. Pode ser síncrona ou assíncrona (`Promise<void>`).
 - `textTransform?`: Transformação de texto para o campo. Opções: `'uppercase'` | `'lowercase'`. Aplicável apenas para campos de texto (text, email, textarea, input-button). Quando definido, o texto é transformado automaticamente conforme o usuário digita.
@@ -1091,6 +1109,102 @@ const layoutConfig: iFormConfig[] = [
 ];
 ```
 
+### Campos de RadioButton
+
+O componente suporta campos de radio button através do `controlType: 'radiobutton'`, utilizando o componente `RadioButtonFieldComponent` que renderiza o `p-radiobutton` do PrimeNG.
+
+**Características Especiais**:
+
+- **Label Simples**: Utiliza uma label HTML padrão posicionada acima do grupo de opções, ao invés de `p-iftalabel`. Isso segue o padrão UX recomendado para grupos de radio buttons.
+- **Layout Configurável**: Suporta layouts horizontal e vertical através da propriedade `radioLayout`. Default: `'vertical'`.
+- **Validação Visual**: Exibe estado inválido através da propriedade `invalid` do `p-radiobutton` quando o campo está inválido e foi tocado/modificado.
+
+#### Propriedades Específicas
+
+O radio button suporta uma propriedade específica:
+
+1. **`radioLayout`**: Orientação do layout dos radio buttons. Opções: `'horizontal'` (opções lado a lado) ou `'vertical'` (opções uma abaixo da outra). Default: `'vertical'`.
+
+#### Exemplo de Uso Básico
+
+```typescript
+const radioFormConfig: iFormConfig[] = [
+  {
+    key: 'genero',
+    controlType: 'radiobutton',
+    label: 'Gênero',
+    options: [
+      { label: 'Masculino', value: 'M' },
+      { label: 'Feminino', value: 'F' },
+      { label: 'Outro', value: 'O' },
+    ],
+    validators: [Validators.required],
+    hint: 'Selecione uma opção',
+  },
+  {
+    key: 'status',
+    controlType: 'radiobutton',
+    label: 'Status',
+    options: [
+      { label: 'Ativo', value: 'active' },
+      { label: 'Inativo', value: 'inactive' },
+      { label: 'Pendente', value: 'pending' },
+    ],
+    value: 'active', // Pré-selecionado
+    validators: [Validators.required],
+  },
+];
+```
+
+#### RadioButton com Layout Horizontal
+
+Para exibir as opções lado a lado:
+
+```typescript
+{
+  key: 'prioridade',
+  controlType: 'radiobutton',
+  label: 'Prioridade',
+  options: [
+    { label: 'Baixa', value: 'low' },
+    { label: 'Média', value: 'medium' },
+    { label: 'Alta', value: 'high' },
+  ],
+  radioLayout: 'horizontal',
+  validators: [Validators.required],
+  hint: 'Selecione o nível de prioridade',
+}
+```
+
+#### RadioButton em Layouts com Grid
+
+O radio button também suporta layouts customizados via `styleClass`:
+
+```typescript
+const layoutConfig: iFormConfig[] = [
+  {
+    key: 'genero',
+    controlType: 'radiobutton',
+    label: 'Gênero',
+    options: [
+      { label: 'Masculino', value: 'M' },
+      { label: 'Feminino', value: 'F' },
+    ],
+    styleClass: 'grid-col-6',
+  },
+  {
+    key: 'estadoCivil',
+    controlType: 'radiobutton',
+    label: 'Estado Civil',
+    options: [
+      { label: 'Solteiro', value: 'single' },
+      { label: 'Casado', value: 'married' },
+    ],
+    styleClass: 'grid-col-6',
+  },
+];
+```
+
 ## Melhorias Implementadas
 
 As seguintes melhorias foram implementadas na versão atual:
@@ -1104,6 +1218,7 @@ As seguintes melhorias foram implementadas na versão atual:
 - **Campo de Data (Datepicker)**: Adicionado suporte para campos de data com três tipos de visualização (date, month, year) e formato automático baseado no tipo selecionado.
 - **Campo de Textarea**: Adicionado suporte para campos de textarea com opções de configuração de linhas (`textareaRows`), colunas (`textareaCols`) e redimensionamento automático (`textareaAutoResize`).
 - **Campo de Toggle Switch**: Adicionado suporte para campos de toggle switch com label inline, valores customizados (`toggleTrueValue` e `toggleFalseValue`) e integração com formulários reativos.
+- **Campo de RadioButton**: Adicionado suporte para campos de radio button com label simples acima do grupo, layout configurável (`radioLayout`) e integração com formulários reativos.
 - **Propriedade Disabled**: Adicionado suporte para desabilitar campos através da propriedade `disabled` na `iFormConfig`. Quando `disabled: true`, o campo não pode ser editado e o `FormControl` é criado como desabilitado. Aplicável a todos os tipos de campo (text, email, password, number, select, datepicker, textarea, toggleswitch).
 - **Dependência entre ToggleSwitch e Campos (`enabledWhen`)**: Adicionado suporte para criar dependências dinâmicas entre campos usando a propriedade `enabledWhen`. Quando um campo referencia a `key` de um toggleSwitch através de `enabledWhen`, ele é habilitado automaticamente quando o toggle está ativado e desabilitado (com limpeza automática do valor) quando o toggle está desativado. Isso permite criar formulários condicionais onde campos só ficam disponíveis quando uma opção está ativada.
 - **Transformação de Texto (`textTransform`)**: Adicionado suporte para transformação automática de texto em uppercase ou lowercase através da propriedade `textTransform` na `iFormConfig`. A transformação ocorre em tempo real enquanto o usuário digita, preservando a posição do cursor. Aplicável apenas para campos de texto (text, email, textarea, input-button). Implementado através de uma diretiva standalone (`TextTransformDirective`) que funciona perfeitamente com Reactive Forms.

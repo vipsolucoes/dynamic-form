@@ -10,6 +10,7 @@ import { InputTextFieldComponent } from '../../fields/input-text-field.component
 import { InputButtonFieldComponent } from '../../fields/input-button-field.component';
 import { NumberInputFieldComponent } from '../../fields/number-input-field.component';
 import { PasswordFieldComponent } from '../../fields/password-field.component';
+import { RadioButtonFieldComponent } from '../../fields/radiobutton-field.component';
 import { SelectFieldComponent } from '../../fields/select-field.component';
 import { TextareaFieldComponent } from '../../fields/textarea-field.component';
 import { ToggleSwitchFieldComponent } from '../../fields/toggleswitch-field.component';
@@ -44,6 +45,7 @@ export class DynamicFormComponent implements OnInit {
     toggleswitch: ToggleSwitchFieldComponent,
     'input-button': InputButtonFieldComponent,
     divider: DividerFieldComponent,
+    radiobutton: RadioButtonFieldComponent,
   };
 
   ngOnInit(): void {
@@ -63,7 +65,15 @@ export class DynamicFormComponent implements OnInit {
       }
 
       // Para toggle switch, o valor padrão é false se não especificado
-      const defaultValue = field.controlType === 'toggleswitch' ? (field.value ?? false) : (field.value ?? '');
+      // Para radiobutton, o valor padrão é null se não especificado
+      let defaultValue: any;
+      if (field.controlType === 'toggleswitch') {
+        defaultValue = field.value ?? false;
+      } else if (field.controlType === 'radiobutton') {
+        defaultValue = field.value ?? null;
+      } else {
+        defaultValue = field.value ?? '';
+      }
 
       // Se o campo tem enabledWhen, ele deve começar desabilitado a menos que o toggle já esteja ativo
       const shouldBeDisabled = field.disabled ?? (field.enabledWhen ? !this.getToggleValue(field.enabledWhen, config) : false);
@@ -157,6 +167,8 @@ export class DynamicFormComponent implements OnInit {
       case 'number':
         return null;
       case 'select':
+        return null;
+      case 'radiobutton':
         return null;
       case 'datepicker':
         return null;

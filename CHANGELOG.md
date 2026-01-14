@@ -5,6 +5,30 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
+## [v1.0.7]
+
+### Adicionado
+
+- Novo campo do tipo `RadioButton` (`radiobutton`) com suporte a:
+  - Layout configurável horizontal ou vertical através da propriedade `radioLayout` (default: `'vertical'`)
+  - Label simples acima do grupo de opções (seguindo padrão UX recomendado)
+  - Validação visual com estado inválido
+  - Integração completa com formulários reativos
+  - Suporte a todas as propriedades comuns (`disabled`, `visible`, `enabledWhen`, `validators`, etc.)
+- Componente `RadioButtonFieldComponent` utilizando `p-radiobutton` do PrimeNG
+- Propriedade `radioLayout?: 'horizontal' | 'vertical'` na interface `iFormConfig`
+- Exemplo 19: Formulário com Campos de RadioButton demonstrando:
+  - Radio buttons em layout vertical e horizontal
+  - Validação obrigatória
+  - Valores pré-selecionados
+  - Diferentes casos de uso (gênero, prioridade, status, tipo de conta, estado civil)
+
+### Documentação
+
+- Seção completa sobre campos de RadioButton na documentação
+- Exemplos de uso com diferentes layouts
+- Documentação da propriedade `radioLayout`
+
 ## [v1.0.6]
 
 ### Adicionado

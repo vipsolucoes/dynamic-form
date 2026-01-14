@@ -99,6 +99,11 @@
           >18. Formulário com Estado e Cidade (Select Dinâmico)</a
         >
       </li>
+      <li>
+        <a (click)="scrollToExample('exemplo-19'); $event.preventDefault()" href="#exemplo-19"
+          >19. Formulário com Campos de RadioButton</a
+        >
+      </li>
     </ul>
   </nav>
 
@@ -472,6 +477,42 @@
       <p class="result-note">
         <strong>Nota:</strong> O estado é carregado do arquivo <code>assets/estados.json</code> e as
         cidades são buscadas da API do IBGE quando um estado é selecionado.
+      </p>
+    </div>
+    }
+  </section>
+
+  <!-- ============================================ -->
+  <!-- EXEMPLO 19: Formulário com Campos de RadioButton -->
+  <!-- ============================================ -->
+  <section id="exemplo-19" class="example-section">
+    <h2>19. Formulário com Campos de RadioButton</h2>
+    <p class="section-description">
+      Demonstra o uso de campos de radio button com diferentes configurações. Os radio buttons
+      permitem que o usuário selecione uma única opção de um grupo de opções. Este exemplo mostra
+      radio buttons com layouts vertical e horizontal, validação obrigatória, valores
+      pré-selecionados e diferentes casos de uso (gênero, prioridade, status, tipo de conta, estado
+      civil).
+    </p>
+    <div class="form-container">
+      <vp-dynamic-form #radioButtonForm [config]="radioButtonFormConfig()" />
+    </div>
+    <div class="submit-actions">
+      <p-button
+        label="Salvar Formulário"
+        icon="pi pi-save"
+        (onClick)="onSubmitRadioButtonForm()"
+        [disabled]="!radioButtonForm || radioButtonForm.form.invalid"
+      />
+    </div>
+    @if (radioButtonResult()) {
+    <div class="result-container">
+      <h3>Resultado do Formulário:</h3>
+      <pre class="json-result">{{ radioButtonResult() | json }}</pre>
+      <p class="result-note">
+        <strong>Nota:</strong> Os radio buttons retornam o valor da opção selecionada. O layout pode
+        ser configurado como 'horizontal' (opções lado a lado) ou 'vertical' (opções uma abaixo da
+        outra) através da propriedade <code>radioLayout</code>.
       </p>
     </div>
     }
