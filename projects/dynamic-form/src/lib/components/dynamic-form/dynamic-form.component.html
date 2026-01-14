@@ -1,6 +1,6 @@
 <form [formGroup]="form" class="dynamic-form-container">
-  @for (field of config(); track field.key) { @if (getFieldComponent(field.controlType); as
-  fieldComponent) {
+  @for (field of config(); track field.key) { @if (field.visible !== false) { @if
+  (getFieldComponent(field.controlType); as fieldComponent) {
   <div [class]="'form-field-wrapper ' + (field.styleClass || '')">
     <!-- Dynamically render the correct field component -->
     <ng-container
@@ -19,5 +19,5 @@
   <div class="form-field-wrapper">
     <small class="p-error">Tipo de campo '{{ field.controlType }}' não encontrado.</small>
   </div>
-  } }
+  } } }
 </form>

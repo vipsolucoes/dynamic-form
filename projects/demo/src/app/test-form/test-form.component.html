@@ -84,6 +84,11 @@
           >15. Formulário com Transformação de Texto</a
         >
       </li>
+      <li>
+        <a (click)="scrollToExample('exemplo-16'); $event.preventDefault()" href="#exemplo-16"
+          >16. Formulário com Campos Visíveis/Invisíveis</a
+        >
+      </li>
     </ul>
   </nav>
 
@@ -348,5 +353,38 @@
     <div class="form-container">
       <vp-dynamic-form [config]="textTransformFormConfig()" />
     </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- EXEMPLO 16: Formulário com Campos Visíveis/Invisíveis -->
+  <!-- ============================================ -->
+  <section id="exemplo-16" class="example-section">
+    <h2>16. Formulário com Campos Visíveis/Invisíveis</h2>
+    <p class="section-description">
+      Demonstra o uso da propriedade <code>visible</code> para ocultar campos do formulário. Campos
+      invisíveis não são renderizados no template, mas ainda são criados no FormGroup, permitindo que
+      seus valores e validações sejam mantidos. Útil para campos administrativos, IDs internos ou campos
+      que precisam existir no formulário mas não devem ser exibidos ao usuário.
+    </p>
+    <div class="form-container">
+      <vp-dynamic-form #visibleForm [config]="visibleFormConfig()" />
+      <div class="form-actions">
+        <p-button
+          label="Submeter Formulário"
+          (onClick)="onSubmitVisibleForm()"
+          severity="primary"
+        ></p-button>
+      </div>
+    </div>
+    @if (visibleFormResult()) {
+    <div class="result-container">
+      <h3>Resultado do Formulário (inclui campos invisíveis):</h3>
+      <pre class="json-result">{{ visibleFormResult() | json }}</pre>
+      <p class="result-note">
+        <strong>Nota:</strong> Os campos invisíveis (internalId, hiddenNotes, adminFlag, hiddenDate)
+        estão presentes no resultado mesmo não sendo renderizados na interface.
+      </p>
+    </div>
+    }
   </section>
 </div>

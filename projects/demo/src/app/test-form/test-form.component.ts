@@ -1128,4 +1128,91 @@ export class TestFormComponent {
       hint: 'A descrição será convertida para minúsculas',
     },
   ]);
+
+  // ============================================
+  // EXEMPLO 16: Formulário com Campos Visíveis/Invisíveis
+  // Demonstra campos que não são renderizados mas ainda existem no FormGroup
+  // ============================================
+  @ViewChild('visibleForm') visibleForm!: DynamicFormComponent;
+  visibleFormResult = signal<any>(null);
+
+  visibleFormConfig = signal<iFormConfig[]>([
+    {
+      key: 'name',
+      label: 'Nome Completo',
+      controlType: 'text',
+      validators: [Validators.required],
+      placeholder: 'Digite seu nome',
+      hint: 'Este campo está visível',
+    },
+    {
+      key: 'internalId',
+      label: 'ID Interno',
+      controlType: 'text',
+      value: 'AUTO-GENERATED-123',
+      visible: false,
+      validators: [Validators.required],
+      hint: 'Este campo está oculto mas existe no FormGroup',
+    },
+    {
+      key: 'email',
+      label: 'Email',
+      controlType: 'email',
+      validators: [Validators.required, Validators.email],
+      placeholder: 'seu@email.com',
+      hint: 'Este campo está visível',
+    },
+    {
+      key: 'hiddenNotes',
+      label: 'Notas Internas',
+      controlType: 'textarea',
+      value: 'Notas administrativas - não visível ao usuário',
+      visible: false,
+      textareaRows: 3,
+      hint: 'Este campo está oculto',
+    },
+    {
+      key: 'phone',
+      label: 'Telefone',
+      controlType: 'text',
+      validators: [Validators.required],
+      placeholder: '(00) 00000-0000',
+      hint: 'Este campo está visível',
+    },
+    {
+      key: 'adminFlag',
+      label: 'Flag Administrativa',
+      controlType: 'toggleswitch',
+      value: true,
+      visible: false,
+      hint: 'Campo toggle oculto',
+    },
+    {
+      key: 'hiddenDate',
+      label: 'Data de Criação',
+      controlType: 'datepicker',
+      value: new Date(),
+      visible: false,
+      dateViewType: 'date',
+      hint: 'Campo de data oculto',
+    },
+  ]);
+
+  onSubmitVisibleForm(): void {
+    if (this.visibleForm.form.valid) {
+      const formData = this.visibleForm.form;
+      this.visibleFormResult.set(formData);
+      console.log('Formulário submetido (inclui campos invisíveis):', formData);
+      console.log('Campos invisíveis presentes:', {
+        internalId: formData.get('internalId')?.value,
+        hiddenNotes: formData.get('hiddenNotes')?.value,
+        adminFlag: formData.get('adminFlag')?.value,
+        hiddenDate: formData.get('hiddenDate')?.value,
+      });
+    } else {
+      this.visibleForm.form.markAllAsTouched();
+      this.visibleFormResult.set(null);
+      console.log('Formulário inválido. Verifique os campos.');
+    }
+  }
 }
