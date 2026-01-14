@@ -29,11 +29,13 @@ export interface iFormConfig {
     | 'datepicker'
     | 'textarea'
     | 'toggleswitch'
-    | 'input-button';
+    | 'input-button'
+    | 'divider';
   /**
    * Texto a ser exibido no label do campo.
+   * Não obrigatório para controlType 'divider'.
    */
-  label: string;
+  label?: string;
   /**
    * Valor inicial do campo.
    */
@@ -137,4 +139,26 @@ export interface iFormConfig {
    * Quando definido, o texto é transformado automaticamente conforme o usuário digita.
    */
   textTransform?: 'uppercase' | 'lowercase';
+  /**
+   * Configuração do divisor/separador para campos do tipo 'divider'.
+   * Aplicável apenas para controlType 'divider'.
+   */
+  dividerConfig?: {
+    /**
+     * Orientação do divisor. Default: 'horizontal'.
+     */
+    layout?: 'horizontal' | 'vertical';
+    /**
+     * Estilo da borda do divisor. Default: 'solid'.
+     */
+    type?: 'solid' | 'dashed' | 'dotted';
+    /**
+     * Alinhamento do conteúdo do divisor (quando há texto).
+     */
+    align?: 'left' | 'center' | 'right' | 'top' | 'bottom';
+    /**
+     * Texto opcional para exibir no divisor.
+     */
+    content?: string;
+  };
 }

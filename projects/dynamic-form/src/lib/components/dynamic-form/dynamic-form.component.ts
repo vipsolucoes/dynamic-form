@@ -5,6 +5,7 @@ import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule } from '@a
 
 import { DynamicFormErrorComponent } from '../form-field-error/form-field-error.component';
 import { DatePickerFieldComponent } from '../../fields/datepicker-field.component';
+import { DividerFieldComponent } from '../../fields/divider-field.component';
 import { InputTextFieldComponent } from '../../fields/input-text-field.component';
 import { InputButtonFieldComponent } from '../../fields/input-button-field.component';
 import { NumberInputFieldComponent } from '../../fields/number-input-field.component';
@@ -42,6 +43,7 @@ export class DynamicFormComponent implements OnInit {
     textarea: TextareaFieldComponent,
     toggleswitch: ToggleSwitchFieldComponent,
     'input-button': InputButtonFieldComponent,
+    divider: DividerFieldComponent,
   };
 
   ngOnInit(): void {
@@ -55,6 +57,11 @@ export class DynamicFormComponent implements OnInit {
 
   private buildForm(config: iFormConfig[]): void {
     config.forEach((field) => {
+      // Campos do tipo 'divider' não criam FormControl, são apenas elementos visuais
+      if (field.controlType === 'divider') {
+        return;
+      }
+
       // Para toggle switch, o valor padrão é false se não especificado
       const defaultValue = field.controlType === 'toggleswitch' ? (field.value ?? false) : (field.value ?? '');
 
