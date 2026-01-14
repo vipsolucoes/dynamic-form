@@ -1057,4 +1057,75 @@ export class TestFormComponent {
       this.isSearching.set(false);
     }
   }
+
+  // ============================================
+  // EXEMPLO 15: Formulário com Transformação de Texto
+  // Demonstra uppercase e lowercase em diferentes tipos de campos
+  // ============================================
+  textTransformFormConfig = signal<iFormConfig[]>([
+    {
+      key: 'codigo',
+      label: 'Código do Produto',
+      controlType: 'text',
+      validators: [Validators.required],
+      placeholder: 'Digite o código',
+      textTransform: 'uppercase',
+      hint: 'O código será convertido automaticamente para MAIÚSCULAS',
+    },
+    {
+      key: 'email',
+      label: 'E-mail',
+      controlType: 'email',
+      validators: [Validators.required, Validators.email],
+      placeholder: 'seu@email.com',
+      textTransform: 'lowercase',
+      hint: 'O e-mail será convertido automaticamente para minúsculas',
+    },
+    {
+      key: 'nome',
+      label: 'Nome Completo',
+      controlType: 'text',
+      validators: [Validators.required],
+      placeholder: 'Digite seu nome',
+      hint: 'Este campo não tem transformação',
+    },
+    {
+      key: 'observacoes',
+      label: 'Observações',
+      controlType: 'textarea',
+      validators: [Validators.maxLength(500)],
+      placeholder: 'Digite as observações',
+      textTransform: 'uppercase',
+      textareaRows: 4,
+      hint: 'As observações serão convertidas para MAIÚSCULAS',
+    },
+    {
+      key: 'sku',
+      label: 'SKU',
+      controlType: 'input-button',
+      validators: [Validators.required],
+      placeholder: 'Digite o SKU',
+      textTransform: 'uppercase',
+      hint: 'O SKU será convertido para MAIÚSCULAS',
+      buttonConfig: {
+        icon: 'pi pi-search',
+        tooltip: 'Buscar produto pelo SKU',
+        position: 'right',
+        severity: 'primary',
+      },
+      buttonCallback: async (fieldKey: string, value: any) => {
+        console.log('Buscando produto com SKU:', value);
+        alert(`Buscando produto com SKU: ${value}`);
+      },
+    } as any,
+    {
+      key: 'descricao',
+      label: 'Descrição',
+      controlType: 'textarea',
+      placeholder: 'Digite a descrição',
+      textTransform: 'lowercase',
+      textareaRows: 3,
+      hint: 'A descrição será convertida para minúsculas',
+    },
+  ]);
 }

@@ -79,6 +79,11 @@
           >14. Campo Input-Button (Busca de CEP)</a
         >
       </li>
+      <li>
+        <a (click)="scrollToExample('exemplo-15'); $event.preventDefault()" href="#exemplo-15"
+          >15. Formulário com Transformação de Texto</a
+        >
+      </li>
     </ul>
   </nav>
 
@@ -328,5 +333,20 @@
       <pre class="json-result">{{ inputButtonResult().dados | json }}</pre>
     </div>
     }
+  </section>
+
+  <!-- ============================================ -->
+  <!-- EXEMPLO 15: Formulário com Transformação de Texto -->
+  <!-- ============================================ -->
+  <section id="exemplo-15" class="example-section">
+    <h2>15. Formulário com Transformação de Texto</h2>
+    <p class="section-description">
+      Demonstra a transformação automática de texto em uppercase ou lowercase usando a propriedade
+      <code>textTransform</code>. A transformação ocorre em tempo real enquanto o usuário digita,
+      preservando a posição do cursor. Funciona com campos de texto, email, textarea e input-button.
+    </p>
+    <div class="form-container">
+      <vp-dynamic-form [config]="textTransformFormConfig()" />
+    </div>
   </section>
 </div>

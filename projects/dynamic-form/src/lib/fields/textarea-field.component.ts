@@ -4,11 +4,12 @@ import { IftaLabelModule } from 'primeng/iftalabel';
 import { TextareaModule } from 'primeng/textarea';
 
 import { iFormConfig } from '../interfaces/form-config.interface';
+import { TextTransformDirective } from '../directives/text-transform.directive';
 
 @Component({
   selector: 'vp-textarea-field',
   standalone: true,
-  imports: [ReactiveFormsModule, IftaLabelModule, TextareaModule],
+  imports: [ReactiveFormsModule, IftaLabelModule, TextareaModule, TextTransformDirective],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div [formGroup]="form()">
@@ -21,6 +22,7 @@ import { iFormConfig } from '../interfaces/form-config.interface';
           [rows]="field().textareaRows ?? 1"
           [cols]="field().textareaCols"
           [autoResize]="field().textareaAutoResize ?? false"
+          [vpTextTransform]="field().textTransform || null"
         ></textarea>
         <label [for]="field().key">{{ field().label }}</label>
       </p-iftalabel>
