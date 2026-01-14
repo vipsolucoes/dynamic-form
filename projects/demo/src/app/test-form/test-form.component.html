@@ -89,6 +89,11 @@
           >16. Formulário com Campos Visíveis/Invisíveis</a
         >
       </li>
+      <li>
+        <a (click)="scrollToExample('exemplo-17'); $event.preventDefault()" href="#exemplo-17"
+          >17. Formulário com Separadores/Divisores</a
+        >
+      </li>
     </ul>
   </nav>
 
@@ -362,9 +367,9 @@
     <h2>16. Formulário com Campos Visíveis/Invisíveis</h2>
     <p class="section-description">
       Demonstra o uso da propriedade <code>visible</code> para ocultar campos do formulário. Campos
-      invisíveis não são renderizados no template, mas ainda são criados no FormGroup, permitindo que
-      seus valores e validações sejam mantidos. Útil para campos administrativos, IDs internos ou campos
-      que precisam existir no formulário mas não devem ser exibidos ao usuário.
+      invisíveis não são renderizados no template, mas ainda são criados no FormGroup, permitindo
+      que seus valores e validações sejam mantidos. Útil para campos administrativos, IDs internos
+      ou campos que precisam existir no formulário mas não devem ser exibidos ao usuário.
     </p>
     <div class="form-container">
       <vp-dynamic-form #visibleForm [config]="visibleFormConfig()" />
@@ -383,6 +388,41 @@
       <p class="result-note">
         <strong>Nota:</strong> Os campos invisíveis (internalId, hiddenNotes, adminFlag, hiddenDate)
         estão presentes no resultado mesmo não sendo renderizados na interface.
+      </p>
+    </div>
+    }
+  </section>
+
+  <!-- ============================================ -->
+  <!-- EXEMPLO 17: Formulário com Separadores/Divisores -->
+  <!-- ============================================ -->
+  <section id="exemplo-17" class="example-section">
+    <h2>17. Formulário com Separadores/Divisores</h2>
+    <p class="section-description">
+      Demonstra o uso de separadores/divisores para organizar visualmente seções do formulário
+      usando o componente <code>divider</code> do PrimeNG. Os dividers podem ter diferentes estilos
+      (solid, dashed, dotted), alinhamentos (left, center, right) e podem incluir texto para
+      identificar seções. Útil para criar formulários mais organizados e fáceis de navegar,
+      separando grupos lógicos de campos (ex: Dados Pessoais, Dados de Contato, Endereço, etc.).
+    </p>
+    <div class="form-container">
+      <vp-dynamic-form #dividerForm [config]="dividerFormConfig()" />
+    </div>
+    <div class="submit-actions">
+      <p-button
+        label="Salvar Formulário"
+        icon="pi pi-save"
+        (onClick)="onSubmitDividerForm()"
+        [disabled]="!dividerForm || dividerForm.form.invalid"
+      />
+    </div>
+    @if (dividerFormResult()) {
+    <div class="result-container">
+      <h3>Resultado do Formulário:</h3>
+      <pre class="json-result">{{ dividerFormResult() | json }}</pre>
+      <p class="result-note">
+        <strong>Nota:</strong> Os campos do tipo 'divider' não aparecem no resultado, pois são
+        apenas elementos visuais de separação e não criam FormControls.
       </p>
     </div>
     }

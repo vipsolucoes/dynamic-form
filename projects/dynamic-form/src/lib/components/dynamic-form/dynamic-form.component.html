@@ -8,12 +8,14 @@
       [ngComponentOutletInputs]="{ form: form, field: field }"
     />
 
-    @if (field.hint) {
+    @if (field.hint && field.controlType !== 'divider') {
     <small class="hint-text">{{ field.hint }}</small>
     }
 
-    <!-- Reusable error display component -->
+    <!-- Reusable error display component - apenas para campos que não são divider -->
+    @if (field.controlType !== 'divider') {
     <vp-form-field-error [control]="getControl(field.key)" />
+    }
   </div>
   } @else {
   <div class="form-field-wrapper">

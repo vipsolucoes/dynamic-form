@@ -1215,4 +1215,185 @@ export class TestFormComponent {
       console.log('Formulário inválido. Verifique os campos.');
     }
   }
+
+  // ============================================
+  // EXEMPLO 17: Formulário com Separadores/Divisores
+  // Demonstra o uso de dividers para separar visualmente seções do formulário
+  // ============================================
+  @ViewChild('dividerForm') dividerForm!: DynamicFormComponent;
+  dividerFormResult = signal<any>(null);
+
+  dividerFormConfig = signal<iFormConfig[]>([
+    {
+      key: 'nome',
+      label: 'Nome Completo',
+      controlType: 'text',
+      validators: [Validators.required],
+      placeholder: 'Digite seu nome completo',
+      hint: 'Seu nome como aparece no documento',
+    },
+    {
+      key: 'cpf',
+      label: 'CPF',
+      controlType: 'text',
+      validators: [Validators.required],
+      placeholder: '000.000.000-00',
+      hint: 'Apenas números',
+    },
+    {
+      key: 'dataNascimento',
+      label: 'Data de Nascimento',
+      controlType: 'datepicker',
+      validators: [Validators.required],
+      placeholder: 'Selecione a data',
+      dateViewType: 'date',
+    },
+    {
+      key: 'divider-1',
+      controlType: 'divider',
+      dividerConfig: {
+        type: 'solid',
+        align: 'center',
+        content: 'Dados de Contato',
+      },
+    },
+    {
+      key: 'email',
+      label: 'E-mail',
+      controlType: 'email',
+      validators: [Validators.required, Validators.email],
+      placeholder: 'seu@email.com',
+      hint: 'E-mail principal para contato',
+    },
+    {
+      key: 'telefone',
+      label: 'Telefone',
+      controlType: 'text',
+      validators: [Validators.required],
+      placeholder: '(00) 00000-0000',
+      hint: 'Inclua DDD',
+    },
+    {
+      key: 'celular',
+      label: 'Celular',
+      controlType: 'text',
+      placeholder: '(00) 00000-0000',
+      hint: 'Opcional',
+    },
+    {
+      key: 'divider-2',
+      controlType: 'divider',
+      dividerConfig: {
+        type: 'dashed',
+        align: 'left',
+        content: 'Endereço',
+      },
+    },
+    {
+      key: 'cep',
+      label: 'CEP',
+      controlType: 'text',
+      validators: [Validators.required],
+      placeholder: '00000-000',
+    },
+    {
+      key: 'rua',
+      label: 'Rua',
+      controlType: 'text',
+      validators: [Validators.required],
+      placeholder: 'Nome da rua',
+      styleClass: 'grid-col-8',
+    },
+    {
+      key: 'numero',
+      label: 'Número',
+      controlType: 'text',
+      validators: [Validators.required],
+      placeholder: 'Número',
+      styleClass: 'grid-col-4',
+    },
+    {
+      key: 'complemento',
+      label: 'Complemento',
+      controlType: 'text',
+      placeholder: 'Apto, Bloco, etc.',
+      styleClass: 'grid-col-6',
+    },
+    {
+      key: 'bairro',
+      label: 'Bairro',
+      controlType: 'text',
+      validators: [Validators.required],
+      placeholder: 'Nome do bairro',
+      styleClass: 'grid-col-6',
+    },
+    {
+      key: 'cidade',
+      label: 'Cidade',
+      controlType: 'text',
+      validators: [Validators.required],
+      placeholder: 'Nome da cidade',
+      styleClass: 'grid-col-8',
+    },
+    {
+      key: 'estado',
+      label: 'Estado',
+      controlType: 'select',
+      validators: [Validators.required],
+      options: [
+        { label: 'São Paulo', value: 'SP' },
+        { label: 'Rio de Janeiro', value: 'RJ' },
+        { label: 'Minas Gerais', value: 'MG' },
+        { label: 'Paraná', value: 'PR' },
+        { label: 'Santa Catarina', value: 'SC' },
+        { label: 'Rio Grande do Sul', value: 'RS' },
+      ],
+      placeholder: 'Selecione o estado',
+      styleClass: 'grid-col-4',
+    },
+    {
+      key: 'divider-3',
+      controlType: 'divider',
+      dividerConfig: {
+        type: 'dotted',
+        align: 'right',
+        content: 'Informações Adicionais',
+      },
+    },
+    {
+      key: 'observacoes',
+      label: 'Observações',
+      controlType: 'textarea',
+      placeholder: 'Adicione observações adicionais...',
+      textareaRows: 4,
+      textareaAutoResize: true,
+      hint: 'Campo opcional para observações',
+    },
+    {
+      key: 'divider-4',
+      controlType: 'divider',
+      dividerConfig: {
+        type: 'solid',
+      },
+    },
+    {
+      key: 'aceitarTermos',
+      label: 'Aceitar Termos e Condições',
+      controlType: 'toggleswitch',
+      validators: [Validators.requiredTrue],
+      hint: 'Você precisa aceitar os termos para continuar',
+    },
+  ]);
+
+  onSubmitDividerForm(): void {
+    if (this.dividerForm.form.valid) {
+      const formData = this.dividerForm.form.value;
+      this.dividerFormResult.set(formData);
+      console.log('Formulário com dividers submetido:', formData);
+    } else {
+      this.dividerForm.form.markAllAsTouched();
+      this.dividerFormResult.set(null);
+      console.log('Formulário inválido. Verifique os campos.');
+    }
+  }
 }
