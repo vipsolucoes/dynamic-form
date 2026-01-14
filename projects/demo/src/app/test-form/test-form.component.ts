@@ -1,9 +1,19 @@
 import { CommonModule, JsonPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, signal, ViewChild } from '@angular/core';
-import { Validators } from '@angular/forms';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  inject,
+  OnInit,
+  signal,
+  ViewChild,
+} from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormGroup, Validators } from '@angular/forms';
 import { DynamicFormComponent, iFormConfig } from '@vipsolucoes/dynamic-form';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
+import { EstadoCidadeService } from '../services/estado-cidade.service';
 
 @Component({
   selector: 'app-test-form',
@@ -12,7 +22,8 @@ import { CardModule } from 'primeng/card';
   styleUrl: './test-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TestFormComponent {
+export class TestFormComponent implements OnInit {
+  private readonly estadoCidadeService = inject(EstadoCidadeService);
   /**
    * Navega até um exemplo específico fazendo scroll suave até o elemento.
    * @param exemploId ID do exemplo (ex: 'exemplo-1', 'exemplo-2', etc.)
@@ -1393,6 +1404,135 @@ export class TestFormComponent {
     } else {
       this.dividerForm.form.markAllAsTouched();
       this.dividerFormResult.set(null);
+      console.log('Formulário inválido. Verifique os campos.');
+    }
+  }
+
+  // ============================================
+  // EXEMPLO 18: Formulário com Estado e Cidade (Select Dinâmico)
+  // Demonstra campos select interdependentes com carregamento dinâmico
+  // ============================================
+  @ViewChild('estadoCidadeForm') estadoCidadeForm!: DynamicFormComponent;
+  estadoCidadeResult = signal<any>(null);
+  isLoadingCidades = signal<boolean>(false);
+  private estadoCidadeFormGroup?: FormGroup;
+  private readonly destroyRef = inject(DestroyRef);
+
+  estadoCidadeFormConfig = signal<iFormConfig[]>([
+    {
+      key: 'estado',
+      label: 'Estado',
+      controlType: 'select',
+      options: [],
+      validators: [Validators.required],
+      placeholder: 'Selecione o estado',
+      hint: 'Selecione um estado para carregar as cidades',
+    },
+    {
+      key: 'cidade',
+      label: 'Cidade',
+      controlType: 'select',
+      options: [],
+      validators: [Validators.required],
+      placeholder: 'Selecione a cidade',
+      disabled: true,
+      hint: 'As cidades serão carregadas após selecionar um estado',
+    },
+  ]);
+
+  ngOnInit(): void {
+    this.carregarEstados();
+  }
+
+  /**
+   * Callback executado quando o formulário está pronto.
+   * Configura a dependência entre os campos estado e cidade.
+   */
+  onEstadoCidadeFormReady(form: FormGroup): void {
+    this.estadoCidadeFormGroup = form;
+
+    // Escuta mudanças no campo estado
+    form
+      .get('estado')
+      ?.valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((uf: string | null) => {
+        if (uf) {
+          this.carregarCidades(uf);
+        } else {
+          this.limparCidades();
+        }
+      });
+  }
+
+  /**
+   * Carrega os estados do arquivo JSON e atualiza a configuração do formulário.
+   */
+  private carregarEstados(): void {
+    this.estadoCidadeService.loadEstados().subscribe({
+      next: (estados) => {
+        this.atualizarCampo('estado', { options: estados });
+      },
+      error: (error) => {
+        console.error('Erro ao carregar estados:', error);
+        alert('Erro ao carregar estados. Verifique o console para mais detalhes.');
+      },
+    });
+  }
+
+  /**
+   * Carrega as cidades de um estado específico via API.
+   * @param uf Sigla do estado selecionado
+   */
+  private carregarCidades(uf: string): void {
+    this.isLoadingCidades.set(true);
+    this.limparCidades();
+
+    this.estadoCidadeService.loadCidadesByEstado(uf).subscribe({
+      next: (cidades) => {
+        this.atualizarCampo('cidade', { options: cidades, disabled: false });
+        this.estadoCidadeFormGroup?.get('cidade')?.enable({ emitEvent: false });
+        this.isLoadingCidades.set(false);
+      },
+      error: (error) => {
+        console.error('Erro ao carregar cidades:', error);
+        this.isLoadingCidades.set(false);
+        alert('Erro ao carregar cidades. Verifique o console para mais detalhes.');
+      },
+    });
+  }
+
+  /**
+   * Limpa as opções de cidade e desabilita o campo.
+   */
+  private limparCidades(): void {
+    this.atualizarCampo('cidade', { options: [], disabled: true });
+    const cidadeControl = this.estadoCidadeFormGroup?.get('cidade');
+    if (cidadeControl) {
+      cidadeControl.reset(null, { emitEvent: false });
+      cidadeControl.disable({ emitEvent: false });
+    }
+  }
+
+  /**
+   * Método auxiliar que atualiza um campo criando um novo objeto (imutabilidade).
+   * Isso garante que o Angular detecte a mudança mesmo com OnPush change detection.
+   * @param key Chave do campo a ser atualizado
+   * @param changes Propriedades a serem atualizadas no campo
+   */
+  private atualizarCampo(key: string, changes: Partial<iFormConfig>): void {
+    this.estadoCidadeFormConfig.update((config) =>
+      config.map((field) => (field.key === key ? { ...field, ...changes } : field))
+    );
+  }
+
+  onSubmitEstadoCidadeForm(): void {
+    if (this.estadoCidadeFormGroup?.valid) {
+      const formData = this.estadoCidadeFormGroup.value;
+      this.estadoCidadeResult.set(formData);
+      console.log('Formulário Estado/Cidade submetido:', formData);
+    } else {
+      this.estadoCidadeFormGroup?.markAllAsTouched();
+      this.estadoCidadeResult.set(null);
       console.log('Formulário inválido. Verifique os campos.');
     }
   }
