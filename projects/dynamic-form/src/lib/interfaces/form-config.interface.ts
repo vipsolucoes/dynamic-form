@@ -126,4 +126,10 @@ export interface iFormConfig {
    * Recebe a key do campo e o valor atual como parâmetros.
    */
   buttonCallback?: (fieldKey: string, fieldValue: any) => void | Promise<void>;
+  /**
+   * Transformação de texto para o campo. Opções: 'uppercase' | 'lowercase'.
+   * Aplicável apenas para campos de texto (text, email, textarea, input-button).
+   * Quando definido, o texto é transformado automaticamente conforme o usuário digita.
+   */
+  textTransform?: 'uppercase' | 'lowercase';
 }

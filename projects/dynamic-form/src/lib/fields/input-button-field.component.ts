@@ -8,6 +8,7 @@ import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 
 import { iFormConfig } from '../interfaces/form-config.interface';
+import { TextTransformDirective } from '../directives/text-transform.directive';
 
 @Component({
   selector: 'vp-input-button-field',
@@ -20,6 +21,7 @@ import { iFormConfig } from '../interfaces/form-config.interface';
     InputGroupAddonModule,
     ButtonModule,
     TooltipModule,
+    TextTransformDirective,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -44,6 +46,7 @@ import { iFormConfig } from '../interfaces/form-config.interface';
             [id]="field().key"
             [formControlName]="field().key"
             [placeholder]="field().placeholder || ''"
+            [vpTextTransform]="field().textTransform || null"
           />
           <label [for]="field().key">{{ field().label }}</label>
         </p-iftalabel>

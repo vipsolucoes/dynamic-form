@@ -25,6 +25,9 @@ export { DYNAMIC_FORM_ERROR_MESSAGES } from './lib/interfaces/error-messages.int
 // Services
 export { FieldRegistryService } from './lib/services/field-registry.service';
 
+// Directives
+export { TextTransformDirective } from './lib/directives/text-transform.directive';
+
 // Utility functions
 export { PRIMENG_PTBR } from './lib/i18n/primeng-ptbr';
 export { provideDynamicFormConfig } from './lib/providers/dynamic-form.providers';

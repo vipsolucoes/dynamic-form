@@ -144,10 +144,12 @@ Componente especializado para campos de toggle switch (liga/desliga).
 Renderiza um campo de input text combinado com um botão usando `p-inputgroup`.
 
 **Entradas (`input`)**:
+
 - `form`: `input.required<FormGroup>()` - O FormGroup reativo.
 - `field`: `input.required<iFormConfig>()` - A configuração do campo.
 
 **Configuração Específica (`iFormConfig`)**:
+
 - `buttonConfig`: Configuração do botão
   - `icon`: Ícone PrimeIcons (ex: 'pi pi-search')
   - `label`: Texto do botão (opcional)
@@ -157,6 +159,7 @@ Renderiza um campo de input text combinado com um botão usando `p-inputgroup`.
 - `buttonCallback`: Função executada no click do botão, recebe `(fieldKey: string, fieldValue: any) => void | Promise<void>`
 
 **Comportamento**:
+
 - O botão pode ser posicionado à esquerda ou direita do input
 - O botão é desabilitado quando o campo está desabilitado
 - Ao clicar no botão, executa a função `buttonCallback` passando a key e o valor atual do campo
@@ -222,12 +225,21 @@ export interface iFormConfig {
   textareaCols?: number; // Para controlType: 'textarea'
   toggleTrueValue?: any; // Para controlType: 'toggleswitch'
   toggleFalseValue?: any; // Para controlType: 'toggleswitch'
-  buttonConfig?: { // Para controlType: 'input-button'
+  buttonConfig?: {
+    // Para controlType: 'input-button'
     icon?: string; // Ícone do PrimeIcons
     label?: string; // Texto do botão
     tooltip?: string; // Tooltip do botão
     position?: 'left' | 'right'; // Posição do botão (default: 'right')
-    severity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'danger' | 'help' | 'contrast'; // Estilo do botão
+    severity?:
+      | 'primary'
+      | 'secondary'
+      | 'success'
+      | 'info'
+      | 'warning'
+      | 'danger'
+      | 'help'
+      | 'contrast'; // Estilo do botão
   };
   buttonCallback?: (fieldKey: string, fieldValue: any) => void | Promise<void>; // Callback executado ao clicar no botão
 }
@@ -253,6 +265,7 @@ export interface iFormConfig {
 - `toggleFalseValue?`: Valor quando o toggle switch está desativado. Default: `false`. Aplicável apenas para `controlType: 'toggleswitch'`.
 - `buttonConfig?`: Configuração do botão para campos do tipo `'input-button'`. Contém propriedades para personalizar o botão (ícone, label, tooltip, posição, severity).
 - `buttonCallback?`: Função callback executada ao clicar no botão do campo `'input-button'`. Recebe a key do campo e o valor atual como parâmetros. Pode ser síncrona ou assíncrona (`Promise<void>`).
+- `textTransform?`: Transformação de texto para o campo. Opções: `'uppercase'` | `'lowercase'`. Aplicável apenas para campos de texto (text, email, textarea, input-button). Quando definido, o texto é transformado automaticamente conforme o usuário digita.
 
 ### De Configuração a Formulário Renderizado
 
@@ -863,6 +876,83 @@ const disabledFormConfig: iFormConfig[] = [
 - O Angular Reactive Forms gerencia automaticamente o atributo `disabled` no DOM quando o `FormControl` está desabilitado, garantindo que o estado visual do componente reflita o estado desabilitado sem necessidade de binding explícito no template.
 - Útil para campos de visualização apenas, campos pré-preenchidos que não devem ser alterados, ou campos que dependem de condições específicas para serem habilitados.
 
+### Transformação de Texto (`textTransform`)
+
+O componente suporta transformação automática de texto em uppercase ou lowercase através da propriedade `textTransform` na `iFormConfig`. Esta funcionalidade é aplicável apenas para campos de texto (`text`, `email`, `textarea`, `input-button`).
+
+#### Propriedades Específicas
+
+- **`textTransform`**: Tipo de transformação a ser aplicada. Opções: `'uppercase'` | `'lowercase'`. Quando definido, o texto é transformado automaticamente conforme o usuário digita, preservando a posição do cursor.
+
+#### Como Funciona
+
+A transformação é implementada através de uma diretiva (`TextTransformDirective`) que:
+
+- Intercepta eventos de input em tempo real
+- Aplica a transformação (uppercase ou lowercase) automaticamente
+- Preserva a posição do cursor durante a digitação
+- Funciona perfeitamente com Reactive Forms
+- Aplica a transformação também em valores iniciais
+
+#### Exemplo de Uso Básico
+
+```typescript
+const textTransformConfig: iFormConfig[] = [
+  {
+    key: 'codigo',
+    controlType: 'text',
+    label: 'Código',
+    placeholder: 'Digite o código',
+    textTransform: 'uppercase', // Converte para maiúsculas
+    validators: [Validators.required],
+  },
+  {
+    key: 'email',
+    controlType: 'email',
+    label: 'E-mail',
+    placeholder: 'Digite seu e-mail',
+    textTransform: 'lowercase', // Converte para minúsculas
+    validators: [Validators.required, Validators.email],
+  },
+  {
+    key: 'observacoes',
+    controlType: 'textarea',
+    label: 'Observações',
+    placeholder: 'Digite as observações',
+    textTransform: 'uppercase', // Também funciona com textarea
+    textareaRows: 4,
+  },
+  {
+    key: 'busca',
+    controlType: 'input-button',
+    label: 'Buscar',
+    placeholder: 'Digite o termo de busca',
+    textTransform: 'uppercase', // Funciona com input-button também
+    buttonConfig: {
+      icon: 'pi pi-search',
+      position: 'right',
+    },
+  },
+];
+```
+
+#### Comportamento
+
+- A transformação ocorre em tempo real enquanto o usuário digita
+- O cursor é preservado na posição correta após a transformação
+- Valores iniciais também são transformados automaticamente
+- A transformação funciona apenas com campos de texto (não aplicável a `number`, `select`, `datepicker`, `toggleswitch`)
+- Quando `textTransform` não é definido ou é `null`, nenhuma transformação é aplicada
+
+#### Casos de Uso
+
+Esta funcionalidade é útil para:
+
+- Códigos de produtos, SKUs, ou identificadores que devem estar sempre em maiúsculas
+- Emails que devem estar sempre em minúsculas
+- Campos de observações ou notas que precisam de formatação consistente
+- Campos de busca que requerem normalização de texto
+
 ### Campos de Toggle Switch
 
 O componente suporta campos de toggle switch através do `controlType: 'toggleswitch'`, utilizando o componente `ToggleSwitchFieldComponent` que renderiza o `p-toggleswitch` do PrimeNG.
@@ -954,6 +1044,7 @@ As seguintes melhorias foram implementadas na versão atual:
 - **Campo de Toggle Switch**: Adicionado suporte para campos de toggle switch com label inline, valores customizados (`toggleTrueValue` e `toggleFalseValue`) e integração com formulários reativos.
 - **Propriedade Disabled**: Adicionado suporte para desabilitar campos através da propriedade `disabled` na `iFormConfig`. Quando `disabled: true`, o campo não pode ser editado e o `FormControl` é criado como desabilitado. Aplicável a todos os tipos de campo (text, email, password, number, select, datepicker, textarea, toggleswitch).
 - **Dependência entre ToggleSwitch e Campos (`enabledWhen`)**: Adicionado suporte para criar dependências dinâmicas entre campos usando a propriedade `enabledWhen`. Quando um campo referencia a `key` de um toggleSwitch através de `enabledWhen`, ele é habilitado automaticamente quando o toggle está ativado e desabilitado (com limpeza automática do valor) quando o toggle está desativado. Isso permite criar formulários condicionais onde campos só ficam disponíveis quando uma opção está ativada.
+- **Transformação de Texto (`textTransform`)**: Adicionado suporte para transformação automática de texto em uppercase ou lowercase através da propriedade `textTransform` na `iFormConfig`. A transformação ocorre em tempo real enquanto o usuário digita, preservando a posição do cursor. Aplicável apenas para campos de texto (text, email, textarea, input-button). Implementado através de uma diretiva standalone (`TextTransformDirective`) que funciona perfeitamente com Reactive Forms.
 - **ChangeDetectionStrategy.OnPush**: Todos os componentes utilizam `OnPush` para otimização de performance.
 - **FieldRegistryService**: Sistema de registro de campos customizados para extensibilidade.
 - **Mensagens de Erro Customizáveis**: Suporte a mensagens de erro customizadas via `provideDynamicFormConfig`.
