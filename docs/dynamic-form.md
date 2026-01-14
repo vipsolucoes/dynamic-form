@@ -214,6 +214,7 @@ export interface iFormConfig {
   placeholder?: string;
   hint?: string;
   disabled?: boolean; // Indica se o campo deve estar desabilitado. Default: false.
+  visible?: boolean; // Indica se o campo deve estar visível. Default: true. Quando false, o campo não é renderizado, mas ainda é criado no FormGroup.
   enabledWhen?: string; // Chave (key) do campo toggleSwitch que controla a habilitação deste campo.
   styleClass?: string;
   options?: iFieldOption[];
@@ -252,6 +253,7 @@ export interface iFormConfig {
 - `placeholder?`: Texto de placeholder opcional.
 - `hint?`: Texto de dica opcional exibido abaixo do campo.
 - `disabled?`: Indica se o campo deve estar desabilitado. Quando `true`, o campo não pode ser editado e o `FormControl` é criado como desabilitado. Default: `false`. Aplicável a todos os tipos de campo.
+- `visible?`: Indica se o campo deve estar visível. Quando `false`, o campo não é renderizado no template, mas ainda é criado no `FormGroup`. Default: `true`. Aplicável a todos os tipos de campo. Útil para formulários condicionais onde campos podem aparecer/desaparecer dinamicamente.
 - `enabledWhen?`: Chave (key) do campo toggleSwitch que controla a habilitação deste campo. Quando o toggle referenciado estiver ativado (true), este campo será habilitado. Quando desativado (false), este campo será desabilitado e seu valor será limpo automaticamente. Aplicável a todos os tipos de campo exceto `toggleswitch`. O campo referenciado deve existir no formulário e ser do tipo `toggleswitch`.
 - `styleClass?`: Classes CSS adicionais para o wrapper do campo. Útil para criar layouts customizados (ex: `'grid-col-6'` para campos lado a lado em um grid de 12 colunas).
 - `options?`: Necessário para `controlType: 'select'`, fornecendo as opções do dropdown.
@@ -875,6 +877,66 @@ const disabledFormConfig: iFormConfig[] = [
 - Campos desabilitados não podem ser editados pelo usuário e não participam da validação do formulário (campos desabilitados são excluídos de `form.value` por padrão do Angular).
 - O Angular Reactive Forms gerencia automaticamente o atributo `disabled` no DOM quando o `FormControl` está desabilitado, garantindo que o estado visual do componente reflita o estado desabilitado sem necessidade de binding explícito no template.
 - Útil para campos de visualização apenas, campos pré-preenchidos que não devem ser alterados, ou campos que dependem de condições específicas para serem habilitados.
+
+### Campos Invisíveis
+
+Todos os tipos de campo suportam a propriedade `visible` para ocultar campos do formulário. Quando `visible: false`, o campo não é renderizado no template, mas ainda é criado no `FormGroup`, permitindo que seus valores e validações sejam mantidos.
+
+#### Exemplo de Uso
+
+```typescript
+const visibleFormConfig: iFormConfig[] = [
+  {
+    key: 'name',
+    label: 'Nome Completo',
+    controlType: 'text',
+    validators: [Validators.required],
+    placeholder: 'Digite seu nome',
+  },
+  {
+    key: 'internalId',
+    label: 'ID Interno',
+    controlType: 'text',
+    value: 'AUTO-GENERATED-123',
+    visible: false, // Campo oculto mas presente no FormGroup
+    validators: [Validators.required],
+  },
+  {
+    key: 'email',
+    label: 'Email',
+    controlType: 'email',
+    validators: [Validators.required, Validators.email],
+    placeholder: 'seu@email.com',
+  },
+  {
+    key: 'hiddenNotes',
+    label: 'Notas Internas',
+    controlType: 'textarea',
+    value: 'Notas administrativas',
+    visible: false, // Campo oculto
+    textareaRows: 3,
+  },
+];
+```
+
+#### Comportamento
+
+- Quando `visible: false`, o campo não é renderizado no template, mas o `FormControl` ainda é criado no `FormGroup` durante `buildForm()`.
+- Campos invisíveis mantêm seus valores e validações no `FormGroup`.
+- Campos invisíveis aparecem em `form.value` e `form.getRawValue()`, permitindo que sejam incluídos na submissão do formulário.
+- A verificação `field.visible !== false` garante que campos sem a propriedade (undefined) sejam tratados como visíveis (padrão).
+- Útil para campos que precisam existir no formulário mas não devem ser exibidos ao usuário (ex: IDs internos, campos calculados, campos administrativos).
+- Compatível com outras propriedades como `disabled` e `enabledWhen` (um campo pode estar visível mas desabilitado, ou invisível e habilitado).
+
+#### Casos de Uso
+
+Esta funcionalidade é útil para:
+
+- Campos administrativos que não devem ser exibidos ao usuário final
+- IDs internos ou campos calculados que precisam estar no formulário
+- Formulários condicionais onde campos podem aparecer/desaparecer baseado em lógica de negócio
+- Campos de auditoria ou rastreamento que são preenchidos automaticamente
+- Formulários multi-etapa onde alguns campos só aparecem em etapas específicas
 
 ### Transformação de Texto (`textTransform`)
 

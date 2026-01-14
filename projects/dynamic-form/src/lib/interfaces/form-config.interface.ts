@@ -51,6 +51,11 @@ export interface iFormConfig {
    */
   disabled?: boolean;
   /**
+   * Indica se o campo deve estar visível. Default: true.
+   * Quando false, o campo não é renderizado no template, mas ainda é criado no FormGroup.
+   */
+  visible?: boolean;
+  /**
    * Chave (key) do campo toggleSwitch que controla a habilitação deste campo.
    * Quando o toggle referenciado estiver ativado (true), este campo será habilitado.
    * Quando desativado (false), este campo será desabilitado.
