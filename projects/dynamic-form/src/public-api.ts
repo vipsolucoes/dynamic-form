@@ -16,6 +16,7 @@ export { NumberInputFieldComponent } from './lib/fields/number-input-field.compo
 export { PasswordFieldComponent } from './lib/fields/password-field.component';
 export { TextareaFieldComponent } from './lib/fields/textarea-field.component';
 export { ToggleSwitchFieldComponent } from './lib/fields/toggleswitch-field.component';
+export { RadioButtonFieldComponent } from './lib/fields/radiobutton-field.component';
 export { DividerFieldComponent } from './lib/fields/divider-field.component';
 
 // Interfaces

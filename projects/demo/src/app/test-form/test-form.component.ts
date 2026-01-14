@@ -1536,4 +1536,100 @@ export class TestFormComponent implements OnInit {
       console.log('Formulário inválido. Verifique os campos.');
     }
   }
+
+  // ============================================
+  // EXEMPLO 19: Formulário com Campos de RadioButton
+  // Demonstra diferentes configurações de radio button
+  // ============================================
+  @ViewChild('radioButtonForm') radioButtonForm!: DynamicFormComponent;
+  radioButtonResult = signal<any>(null);
+
+  radioButtonFormConfig = signal<iFormConfig[]>([
+    {
+      key: 'nome',
+      label: 'Nome Completo',
+      controlType: 'text',
+      validators: [Validators.required],
+      placeholder: 'Digite seu nome',
+    },
+    {
+      key: 'genero',
+      controlType: 'radiobutton',
+      label: 'Gênero',
+      options: [
+        { label: 'Masculino', value: 'M' },
+        { label: 'Feminino', value: 'F' },
+        { label: 'Outro', value: 'O' },
+        { label: 'Prefiro não informar', value: 'N' },
+      ],
+      radioLayout: 'vertical',
+      validators: [Validators.required],
+      hint: 'Selecione uma opção',
+    },
+    {
+      key: 'prioridade',
+      controlType: 'radiobutton',
+      label: 'Prioridade',
+      options: [
+        { label: 'Baixa', value: 'low' },
+        { label: 'Média', value: 'medium' },
+        { label: 'Alta', value: 'high' },
+        { label: 'Urgente', value: 'urgent' },
+      ],
+      radioLayout: 'horizontal',
+      validators: [Validators.required],
+      hint: 'Selecione o nível de prioridade',
+    },
+    {
+      key: 'status',
+      controlType: 'radiobutton',
+      label: 'Status',
+      options: [
+        { label: 'Ativo', value: 'active' },
+        { label: 'Inativo', value: 'inactive' },
+        { label: 'Pendente', value: 'pending' },
+      ],
+      value: 'active',
+      radioLayout: 'vertical',
+      validators: [Validators.required],
+      hint: 'Status pré-selecionado como "Ativo"',
+    },
+    {
+      key: 'tipoConta',
+      controlType: 'radiobutton',
+      label: 'Tipo de Conta',
+      options: [
+        { label: 'Pessoa Física', value: 'PF' },
+        { label: 'Pessoa Jurídica', value: 'PJ' },
+      ],
+      radioLayout: 'horizontal',
+      validators: [Validators.required],
+      hint: 'Selecione o tipo de conta',
+    },
+    {
+      key: 'estadoCivil',
+      controlType: 'radiobutton',
+      label: 'Estado Civil',
+      options: [
+        { label: 'Solteiro(a)', value: 'single' },
+        { label: 'Casado(a)', value: 'married' },
+        { label: 'Divorciado(a)', value: 'divorced' },
+        { label: 'Viúvo(a)', value: 'widowed' },
+      ],
+      radioLayout: 'vertical',
+      hint: 'Campo opcional',
+    },
+  ]);
+
+  onSubmitRadioButtonForm(): void {
+    if (this.radioButtonForm.form.valid) {
+      const formData = this.radioButtonForm.form.value;
+      this.radioButtonResult.set(formData);
+      console.log('Formulário RadioButton submetido:', formData);
+    } else {
+      this.radioButtonForm.form.markAllAsTouched();
+      this.radioButtonResult.set(null);
+      console.log('Formulário inválido. Verifique os campos.');
+    }
+  }
 }
