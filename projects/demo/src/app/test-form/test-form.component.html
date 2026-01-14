@@ -94,6 +94,11 @@
           >17. Formulário com Separadores/Divisores</a
         >
       </li>
+      <li>
+        <a (click)="scrollToExample('exemplo-18'); $event.preventDefault()" href="#exemplo-18"
+          >18. Formulário com Estado e Cidade (Select Dinâmico)</a
+        >
+      </li>
     </ul>
   </nav>
 
@@ -423,6 +428,50 @@
       <p class="result-note">
         <strong>Nota:</strong> Os campos do tipo 'divider' não aparecem no resultado, pois são
         apenas elementos visuais de separação e não criam FormControls.
+      </p>
+    </div>
+    }
+  </section>
+
+  <!-- ============================================ -->
+  <!-- EXEMPLO 18: Formulário com Estado e Cidade (Select Dinâmico) -->
+  <!-- ============================================ -->
+  <section id="exemplo-18" class="example-section">
+    <h2>18. Formulário com Estado e Cidade (Select Dinâmico)</h2>
+    <p class="section-description">
+      Demonstra campos select interdependentes onde o campo de <strong>Estado</strong> é preenchido
+      com dados de um arquivo JSON e o campo de <strong>Cidade</strong> é carregado dinamicamente
+      via API quando um estado é selecionado. Este exemplo mostra como trabalhar com dados
+      assíncronos e atualizar opções de campos select dinamicamente usando signals do Angular.
+    </p>
+    <div class="form-container">
+      <vp-dynamic-form
+        #estadoCidadeForm
+        [config]="estadoCidadeFormConfig()"
+        (formReady)="onEstadoCidadeFormReady($event)"
+      />
+      @if (isLoadingCidades()) {
+      <div class="loading-indicator">
+        <i class="pi pi-spin pi-spinner"></i>
+        <span>Carregando cidades...</span>
+      </div>
+      }
+    </div>
+    <div class="submit-actions">
+      <p-button
+        label="Salvar Formulário"
+        icon="pi pi-save"
+        (onClick)="onSubmitEstadoCidadeForm()"
+        [disabled]="!estadoCidadeForm || estadoCidadeForm.form.invalid"
+      />
+    </div>
+    @if (estadoCidadeResult()) {
+    <div class="result-container">
+      <h3>Resultado do Formulário:</h3>
+      <pre class="json-result">{{ estadoCidadeResult() | json }}</pre>
+      <p class="result-note">
+        <strong>Nota:</strong> O estado é carregado do arquivo <code>assets/estados.json</code> e as
+        cidades são buscadas da API do IBGE quando um estado é selecionado.
       </p>
     </div>
     }

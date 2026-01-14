@@ -5,6 +5,22 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
+## [v1.0.6]
+
+### Adicionado
+
+- Novo campo do tipo `Diviser` com opções relacionadas
+- Suporte para o campo não ser renderizado usando o parâmetro `visible`
+- Exemplo 18: Formulário com Estado e Cidade (Select Dinâmico) demonstrando:
+  - Carregamento de estados de arquivo JSON
+  - Carregamento dinâmico de cidades via API IBGE quando um estado é selecionado
+  - Atualização de opções de select usando imutabilidade para garantir change detection com OnPush
+  - Serviço `EstadoCidadeService` para gerenciar busca de estados e cidades
+
+### Documentação
+
+- Exemplo completo de campos select interdependentes com carregamento assíncrono
+
 ## [v1.0.5] - 2025-01-14
 
 ### Adicionado
