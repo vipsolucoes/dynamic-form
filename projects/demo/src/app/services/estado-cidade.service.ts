@@ -49,6 +49,7 @@ export class EstadoCidadeService {
    * Busca as cidades de um estado específico via API do IBGE.
    * @param uf Sigla do estado (ex: 'SP', 'RJ')
    * @returns Observable com array de cidades no formato iFieldOption
+   * @deprecated Use loadCidadesByEstadoRaw() com optionLabel/optionValue na configuração do campo
    */
   loadCidadesByEstado(uf: string): Observable<iFieldOption[]> {
     const url = `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${uf}/municipios`;
@@ -60,5 +61,16 @@ export class EstadoCidadeService {
         }))
       )
     );
+  }
+
+  /**
+   * Busca as cidades de um estado específico via API do IBGE retornando dados brutos.
+   * Use este método com optionLabel/optionValue na configuração do campo para evitar mapeamento manual.
+   * @param uf Sigla do estado (ex: 'SP', 'RJ')
+   * @returns Observable com array de cidades no formato bruto da API (CidadeIBGE[])
+   */
+  loadCidadesByEstadoRaw(uf: string): Observable<CidadeIBGE[]> {
+    const url = `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${uf}/municipios`;
+    return this.http.get<CidadeIBGE[]>(url);
   }
 }
