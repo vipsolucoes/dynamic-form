@@ -517,4 +517,67 @@
     </div>
     }
   </section>
+
+  <!-- ============================================ -->
+  <!-- EXEMPLO 20: Select com Dados de API (Sem Mapeamento) -->
+  <!-- ============================================ -->
+  <section id="exemplo-20" class="example-section">
+    <h2>20. Select com Dados de API (Sem Mapeamento Manual)</h2>
+    <p class="section-description">
+      Demonstra como usar campos select com dados de API
+      <strong>sem necessidade de mapeamento manual</strong>. Este exemplo mostra duas abordagens:
+    </p>
+    <ul class="section-description">
+      <li>
+        <strong>optionLabel/optionValue:</strong> Use quando os dados da API têm campos simples que
+        podem ser usados diretamente como label e value.
+      </li>
+      <li>
+        <strong>optionMapper:</strong> Use quando precisa criar labels compostos ou fazer
+        transformações mais complexas nos dados.
+      </li>
+    </ul>
+    <p class="section-description">
+      <strong>Vantagens:</strong> Elimina a necessidade de fazer <code>map()</code> no service,
+      permitindo passar os dados brutos da API diretamente para o componente. O service retorna
+      dados no formato original da API e o componente configura como extrair label e value.
+    </p>
+    <div class="form-container">
+      <vp-dynamic-form
+        #selectApiForm
+        [config]="selectApiFormConfig()"
+        (formReady)="onSelectApiFormReady($event)"
+      />
+      @if (isLoadingCidadesApi()) {
+      <div class="loading-indicator">
+        <i class="pi pi-spin pi-spinner"></i>
+        <span>Carregando cidades...</span>
+      </div>
+      }
+    </div>
+    <div class="submit-actions">
+      <p-button
+        label="Salvar Formulário"
+        icon="pi pi-save"
+        (onClick)="onSubmitSelectApiForm()"
+        [disabled]="!selectApiForm || selectApiForm.form.invalid"
+      />
+    </div>
+    @if (selectApiResult()) {
+    <div class="result-container">
+      <h3>Resultado do Formulário:</h3>
+      <pre class="json-result">{{ selectApiResult() | json }}</pre>
+      <p class="result-note">
+        <strong>Nota:</strong> O campo "Cidade" usa <code>optionLabel: 'nome'</code> e
+        <code>optionValue: 'id'</code> para extrair diretamente dos dados da API. O campo "Cidade
+        (com Mapper)" usa <code>optionMapper</code> para criar um label composto combinando nome e
+        sigla do estado.
+      </p>
+      <p class="result-note">
+        <strong>Service:</strong> O método <code>loadCidadesByEstadoRaw()</code> retorna dados
+        brutos da API sem mapeamento, permitindo que o componente configure como usar os dados.
+      </p>
+    </div>
+    }
+  </section>
 </div>

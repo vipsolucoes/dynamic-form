@@ -273,7 +273,12 @@ export interface iFormConfig {
 - `visible?`: Indica se o campo deve estar visível. Quando `false`, o campo não é renderizado no template, mas ainda é criado no `FormGroup`. Default: `true`. Aplicável a todos os tipos de campo. Útil para formulários condicionais onde campos podem aparecer/desaparecer dinamicamente.
 - `enabledWhen?`: Chave (key) do campo toggleSwitch que controla a habilitação deste campo. Quando o toggle referenciado estiver ativado (true), este campo será habilitado. Quando desativado (false), este campo será desabilitado e seu valor será limpo automaticamente. Aplicável a todos os tipos de campo exceto `toggleswitch`. O campo referenciado deve existir no formulário e ser do tipo `toggleswitch`.
 - `styleClass?`: Classes CSS adicionais para o wrapper do campo. Útil para criar layouts customizados (ex: `'grid-col-6'` para campos lado a lado em um grid de 12 colunas).
-- `options?`: Necessário para `controlType: 'select'` e `controlType: 'radiobutton'`, fornecendo as opções do dropdown ou do grupo de radio buttons.
+- `options?`: Necessário para `controlType: 'select'` e `controlType: 'radiobutton'`, fornecendo as opções do dropdown ou do grupo de radio buttons. Para `select`, pode ser um array de `iFieldOption` (formato padrão `{ label, value }`) ou dados brutos de API quando usado com `optionLabel`/`optionValue` ou `optionMapper`.
+- `optionLabel?`: Nome do campo do objeto a ser usado como label no select. Default: `'label'`. Suporta dot notation para campos aninhados (ex: `'endereco.cidade'`). Aplicável apenas para `controlType: 'select'`. Quando definido, permite usar dados de API diretamente sem mapeamento manual.
+- `optionValue?`: Nome do campo do objeto a ser usado como value no select. Default: `'value'`. Suporta dot notation para campos aninhados. Aplicável apenas para `controlType: 'select'`. Quando definido, permite usar dados de API diretamente sem mapeamento manual.
+- `optionMapper?`: Função para mapear cada item da opção para o formato `{ label, value }`. Útil quando label precisa ser uma combinação de campos ou transformação complexa. Aplicável apenas para `controlType: 'select'`. Se definido, tem prioridade sobre `optionLabel`/`optionValue`.
+- `optionFilter?`: Habilita filtro de busca nas opções do select. Aplicável apenas para `controlType: 'select'`.
+- `optionShowClear?`: Exibe botão para limpar a seleção do select. Aplicável apenas para `controlType: 'select'`.
 - `validators?`: Um array de funções `ValidatorFn` do Angular Forms, aplicadas diretamente ao `FormControl`.
 - `dateFormat?`: Formato de data customizado para `controlType: 'datepicker'`. Default: `'dd/mm/yy'` quando `dateViewType` é `'date'`. Para `'month'` e `'year'`, o formato é calculado automaticamente (`'mm/yy'` e `'yy'` respectivamente).
 - `dateViewType?`: Tipo de visualização do datepicker. Opções: `'date'` (data completa), `'month'` (mês/ano), `'year'` (ano). Default: `'date'`. O formato é ajustado automaticamente baseado neste valor.
@@ -1205,6 +1210,188 @@ const layoutConfig: iFormConfig[] = [
 ];
 ```
 
+### Select com Dados de API (Sem Mapeamento Manual)
+
+O componente `select` suporta três formas de trabalhar com dados:
+
+1. **Formato Padrão** (`{ label, value }`): Para dados fixos ou já mapeados
+2. **optionLabel/optionValue**: Para dados de API com campos simples
+3. **optionMapper**: Para transformações complexas ou labels compostos
+
+#### Abordagem 1: optionLabel/optionValue (Recomendada para APIs)
+
+Quando você tem dados de API com campos simples que podem ser usados diretamente:
+
+```typescript
+// Service - retorna dados brutos da API
+loadCidadesByEstado(uf: string): Observable<CidadeIBGE[]> {
+  const url = `https://api.exemplo.com/estados/${uf}/cidades`;
+  return this.http.get<CidadeIBGE[]>(url);
+  // Retorna: [{ id: 1, nome: 'São Paulo', uf: 'SP' }, ...]
+}
+
+// Configuração do campo
+const formConfig: iFormConfig[] = [
+  {
+    key: 'cidade',
+    label: 'Cidade',
+    controlType: 'select',
+    options: [],
+    optionLabel: 'nome',      // Usa o campo 'nome' do objeto
+    optionValue: 'id',        // Usa o campo 'id' do objeto
+    optionFilter: true,       // Habilita filtro de busca
+    optionShowClear: true,    // Mostra botão limpar
+    validators: [Validators.required],
+  },
+];
+
+// Component - carregamento direto sem mapeamento
+this.service.loadCidadesByEstado(uf).subscribe(cidades => {
+  this.atualizarCampo('cidade', {
+    options: cidades,  // Passa direto sem mapeamento!
+  });
+});
+```
+
+**Vantagens:**
+
+- Elimina necessidade de `map()` no service
+- Dados brutos da API podem ser passados diretamente
+- Suporta dot notation para campos aninhados (ex: `'endereco.cidade'`)
+- Retrocompatível com formato padrão `{ label, value }`
+
+#### Abordagem 2: optionMapper (Para Labels Compostos)
+
+Quando você precisa criar labels compostos ou fazer transformações complexas:
+
+```typescript
+// API retorna: { id: 1, codigo: 'SP001', nome: 'São Paulo', uf: 'SP' }
+
+const formConfig: iFormConfig[] = [
+  {
+    key: 'cidade',
+    label: 'Cidade',
+    controlType: 'select',
+    options: [],
+    optionMapper: (cidade) => ({
+      label: `${cidade.nome} - ${cidade.uf} (${cidade.codigo})`, // "São Paulo - SP (SP001)"
+      value: cidade.id,
+    }),
+    filter: true,
+    validators: [Validators.required],
+  },
+];
+
+// Component
+this.service.loadCidades().subscribe((cidades) => {
+  this.atualizarCampo('cidade', { options: cidades });
+});
+```
+
+**Vantagens:**
+
+- Flexibilidade total para transformações complexas
+- Útil quando label precisa combinar múltiplos campos
+- Permite formatação customizada dos dados
+
+**Nota:** `optionMapper` tem prioridade sobre `optionLabel`/`optionValue`. Se ambos estiverem definidos, apenas `optionMapper` será usado.
+
+#### Abordagem 3: Formato Padrão (Compatibilidade)
+
+O formato tradicional continua funcionando normalmente:
+
+```typescript
+const formConfig: iFormConfig[] = [
+  {
+    key: 'plan',
+    label: 'Plano',
+    controlType: 'select',
+    options: [
+      { label: 'Básico', value: 'basic' },
+      { label: 'Profissional', value: 'pro' },
+      { label: 'Empresarial', value: 'enterprise' },
+    ],
+    validators: [Validators.required],
+  },
+];
+```
+
+#### Propriedades Adicionais do Select
+
+- **`optionFilter`**: Habilita campo de busca para filtrar opções
+- **`optionShowClear`**: Exibe botão para limpar a seleção atual
+
+#### Exemplo Completo: Select Dependente com API
+
+```typescript
+// Service
+@Injectable({ providedIn: 'root' })
+export class EstadoCidadeService {
+  private http = inject(HttpClient);
+
+  loadEstados(): Observable<Estado[]> {
+    return this.http.get<Estado[]>('assets/estados.json');
+  }
+
+  loadCidadesByEstado(uf: string): Observable<CidadeIBGE[]> {
+    return this.http.get<CidadeIBGE[]>(
+      `https://api.ibge.gov.br/v1/localidades/estados/${uf}/municipios`
+    );
+  }
+}
+
+// Component
+export class MeuComponente {
+  private service = inject(EstadoCidadeService);
+  formConfig = signal<iFormConfig[]>([
+    {
+      key: 'estado',
+      label: 'Estado',
+      controlType: 'select',
+      options: [],
+      optionFilter: true,
+      validators: [Validators.required],
+    },
+    {
+      key: 'cidade',
+      label: 'Cidade',
+      controlType: 'select',
+      options: [],
+      optionLabel: 'nome',
+      optionValue: 'id',
+      optionFilter: true,
+      optionShowClear: true,
+      disabled: true,
+      validators: [Validators.required],
+    },
+  ]);
+
+  ngOnInit() {
+    // Carrega estados
+    this.service.loadEstados().subscribe((estados) => {
+      this.atualizarCampo('estado', { options: estados });
+    });
+
+    // Escuta mudanças no estado
+    this.form.get('estado')?.valueChanges.subscribe((uf) => {
+      if (uf) {
+        this.atualizarCampo('cidade', { disabled: false });
+        this.service.loadCidadesByEstado(uf).subscribe((cidades) => {
+          this.atualizarCampo('cidade', {
+            options: cidades,
+          });
+        });
+      } else {
+        this.atualizarCampo('cidade', {
+          options: [],
+          disabled: true,
+        });
+      }
+    });
+  }
+}
+```
+
 ## Melhorias Implementadas
 
 As seguintes melhorias foram implementadas na versão atual:
@@ -1222,6 +1409,7 @@ As seguintes melhorias foram implementadas na versão atual:
 - **Propriedade Disabled**: Adicionado suporte para desabilitar campos através da propriedade `disabled` na `iFormConfig`. Quando `disabled: true`, o campo não pode ser editado e o `FormControl` é criado como desabilitado. Aplicável a todos os tipos de campo (text, email, password, number, select, datepicker, textarea, toggleswitch).
 - **Dependência entre ToggleSwitch e Campos (`enabledWhen`)**: Adicionado suporte para criar dependências dinâmicas entre campos usando a propriedade `enabledWhen`. Quando um campo referencia a `key` de um toggleSwitch através de `enabledWhen`, ele é habilitado automaticamente quando o toggle está ativado e desabilitado (com limpeza automática do valor) quando o toggle está desativado. Isso permite criar formulários condicionais onde campos só ficam disponíveis quando uma opção está ativada.
 - **Transformação de Texto (`textTransform`)**: Adicionado suporte para transformação automática de texto em uppercase ou lowercase através da propriedade `textTransform` na `iFormConfig`. A transformação ocorre em tempo real enquanto o usuário digita, preservando a posição do cursor. Aplicável apenas para campos de texto (text, email, textarea, input-button). Implementado através de uma diretiva standalone (`TextTransformDirective`) que funciona perfeitamente com Reactive Forms.
+- **Select com Dados de API (Sem Mapeamento Manual)**: Adicionado suporte para usar dados de API diretamente no select sem necessidade de mapeamento manual através das propriedades `optionLabel`, `optionValue` e `optionMapper`. Isso elimina a necessidade de fazer `map()` no service, permitindo passar dados brutos da API diretamente para o componente. Suporta dot notation para campos aninhados e inclui propriedades adicionais como `optionFilter` e `optionShowClear` para melhor UX.
 - **ChangeDetectionStrategy.OnPush**: Todos os componentes utilizam `OnPush` para otimização de performance.
 - **FieldRegistryService**: Sistema de registro de campos customizados para extensibilidade.
 - **Mensagens de Erro Customizáveis**: Suporte a mensagens de erro customizadas via `provideDynamicFormConfig`.

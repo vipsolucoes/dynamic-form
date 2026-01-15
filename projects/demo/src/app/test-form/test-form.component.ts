@@ -1442,6 +1442,7 @@ export class TestFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.carregarEstados();
+    this.carregarEstadosApi();
   }
 
   /**
@@ -1629,6 +1630,170 @@ export class TestFormComponent implements OnInit {
     } else {
       this.radioButtonForm.form.markAllAsTouched();
       this.radioButtonResult.set(null);
+      console.log('Formulário inválido. Verifique os campos.');
+    }
+  }
+
+  // ============================================
+  // EXEMPLO 20: Select com Dados de API (Sem Mapeamento)
+  // Demonstra uso de optionLabel/optionValue e optionMapper para dados de API
+  // ============================================
+  @ViewChild('selectApiForm') selectApiForm!: DynamicFormComponent;
+  selectApiResult = signal<any>(null);
+  isLoadingCidadesApi = signal<boolean>(false);
+  private selectApiFormGroup?: FormGroup;
+
+  selectApiFormConfig = signal<iFormConfig[]>([
+    {
+      key: 'estado',
+      label: 'Estado',
+      controlType: 'select',
+      options: [],
+      validators: [Validators.required],
+      placeholder: 'Selecione o estado',
+      hint: 'Selecione um estado para carregar as cidades',
+      optionFilter: true,
+      optionShowClear: true,
+    },
+    {
+      key: 'cidade',
+      label: 'Cidade',
+      controlType: 'select',
+      options: [],
+      validators: [Validators.required],
+      placeholder: 'Selecione a cidade',
+      disabled: true,
+      hint: 'As cidades serão carregadas após selecionar um estado',
+      optionLabel: 'nome',
+      optionValue: 'id',
+      optionFilter: true,
+      optionShowClear: true,
+    },
+    {
+      key: 'cidadeComMapper',
+      label: 'Cidade (com Mapper)',
+      controlType: 'select',
+      options: [],
+      validators: [Validators.required],
+      placeholder: 'Selecione a cidade',
+      disabled: true,
+      hint: 'Exemplo usando optionMapper para label composto',
+      optionMapper: (cidade: any) => ({
+        label: `${cidade.nome} - ${cidade.microrregiao?.mesorregiao?.UF?.sigla || 'N/A'}`,
+        value: cidade.id,
+      }),
+      optionFilter: true,
+      optionShowClear: true,
+    },
+  ]);
+
+  /**
+   * Callback executado quando o formulário está pronto.
+   * Configura a dependência entre os campos estado e cidade.
+   */
+  onSelectApiFormReady(form: FormGroup): void {
+    this.selectApiFormGroup = form;
+
+    // Escuta mudanças no campo estado
+    form
+      .get('estado')
+      ?.valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((uf: string | null) => {
+        if (uf) {
+          this.carregarCidadesApi(uf);
+        } else {
+          this.limparCidadesApi();
+        }
+      });
+  }
+
+  /**
+   * Carrega os estados do arquivo JSON e atualiza a configuração do formulário.
+   */
+  private carregarEstadosApi(): void {
+    this.estadoCidadeService.loadEstados().subscribe({
+      next: (estados) => {
+        this.atualizarCampoApi('estado', { options: estados });
+      },
+      error: (error) => {
+        console.error('Erro ao carregar estados:', error);
+        alert('Erro ao carregar estados. Verifique o console para mais detalhes.');
+      },
+    });
+  }
+
+  /**
+   * Carrega as cidades de um estado específico via API usando dados brutos.
+   * Demonstra o uso de optionLabel/optionValue para evitar mapeamento manual.
+   * @param uf Sigla do estado selecionado
+   */
+  private carregarCidadesApi(uf: string): void {
+    this.isLoadingCidadesApi.set(true);
+    this.limparCidadesApi();
+
+    this.estadoCidadeService.loadCidadesByEstadoRaw(uf).subscribe({
+      next: (cidades) => {
+        // Campo cidade usa optionLabel/optionValue
+        this.atualizarCampoApi('cidade', {
+          options: cidades,
+          disabled: false,
+        });
+
+        // Campo cidadeComMapper usa optionMapper
+        this.atualizarCampoApi('cidadeComMapper', {
+          options: cidades,
+          disabled: false,
+        });
+
+        this.selectApiFormGroup?.get('cidade')?.enable({ emitEvent: false });
+        this.selectApiFormGroup?.get('cidadeComMapper')?.enable({ emitEvent: false });
+        this.isLoadingCidadesApi.set(false);
+      },
+      error: (error) => {
+        console.error('Erro ao carregar cidades:', error);
+        this.isLoadingCidadesApi.set(false);
+        alert('Erro ao carregar cidades. Verifique o console para mais detalhes.');
+      },
+    });
+  }
+
+  /**
+   * Limpa as opções de cidade e desabilita os campos.
+   */
+  private limparCidadesApi(): void {
+    this.atualizarCampoApi('cidade', { options: [], disabled: true });
+    this.atualizarCampoApi('cidadeComMapper', { options: [], disabled: true });
+    const cidadeControl = this.selectApiFormGroup?.get('cidade');
+    const cidadeMapperControl = this.selectApiFormGroup?.get('cidadeComMapper');
+    if (cidadeControl) {
+      cidadeControl.reset(null, { emitEvent: false });
+      cidadeControl.disable({ emitEvent: false });
+    }
+    if (cidadeMapperControl) {
+      cidadeMapperControl.reset(null, { emitEvent: false });
+      cidadeMapperControl.disable({ emitEvent: false });
+    }
+  }
+
+  /**
+   * Método auxiliar que atualiza um campo criando um novo objeto (imutabilidade).
+   * @param key Chave do campo a ser atualizado
+   * @param changes Propriedades a serem atualizadas no campo
+   */
+  private atualizarCampoApi(key: string, changes: Partial<iFormConfig>): void {
+    this.selectApiFormConfig.update((config) =>
+      config.map((field) => (field.key === key ? { ...field, ...changes } : field))
+    );
+  }
+
+  onSubmitSelectApiForm(): void {
+    if (this.selectApiFormGroup?.valid) {
+      const formData = this.selectApiFormGroup.value;
+      this.selectApiResult.set(formData);
+      console.log('Formulário Select API submetido:', formData);
+    } else {
+      this.selectApiFormGroup?.markAllAsTouched();
+      this.selectApiResult.set(null);
       console.log('Formulário inválido. Verifique os campos.');
     }
   }

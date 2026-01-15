@@ -73,6 +73,37 @@ export interface iFormConfig {
    */
   options?: iFieldOption[];
   /**
+   * Nome do campo do objeto a ser usado como label no select.
+   * Default: 'label'. Suporta dot notation para campos aninhados (ex: 'endereco.cidade').
+   * Aplicável apenas para controlType 'select'.
+   * Quando definido, permite usar dados de API diretamente sem mapeamento manual.
+   */
+  optionLabel?: string;
+  /**
+   * Nome do campo do objeto a ser usado como value no select.
+   * Default: 'value'. Suporta dot notation para campos aninhados (ex: 'id').
+   * Aplicável apenas para controlType 'select'.
+   * Quando definido, permite usar dados de API diretamente sem mapeamento manual.
+   */
+  optionValue?: string;
+  /**
+   * Função para mapear cada item da opção para o formato { label, value }.
+   * Útil quando label precisa ser uma combinação de campos ou transformação complexa.
+   * Aplicável apenas para controlType 'select'.
+   * Se definido, tem prioridade sobre optionLabel/optionValue.
+   */
+  optionMapper?: (item: any) => iFieldOption;
+  /**
+   * Habilita filtro de busca nas opções do select.
+   * Aplicável apenas para controlType 'select'.
+   */
+  optionFilter?: boolean;
+  /**
+   * Exibe botão para limpar a seleção do select.
+   * Aplicável apenas para controlType 'select'.
+   */
+  optionShowClear?: boolean;
+  /**
    * Array de funções de validação a serem aplicadas ao campo.
    */
   validators?: ValidatorFn[];

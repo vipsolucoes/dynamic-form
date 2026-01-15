@@ -137,6 +137,8 @@ A biblioteca suporta os seguintes tipos de campos:
 
 ### Campo Select
 
+#### Formato Padrão (Dados Fixos)
+
 ```typescript
 {
   key: 'pais',
@@ -151,6 +153,54 @@ A biblioteca suporta os seguintes tipos de campos:
   validators: [Validators.required]
 }
 ```
+
+#### Com Dados de API (Sem Mapeamento Manual)
+
+```typescript
+// Service retorna dados brutos: [{ id: 1, nome: 'São Paulo', uf: 'SP' }, ...]
+
+{
+  key: 'cidade',
+  controlType: 'select',
+  label: 'Cidade',
+  options: [],
+  optionLabel: 'nome',      // Campo do objeto para label
+  optionValue: 'id',        // Campo do objeto para value
+  optionFilter: true,       // Habilita filtro de busca
+  optionShowClear: true,    // Mostra botão limpar
+  validators: [Validators.required]
+}
+
+// No componente, passe os dados diretamente:
+this.service.loadCidades().subscribe(cidades => {
+  this.atualizarCampo('cidade', { options: cidades });
+});
+```
+
+#### Com optionMapper (Labels Compostos)
+
+```typescript
+{
+  key: 'cidade',
+  controlType: 'select',
+  label: 'Cidade',
+  options: [],
+  optionMapper: (cidade) => ({
+    label: `${cidade.nome} - ${cidade.uf}`,  // Label composto
+    value: cidade.id
+  }),
+  optionFilter: true,
+  validators: [Validators.required]
+}
+```
+
+**Propriedades Disponíveis:**
+
+- `optionLabel?`: Nome do campo para label (default: `'label'`)
+- `optionValue?`: Nome do campo para value (default: `'value'`)
+- `optionMapper?`: Função para mapear itens (tem prioridade sobre optionLabel/optionValue)
+- `optionFilter?`: Habilita filtro de busca
+- `optionShowClear?`: Mostra botão para limpar seleção
 
 ### Campo DatePicker
 
@@ -338,6 +388,11 @@ interface iFormConfig {
   enabledWhen?: string; // Chave do toggle que controla este campo
   styleClass?: string; // Classes CSS customizadas
   options?: iFieldOption[]; // Opções para select (obrigatório se controlType for 'select')
+  optionLabel?: string; // Campo do objeto para label no select (default: 'label')
+  optionValue?: string; // Campo do objeto para value no select (default: 'value')
+  optionMapper?: (item: any) => iFieldOption; // Função para mapear itens (tem prioridade sobre optionLabel/optionValue)
+  optionFilter?: boolean; // Habilita filtro de busca no select
+  optionShowClear?: boolean; // Mostra botão para limpar seleção no select
   validators?: ValidatorFn[]; // Validadores Angular
   dateFormat?: string; // Formato da data (default: 'dd/mm/yy')
   dateViewType?: 'date' | 'month' | 'year'; // Tipo de visualização da data (default: 'date')
@@ -346,12 +401,21 @@ interface iFormConfig {
   textareaCols?: number; // Número de colunas do textarea
   toggleTrueValue?: any; // Valor quando toggle está ativo (default: true)
   toggleFalseValue?: any; // Valor quando toggle está inativo (default: false)
-  buttonConfig?: { // Configuração do botão para campos 'input-button'
+  buttonConfig?: {
+    // Configuração do botão para campos 'input-button'
     icon?: string; // Ícone do PrimeIcons
     label?: string; // Texto do botão
     tooltip?: string; // Tooltip do botão
     position?: 'left' | 'right'; // Posição do botão (default: 'right')
-    severity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'danger' | 'help' | 'contrast'; // Estilo do botão
+    severity?:
+      | 'primary'
+      | 'secondary'
+      | 'success'
+      | 'info'
+      | 'warning'
+      | 'danger'
+      | 'help'
+      | 'contrast'; // Estilo do botão
   };
   buttonCallback?: (fieldKey: string, fieldValue: any) => void | Promise<void>; // Callback executado ao clicar no botão
 }
