@@ -387,7 +387,7 @@ interface iFormConfig {
   disabled?: boolean; // Campo desabilitado
   enabledWhen?: string; // Chave do toggle que controla este campo
   styleClass?: string; // Classes CSS customizadas
-  options?: iFieldOption[]; // Opções para select (obrigatório se controlType for 'select')
+  options?: iFieldOption[] | unknown[]; // Opções para select (obrigatório se controlType for 'select')
   optionLabel?: string; // Campo do objeto para label no select (default: 'label')
   optionValue?: string; // Campo do objeto para value no select (default: 'value')
   optionMapper?: (item: any) => iFieldOption; // Função para mapear itens (tem prioridade sobre optionLabel/optionValue)

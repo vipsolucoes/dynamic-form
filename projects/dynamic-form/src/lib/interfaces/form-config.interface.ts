@@ -71,7 +71,7 @@ export interface iFormConfig {
   /**
    * Array de opções, obrigatório para o controlType 'select' e 'radiobutton'.
    */
-  options?: iFieldOption[];
+  options?: iFieldOption[] | unknown[];
   /**
    * Nome do campo do objeto a ser usado como label no select.
    * Default: 'label'. Suporta dot notation para campos aninhados (ex: 'endereco.cidade').
