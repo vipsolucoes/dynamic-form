@@ -5,7 +5,29 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
-## [v1.0.7]
+## [v1.0.8] - 2026-01-15
+
+### Alterado
+
+- Campo `select` agora suporta receber **dados brutos** em `options` (ex: retorno direto de API), além do formato padrão `{ label, value }`:
+  - `options?: iFieldOption[] | unknown[]`
+- Novas propriedades para `select` na interface `iFormConfig`:
+  - `optionLabel` e `optionValue` para extrair label/value diretamente dos objetos (sem `map()` no service)
+  - `optionMapper` para cenários de transformação/label composto (mantido como está por enquanto)
+- Renomeadas propriedades do `select`:
+  - `filter` → `optionFilter`
+  - `showClear` → `optionShowClear`
+- Removida a propriedade `loading` do `select` (o controle de carregamento permanece sendo responsabilidade do componente pai).
+
+### Documentação
+
+- Atualizada a documentação para refletir o uso de `optionLabel`/`optionValue`/`optionMapper`, a tipagem de `options` e os novos nomes `optionFilter`/`optionShowClear`.
+
+### Demo
+
+- Adicionado exemplo com `select` consumindo dados de API sem mapeamento manual (usando `optionLabel`/`optionValue`) e também exemplo com `optionMapper`.
+
+## [v1.0.7] - 2026-01-14
 
 ### Adicionado
 
@@ -29,7 +51,7 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 - Exemplos de uso com diferentes layouts
 - Documentação da propriedade `radioLayout`
 
-## [v1.0.6]
+## [v1.0.6] - 2026-01-14
 
 ### Adicionado
 
