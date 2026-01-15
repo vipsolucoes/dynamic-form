@@ -233,7 +233,7 @@ export interface iFormConfig {
   visible?: boolean; // Indica se o campo deve estar visível. Default: true. Quando false, o campo não é renderizado, mas ainda é criado no FormGroup.
   enabledWhen?: string; // Chave (key) do campo toggleSwitch que controla a habilitação deste campo.
   styleClass?: string;
-  options?: iFieldOption[]; // Necessário para controlType: 'select' e 'radiobutton'
+  options?: iFieldOption[] | unknown[]; // Necessário para controlType: 'select' e 'radiobutton'
   validators?: ValidatorFn[]; // Array de ValidatorFn diretamente
   dateFormat?: string; // Para controlType: 'datepicker'
   dateViewType?: 'date' | 'month' | 'year'; // Para controlType: 'datepicker'
