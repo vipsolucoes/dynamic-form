@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { RadioButtonModule } from 'primeng/radiobutton';
 
-import { iFormConfig } from '../interfaces/form-config.interface';
+import { iFieldOption, iFormConfig } from '../interfaces/form-config.interface';
 
 @Component({
   selector: 'vp-radiobutton-field',
@@ -19,7 +19,7 @@ import { iFormConfig } from '../interfaces/form-config.interface';
         [class.radiobutton-options-horizontal]="layout() === 'horizontal'"
         [class.radiobutton-options-vertical]="layout() === 'vertical'"
       >
-        @for (option of field().options; track option.value) {
+        @for (option of options(); track option.value) {
         <div class="radiobutton-option">
           <p-radiobutton
             [formControlName]="field().key"
@@ -94,6 +94,10 @@ import { iFormConfig } from '../interfaces/form-config.interface';
 export class RadioButtonFieldComponent {
   form = input.required<FormGroup>();
   field = input.required<iFormConfig>();
+
+  options = computed(() => {
+    return this.field().options as iFieldOption[];
+  });
 
   layout = computed(() => {
     return this.field().radioLayout ?? 'vertical';
