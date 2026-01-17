@@ -291,6 +291,7 @@ export interface iFormConfig {
 - `buttonConfig?`: Configuração do botão para campos do tipo `'input-button'`. Contém propriedades para personalizar o botão (ícone, label, tooltip, posição, severity).
 - `buttonCallback?`: Função callback executada ao clicar no botão do campo `'input-button'`. Recebe a key do campo e o valor atual como parâmetros. Pode ser síncrona ou assíncrona (`Promise<void>`).
 - `textTransform?`: Transformação de texto para o campo. Opções: `'uppercase'` | `'lowercase'`. Aplicável apenas para campos de texto (text, email, textarea, input-button). Quando definido, o texto é transformado automaticamente conforme o usuário digita.
+- `numberConfig?`: Configuração específica para campos do tipo `'number'`. Permite configurar modo (decimal/currency), formatação, prefixo/sufixo, validações min/max, botões de incremento/decremento, localização e outras opções. Aplicável apenas para `controlType: 'number'`. Veja a seção "Campos de Number (InputNumber)" para detalhes completos e exemplos.
 
 ### De Configuração a Formulário Renderizado
 
@@ -753,6 +754,201 @@ Quando `textareaAutoResize` é `true`, o textarea cresce automaticamente conform
   textareaAutoResize: true,
 }
 ```
+
+### Campos de Number (InputNumber)
+
+O componente suporta campos numéricos através do `controlType: 'number'`, utilizando o componente `NumberInputFieldComponent` que renderiza o `p-inputNumber` do PrimeNG. Este componente foi aprimorado para suportar números inteiros, decimais, monetários, prefixo/sufixo e muitas outras funcionalidades.
+
+#### Propriedades Específicas (`numberConfig`)
+
+O campo number suporta uma propriedade específica `numberConfig` com as seguintes opções:
+
+1. **`mode`**: Modo do campo. Opções: `'decimal'` (padrão quando especificado) ou `'currency'` (monetário). Se não especificado, mantém comportamento padrão para inteiros.
+2. **`currency`**: Código da moeda (ISO 4217). Ex: `'BRL'`, `'USD'`, `'EUR'`. Obrigatório quando `mode` é `'currency'`.
+3. **`currencyDisplay`**: Como exibir a moeda. Opções: `'symbol'` (padrão), `'code'`, `'name'`.
+4. **`minFractionDigits`**: Número mínimo de casas decimais. Default: `0` para decimal, `2` para currency.
+5. **`maxFractionDigits`**: Número máximo de casas decimais. Default: `3` para decimal, `2` para currency.
+6. **`useGrouping`**: Usar separadores de milhar. Default: `true`.
+7. **`prefix`**: Texto exibido antes do valor. Ex: `'R$'`, `'%'`, `'Quantidade: '`.
+8. **`suffix`**: Texto exibido após o valor. Ex: `' kg'`, `' m²'`, `' dias'`.
+9. **`min`**: Valor mínimo permitido.
+10. **`max`**: Valor máximo permitido.
+11. **`step`**: Incremento/decremento para os botões. Default: `1`.
+12. **`showButtons`**: Exibir botões de incremento/decremento. Default: `false`.
+13. **`buttonLayout`**: Layout dos botões. Opções: `'stacked'` (padrão), `'horizontal'`, `'vertical'`.
+14. **`showClear`**: Exibir botão para limpar valor. Default: `false`.
+15. **`locale`**: Localização para formatação. Ex: `'pt-BR'`, `'en-US'`, `'de-DE'`. Se não especificado, usa a localização do navegador.
+16. **`readonly`**: Campo somente leitura. Default: `false`.
+17. **`size`**: Tamanho do campo. Opções: `'small'`, `'large'`.
+18. **`variant`**: Variante visual do campo. Opções: `'outlined'` (padrão), `'filled'`.
+
+#### Exemplo 1: Campo de Preço (Currency)
+
+```typescript
+{
+  key: 'preco',
+  label: 'Preço',
+  controlType: 'number',
+  placeholder: 'Digite o preço',
+  numberConfig: {
+    mode: 'currency',
+    currency: 'BRL',
+    locale: 'pt-BR',
+    minFractionDigits: 2,
+    maxFractionDigits: 2,
+  },
+  validators: [Validators.required, Validators.min(0)],
+  hint: 'Valor em reais (R$)',
+}
+```
+
+#### Exemplo 2: Campo de Porcentagem
+
+```typescript
+{
+  key: 'desconto',
+  label: 'Desconto',
+  controlType: 'number',
+  placeholder: 'Digite o desconto',
+  numberConfig: {
+    prefix: '%',
+    min: 0,
+    max: 100,
+    showButtons: true,
+    step: 1,
+  },
+  validators: [Validators.required, Validators.min(0), Validators.max(100)],
+  hint: 'Desconto de 0 a 100%',
+}
+```
+
+#### Exemplo 3: Campo de Peso
+
+```typescript
+{
+  key: 'peso',
+  label: 'Peso',
+  controlType: 'number',
+  placeholder: 'Digite o peso',
+  numberConfig: {
+    mode: 'decimal',
+    suffix: ' kg',
+    minFractionDigits: 2,
+    maxFractionDigits: 3,
+    showClear: true,
+    min: 0,
+  },
+  validators: [Validators.required, Validators.min(0)],
+  hint: 'Peso em quilogramas',
+}
+```
+
+#### Exemplo 4: Campo de Inteiros (Comportamento Padrão)
+
+Quando `numberConfig` não é especificado, o campo mantém o comportamento padrão para números inteiros:
+
+```typescript
+{
+  key: 'quantidade',
+  label: 'Quantidade',
+  controlType: 'number',
+  placeholder: 'Digite a quantidade',
+  validators: [Validators.required, Validators.min(1)],
+  hint: 'Quantidade de itens (números inteiros)',
+}
+```
+
+#### Exemplo 5: Campo Monetário USD
+
+```typescript
+{
+  key: 'precoUSD',
+  label: 'Preço (USD)',
+  controlType: 'number',
+  placeholder: 'Enter price',
+  numberConfig: {
+    mode: 'currency',
+    currency: 'USD',
+    locale: 'en-US',
+    currencyDisplay: 'symbol',
+    minFractionDigits: 2,
+    maxFractionDigits: 2,
+  },
+  validators: [Validators.required, Validators.min(0)],
+  hint: 'Price in US Dollars',
+}
+```
+
+#### Exemplo 6: Campo de Temperatura
+
+```typescript
+{
+  key: 'temperatura',
+  label: 'Temperatura',
+  controlType: 'number',
+  placeholder: 'Digite a temperatura',
+  numberConfig: {
+    mode: 'decimal',
+    prefix: '↑ ',
+    suffix: '℃',
+    min: -50,
+    max: 50,
+    step: 0.5,
+    showButtons: true,
+    buttonLayout: 'horizontal',
+    minFractionDigits: 1,
+    maxFractionDigits: 1,
+  },
+  validators: [Validators.required, Validators.min(-50), Validators.max(50)],
+  hint: 'Temperatura em graus Celsius',
+}
+```
+
+#### Exemplo 7: Campo Readonly
+
+```typescript
+{
+  key: 'total',
+  label: 'Total',
+  controlType: 'number',
+  numberConfig: {
+    mode: 'currency',
+    currency: 'BRL',
+    locale: 'pt-BR',
+    minFractionDigits: 2,
+    maxFractionDigits: 2,
+    readonly: true,
+  },
+  value: 0,
+  hint: 'Valor calculado automaticamente',
+}
+```
+
+#### Validações Min/Max
+
+O componente suporta validações `min` e `max` tanto através do `numberConfig` quanto através dos validadores do Angular:
+
+```typescript
+{
+  key: 'idade',
+  controlType: 'number',
+  label: 'Idade',
+  numberConfig: {
+    min: 18,
+    max: 120,
+  },
+  validators: [Validators.required, Validators.min(18), Validators.max(120)],
+}
+```
+
+As mensagens de erro para `min` e `max` são exibidas automaticamente através do `DynamicFormErrorComponent` e podem ser customizadas via `provideDynamicFormConfig`.
+
+#### Comportamento Padrão
+
+- **Sem `numberConfig`**: Comportamento padrão para números inteiros (sem casas decimais).
+- **Com `numberConfig` mas sem `mode`**: Modo `'decimal'` é usado por padrão.
+- **Com `mode: 'currency'`**: Requer `currency` obrigatório. Default de casas decimais é `2`.
+- **Com `mode: 'decimal'`**: Default de casas decimais é `0` mínimo e `3` máximo.
 
 ### Dependência entre ToggleSwitch e Campos (`enabledWhen`)
 
@@ -1410,6 +1606,7 @@ As seguintes melhorias foram implementadas na versão atual:
 - **Dependência entre ToggleSwitch e Campos (`enabledWhen`)**: Adicionado suporte para criar dependências dinâmicas entre campos usando a propriedade `enabledWhen`. Quando um campo referencia a `key` de um toggleSwitch através de `enabledWhen`, ele é habilitado automaticamente quando o toggle está ativado e desabilitado (com limpeza automática do valor) quando o toggle está desativado. Isso permite criar formulários condicionais onde campos só ficam disponíveis quando uma opção está ativada.
 - **Transformação de Texto (`textTransform`)**: Adicionado suporte para transformação automática de texto em uppercase ou lowercase através da propriedade `textTransform` na `iFormConfig`. A transformação ocorre em tempo real enquanto o usuário digita, preservando a posição do cursor. Aplicável apenas para campos de texto (text, email, textarea, input-button). Implementado através de uma diretiva standalone (`TextTransformDirective`) que funciona perfeitamente com Reactive Forms.
 - **Select com Dados de API (Sem Mapeamento Manual)**: Adicionado suporte para usar dados de API diretamente no select sem necessidade de mapeamento manual através das propriedades `optionLabel`, `optionValue` e `optionMapper`. Isso elimina a necessidade de fazer `map()` no service, permitindo passar dados brutos da API diretamente para o componente. Suporta dot notation para campos aninhados e inclui propriedades adicionais como `optionFilter` e `optionShowClear` para melhor UX.
+- **Campo de Number Aprimorado**: O campo `number` foi completamente refatorado e expandido com suporte a números decimais, monetários (currency), prefixo/sufixo, validações min/max, botões de incremento/decremento, localização, formatação customizada e muitas outras funcionalidades através da propriedade `numberConfig`. Mantém compatibilidade retroativa com campos sem `numberConfig` (comportamento padrão para inteiros).
 - **ChangeDetectionStrategy.OnPush**: Todos os componentes utilizam `OnPush` para otimização de performance.
 - **FieldRegistryService**: Sistema de registro de campos customizados para extensibilidade.
 - **Mensagens de Erro Customizáveis**: Suporte a mensagens de erro customizadas via `provideDynamicFormConfig`.

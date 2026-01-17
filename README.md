@@ -8,7 +8,7 @@ Biblioteca Angular para criação de formulários dinâmicos e reativos usando P
 ## Características
 
 - ✅ **Formulários Reativos**: Baseado em Angular Reactive Forms
-- ✅ **Múltiplos Tipos de Campo**: Text, Email, Password, Number, Select, Datepicker, Textarea, ToggleSwitch
+- ✅ **Múltiplos Tipos de Campo**: Text, Email, Password, Number (com suporte a decimais, monetários, prefixo/sufixo), Select, Datepicker, Textarea, ToggleSwitch
 - ✅ **Validação Integrada**: Suporte completo a validadores do Angular Forms
 - ✅ **Dependências entre Campos**: Campos condicionais baseados em toggle switches
 - ✅ **Layout Customizado**: Suporte a classes CSS customizadas para layouts flexíveis
@@ -79,7 +79,7 @@ Para documentação detalhada, exemplos avançados e referência completa da API
 
 - **Text/Email**: Campos de texto simples
 - **Password**: Campo de senha com toggle de visibilidade
-- **Number**: Campo numérico com formatação
+- **Number**: Campo numérico com suporte a inteiros, decimais, monetários, prefixo/sufixo, botões de incremento e muito mais
 - **Select**: Dropdown com opções customizadas
 - **Datepicker**: Seletor de data com suporte a diferentes visualizações (date, month, year)
 - **Textarea**: Área de texto com redimensionamento automático opcional

@@ -172,6 +172,86 @@ export interface iFormConfig {
    */
   textTransform?: 'uppercase' | 'lowercase';
   /**
+   * Configuração específica para campos do tipo 'number'.
+   * Aplicável apenas para controlType 'number'.
+   */
+  numberConfig?: {
+    /**
+     * Modo do campo. Default: 'decimal' (comportamento padrão para inteiros quando não especificado).
+     */
+    mode?: 'decimal' | 'currency';
+    /**
+     * Código da moeda (ISO 4217). Ex: 'BRL', 'USD', 'EUR'.
+     * Obrigatório quando mode é 'currency'.
+     */
+    currency?: string;
+    /**
+     * Como exibir a moeda. Default: 'symbol'.
+     */
+    currencyDisplay?: 'symbol' | 'code' | 'name';
+    /**
+     * Número mínimo de casas decimais. Default: 0 para decimal, 2 para currency.
+     */
+    minFractionDigits?: number;
+    /**
+     * Número máximo de casas decimais. Default: 3 para decimal, 2 para currency.
+     */
+    maxFractionDigits?: number;
+    /**
+     * Usar separadores de milhar. Default: true.
+     */
+    useGrouping?: boolean;
+    /**
+     * Texto exibido antes do valor. Ex: 'R$', '%', 'Quantidade: '.
+     */
+    prefix?: string;
+    /**
+     * Texto exibido após o valor. Ex: ' kg', ' m²', ' dias'.
+     */
+    suffix?: string;
+    /**
+     * Valor mínimo permitido.
+     */
+    min?: number;
+    /**
+     * Valor máximo permitido.
+     */
+    max?: number;
+    /**
+     * Incremento/decremento para os botões. Default: 1.
+     */
+    step?: number;
+    /**
+     * Exibir botões de incremento/decremento. Default: false.
+     */
+    showButtons?: boolean;
+    /**
+     * Layout dos botões. Default: 'stacked'.
+     */
+    buttonLayout?: 'stacked' | 'horizontal' | 'vertical';
+    /**
+     * Exibir botão para limpar valor. Default: false.
+     */
+    showClear?: boolean;
+    /**
+     * Localização para formatação. Ex: 'pt-BR', 'en-US', 'de-DE'.
+     * Se não especificado, usa a localização do navegador.
+     */
+    locale?: string;
+    /**
+     * Campo somente leitura. Default: false.
+     */
+    readonly?: boolean;
+    /**
+     * Tamanho do campo. Default: undefined (normal).
+     */
+    size?: 'small' | 'large';
+    /**
+     * Variante visual do campo. Default: 'outlined'.
+     */
+    variant?: 'outlined' | 'filled';
+  };
+  /**
    * Configuração do divisor/separador para campos do tipo 'divider'.
    * Aplicável apenas para controlType 'divider'.
    */

@@ -38,6 +38,8 @@ export class DynamicFormErrorComponent {
     email: () => this.customMessages?.email ?? 'Por favor, insira um e-mail válido.',
     minlength: (err) => this.customMessages?.minlength?.(err.requiredLength) ?? `Mínimo de ${err.requiredLength} caracteres.`,
     maxlength: (err) => this.customMessages?.maxlength?.(err.requiredLength) ?? `Máximo de ${err.requiredLength} caracteres.`,
+    min: (err) => this.customMessages?.min?.(err.min) ?? `O valor mínimo é ${err.min}.`,
+    max: (err) => this.customMessages?.max?.(err.max) ?? `O valor máximo é ${err.max}.`,
     custom: (err) => (this.customMessages?.custom ? this.customMessages.custom(err) : err),
   };
 

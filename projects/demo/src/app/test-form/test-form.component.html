@@ -109,6 +109,11 @@
           >20. Select com Dados de API (sem mapeamento manual)</a
         >
       </li>
+      <li>
+        <a (click)="scrollToExample('exemplo-21'); $event.preventDefault()" href="#exemplo-21"
+          >21. Formulário com Campos Number Aprimorados</a
+        >
+      </li>
     </ul>
   </nav>
 
@@ -581,6 +586,66 @@
       <p class="result-note">
         <strong>Service:</strong> O método <code>loadCidadesByEstadoRaw()</code> retorna dados
         brutos da API sem mapeamento, permitindo que o componente configure como usar os dados.
+      </p>
+    </div>
+    }
+  </section>
+
+  <!-- ============================================ -->
+  <!-- EXEMPLO 21: Formulário com Campos Number Aprimorados -->
+  <!-- ============================================ -->
+  <section id="exemplo-21" class="example-section">
+    <h2>21. Formulário com Campos Number Aprimorados</h2>
+    <p class="section-description">
+      Demonstra todas as funcionalidades aprimoradas do campo <code>number</code> através da propriedade
+      <code>numberConfig</code>. Este exemplo mostra:
+    </p>
+    <ul class="section-description">
+      <li>
+        <strong>Campos Monetários:</strong> Formatação em BRL e USD com símbolos de moeda e localização
+        específica.
+      </li>
+      <li>
+        <strong>Prefixo e Sufixo:</strong> Textos customizados antes/depois do valor (ex: %, kg, m², ℃).
+      </li>
+      <li>
+        <strong>Botões de Incremento/Decremento:</strong> Botões +/- para ajustar valores com layouts
+        diferentes (stacked, horizontal).
+      </li>
+      <li>
+        <strong>Validações Min/Max:</strong> Valores mínimos e máximos através de numberConfig e
+        validators.
+      </li>
+      <li>
+        <strong>Casas Decimais:</strong> Controle preciso de casas decimais mínimas e máximas.
+      </li>
+      <li>
+        <strong>Modo Readonly:</strong> Campos somente leitura para valores calculados.
+      </li>
+      <li>
+        <strong>Comportamento Padrão:</strong> Campo sem numberConfig mantém comportamento de inteiros.
+      </li>
+    </ul>
+    <div class="form-container">
+      <vp-dynamic-form #numberForm [config]="numberFormConfig()" />
+    </div>
+    <div class="submit-actions">
+      <p-button
+        label="Salvar Formulário"
+        icon="pi pi-save"
+        (onClick)="onSubmitNumberForm()"
+        [disabled]="!numberForm || numberForm.form.invalid"
+      />
+    </div>
+    @if (numberResult()) {
+    <div class="result-container">
+      <h3>Resultado do Formulário:</h3>
+      <pre class="json-result">{{ numberResult() | json }}</pre>
+      <p class="result-note">
+        <strong>Nota:</strong> Os campos number com <code>numberConfig</code> suportam formatação
+        avançada, enquanto campos sem <code>numberConfig</code> mantêm o comportamento padrão para
+        números inteiros. Valores monetários são formatados automaticamente conforme a localização
+        especificada.
       </p>
     </div>
     }

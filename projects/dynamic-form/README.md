@@ -202,6 +202,87 @@ this.service.loadCidades().subscribe(cidades => {
 - `optionFilter?`: Habilita filtro de busca
 - `optionShowClear?`: Mostra botão para limpar seleção
 
+### Campo Number
+
+O campo `number` suporta números inteiros, decimais e monetários com muitas opções de formatação:
+
+#### Números Inteiros (Padrão)
+
+```typescript
+{
+  key: 'quantidade',
+  controlType: 'number',
+  label: 'Quantidade',
+  validators: [Validators.required, Validators.min(1)]
+}
+```
+
+#### Campo Monetário (Currency)
+
+```typescript
+{
+  key: 'preco',
+  controlType: 'number',
+  label: 'Preço',
+  numberConfig: {
+    mode: 'currency',
+    currency: 'BRL',
+    locale: 'pt-BR',
+    minFractionDigits: 2,
+    maxFractionDigits: 2
+  },
+  validators: [Validators.required, Validators.min(0)]
+}
+```
+
+#### Campo com Prefixo/Sufixo
+
+```typescript
+{
+  key: 'desconto',
+  controlType: 'number',
+  label: 'Desconto',
+  numberConfig: {
+    prefix: '%',
+    min: 0,
+    max: 100,
+    showButtons: true
+  },
+  validators: [Validators.required, Validators.min(0), Validators.max(100)]
+}
+```
+
+#### Campo Decimal com Unidade
+
+```typescript
+{
+  key: 'peso',
+  controlType: 'number',
+  label: 'Peso',
+  numberConfig: {
+    mode: 'decimal',
+    suffix: ' kg',
+    minFractionDigits: 2,
+    maxFractionDigits: 3,
+    showClear: true
+  },
+  validators: [Validators.required, Validators.min(0)]
+}
+```
+
+**Propriedades Disponíveis em `numberConfig`:**
+
+- `mode`: `'decimal'` | `'currency'`
+- `currency`: Código da moeda (ISO 4217) - obrigatório para currency
+- `prefix`: Texto antes do valor (ex: `'R$'`, `'%'`)
+- `suffix`: Texto após o valor (ex: `' kg'`, `' m²'`)
+- `min` / `max`: Valores mínimo e máximo
+- `minFractionDigits` / `maxFractionDigits`: Casas decimais
+- `showButtons`: Exibir botões de incremento/decremento
+- `showClear`: Exibir botão para limpar valor
+- `locale`: Localização para formatação (ex: `'pt-BR'`, `'en-US'`)
+- E muitas outras opções...
+
 ### Campo DatePicker
 
 ```typescript
@@ -418,6 +499,27 @@ interface iFormConfig {
       | 'contrast'; // Estilo do botão
   };
   buttonCallback?: (fieldKey: string, fieldValue: any) => void | Promise<void>; // Callback executado ao clicar no botão
+  numberConfig?: {
+    // Configuração específica para campos 'number'
+    mode?: 'decimal' | 'currency';
+    currency?: string; // Código da moeda (ISO 4217)
+    currencyDisplay?: 'symbol' | 'code' | 'name';
+    minFractionDigits?: number;
+    maxFractionDigits?: number;
+    useGrouping?: boolean;
+    prefix?: string;
+    suffix?: string;
+    min?: number;
+    max?: number;
+    step?: number;
+    showButtons?: boolean;
+    buttonLayout?: 'stacked' | 'horizontal' | 'vertical';
+    showClear?: boolean;
+    locale?: string;
+    readonly?: boolean;
+    size?: 'small' | 'large';
+    variant?: 'outlined' | 'filled';
+  };
 }
 ```
 
