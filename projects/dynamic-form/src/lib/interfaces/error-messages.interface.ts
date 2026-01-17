@@ -8,6 +8,8 @@ export interface DynamicFormErrorMessages {
   email?: string;
   minlength?: (requiredLength: number) => string;
   maxlength?: (requiredLength: number) => string;
+  min?: (minValue: number) => string;
+  max?: (maxValue: number) => string;
   custom?: (error: any) => string;
 }
 

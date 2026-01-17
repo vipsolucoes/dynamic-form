@@ -5,6 +5,39 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
+## [v1.0.9] - 2026-01-17
+
+### Adicionado
+
+- **Campo Number Aprimorado**: O campo `number` foi completamente refatorado e expandido com suporte a:
+  - **Números decimais e monetários**: Modo `decimal` e `currency` através da propriedade `numberConfig.mode`
+  - **Formatação monetária**: Suporte completo para moedas (BRL, USD, EUR, etc.) com código ISO 4217
+  - **Prefixo e sufixo**: Textos customizados antes/depois do valor (ex: `'R$'`, `'%'`, `' kg'`, `' m²'`)
+  - **Validações min/max**: Suporte a valores mínimos e máximos através de `numberConfig.min` e `numberConfig.max`
+  - **Botões de incremento/decremento**: Botões +/- para ajustar valores com `showButtons: true`
+  - **Botão limpar**: Opção para exibir botão de limpar valor com `showClear: true`
+  - **Localização**: Formatação específica por região através de `locale` (pt-BR, en-US, de-DE, etc.)
+  - **Controle de casas decimais**: `minFractionDigits` e `maxFractionDigits` para precisão customizada
+  - **Separadores de milhar**: Controle de agrupamento de números com `useGrouping`
+  - **Step customizado**: Incremento/decremento personalizado para botões
+  - **Layout de botões**: Opções `stacked`, `horizontal` ou `vertical` para botões de incremento
+  - **Tamanhos e variantes**: Suporte a `size` (small/large) e `variant` (outlined/filled)
+  - **Modo readonly**: Campo somente leitura para valores calculados ou não editáveis
+- **Propriedade `numberConfig`**: Nova propriedade opcional na interface `iFormConfig` para configurar todas as opções do campo number
+- **Mensagens de erro min/max**: Suporte a mensagens de erro customizadas para validações `min` e `max` através de `provideDynamicFormConfig`
+
+### Alterado
+
+- **Compatibilidade retroativa**: Campos `number` sem `numberConfig` mantêm comportamento padrão (números inteiros)
+- **Validação visual**: Campo number agora exibe estado inválido visualmente quando há erros de validação
+
+### Documentação
+
+- Adicionada seção completa sobre campos Number na documentação principal
+- Adicionados 10 exemplos práticos de uso do campo number (currency, porcentagem, peso, temperatura, etc.)
+- Atualizada interface `iFormConfig` na documentação com todas as propriedades de `numberConfig`
+- Criado arquivo de exemplos em `docs/examples/number-input-examples.ts`
+
 ## [v1.0.8] - 2026-01-15
 
 ### Alterado

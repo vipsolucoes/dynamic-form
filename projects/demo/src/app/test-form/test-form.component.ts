@@ -1797,4 +1797,174 @@ export class TestFormComponent implements OnInit {
       console.log('Formulário inválido. Verifique os campos.');
     }
   }
+
+  // ============================================
+  // EXEMPLO 21: Formulário com Campos Number Aprimorados
+  // Demonstra todas as funcionalidades do campo number: currency, decimal, prefixo/sufixo, botões, etc.
+  // ============================================
+  @ViewChild('numberForm') numberForm!: DynamicFormComponent;
+  numberResult = signal<any>(null);
+
+  numberFormConfig = signal<iFormConfig[]>([
+    {
+      key: 'nome',
+      label: 'Nome do Produto',
+      controlType: 'text',
+      validators: [Validators.required],
+      placeholder: 'Digite o nome do produto',
+    },
+    {
+      key: 'preco',
+      label: 'Preço de Venda',
+      controlType: 'number',
+      placeholder: 'Digite o preço',
+      numberConfig: {
+        mode: 'currency',
+        currency: 'BRL',
+        locale: 'pt-BR',
+        minFractionDigits: 2,
+        maxFractionDigits: 2,
+        showClear: true,
+      },
+      validators: [Validators.required, Validators.min(0)],
+      hint: 'Preço em reais (R$) com formatação monetária',
+    },
+    {
+      key: 'desconto',
+      label: 'Desconto',
+      controlType: 'number',
+      placeholder: 'Digite o desconto',
+      numberConfig: {
+        prefix: '%',
+        min: 0,
+        max: 100,
+        showButtons: true,
+        buttonLayout: 'stacked',
+        step: 1,
+      },
+      validators: [Validators.min(0), Validators.max(100)],
+      hint: 'Desconto de 0 a 100% com botões de incremento/decremento',
+    },
+    {
+      key: 'peso',
+      label: 'Peso',
+      controlType: 'number',
+      placeholder: 'Digite o peso',
+      numberConfig: {
+        mode: 'decimal',
+        suffix: ' kg',
+        minFractionDigits: 2,
+        maxFractionDigits: 3,
+        useGrouping: true,
+        showClear: true,
+        min: 0,
+      },
+      validators: [Validators.required, Validators.min(0)],
+      hint: 'Peso em quilogramas com 2-3 casas decimais',
+    },
+    {
+      key: 'quantidade',
+      label: 'Quantidade em Estoque',
+      controlType: 'number',
+      placeholder: 'Digite a quantidade',
+      numberConfig: {
+        min: 0,
+        showButtons: true,
+        buttonLayout: 'horizontal',
+        step: 1,
+      },
+      validators: [Validators.required, Validators.min(0)],
+      hint: 'Quantidade de itens (números inteiros) com botões horizontais',
+    },
+    {
+      key: 'temperatura',
+      label: 'Temperatura de Armazenamento',
+      controlType: 'number',
+      placeholder: 'Digite a temperatura',
+      numberConfig: {
+        mode: 'decimal',
+        prefix: '↑ ',
+        suffix: '℃',
+        min: -50,
+        max: 50,
+        step: 0.5,
+        showButtons: true,
+        buttonLayout: 'horizontal',
+        minFractionDigits: 1,
+        maxFractionDigits: 1,
+      },
+      validators: [Validators.required, Validators.min(-50), Validators.max(50)],
+      hint: 'Temperatura em graus Celsius com prefixo e sufixo',
+    },
+    {
+      key: 'area',
+      label: 'Área',
+      controlType: 'number',
+      placeholder: 'Digite a área',
+      numberConfig: {
+        mode: 'decimal',
+        suffix: ' m²',
+        minFractionDigits: 2,
+        maxFractionDigits: 4,
+        useGrouping: true,
+        showButtons: true,
+        buttonLayout: 'stacked',
+        step: 0.1,
+        min: 0,
+      },
+      validators: [Validators.required, Validators.min(0)],
+      hint: 'Área em metros quadrados com múltiplas casas decimais',
+    },
+    {
+      key: 'precoUSD',
+      label: 'Preço (USD)',
+      controlType: 'number',
+      placeholder: 'Enter price',
+      numberConfig: {
+        mode: 'currency',
+        currency: 'USD',
+        locale: 'en-US',
+        currencyDisplay: 'symbol',
+        minFractionDigits: 2,
+        maxFractionDigits: 2,
+      },
+      validators: [Validators.min(0)],
+      hint: 'Preço em dólares americanos (opcional)',
+    },
+    {
+      key: 'total',
+      label: 'Total Calculado',
+      controlType: 'number',
+      numberConfig: {
+        mode: 'currency',
+        currency: 'BRL',
+        locale: 'pt-BR',
+        minFractionDigits: 2,
+        maxFractionDigits: 2,
+        readonly: true,
+      },
+      value: 0,
+      hint: 'Valor calculado automaticamente (somente leitura)',
+    },
+    {
+      key: 'idade',
+      label: 'Idade',
+      controlType: 'number',
+      placeholder: 'Digite a idade',
+      validators: [Validators.required, Validators.min(18), Validators.max(120)],
+      hint: 'Campo number sem numberConfig (comportamento padrão para inteiros)',
+    },
+  ]);
+
+  onSubmitNumberForm(): void {
+    if (this.numberForm.form.valid) {
+      const formData = this.numberForm.form.value;
+      this.numberResult.set(formData);
+      console.log('Formulário Number aprimorado submetido:', formData);
+    } else {
+      this.numberForm.form.markAllAsTouched();
+      this.numberResult.set(null);
+      console.log('Formulário inválido. Verifique os campos.');
+    }
+  }
 }
