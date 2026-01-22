@@ -36,7 +36,7 @@ import { TextTransformDirective } from '../directives/text-transform.directive';
           [pTooltip]="buttonConfig()?.tooltip || ''"
           tooltipPosition="top"
           (click)="onButtonClick()"
-          [disabled]="isFieldDisabled()"
+          [disabled]="isButtonDisabled()"
         />
         }
 
@@ -60,7 +60,7 @@ import { TextTransformDirective } from '../directives/text-transform.directive';
           [pTooltip]="buttonConfig()?.tooltip || ''"
           tooltipPosition="top"
           (click)="onButtonClick()"
-          [disabled]="isFieldDisabled()"
+          [disabled]="isButtonDisabled()"
         />
         }
       </p-inputgroup>
@@ -97,6 +97,21 @@ export class InputButtonFieldComponent {
   isFieldDisabled(): boolean {
     const control = this.form().get(this.field().key);
     return control?.disabled ?? false;
+  }
+
+  isButtonDisabled(): boolean {
+    const buttonEnabled = this.buttonConfig()?.buttonEnabled;
+
+    // Se buttonEnabled está explicitamente definido, usa esse valor
+    if (buttonEnabled === true) {
+      return false; // Botão habilitado
+    }
+    if (buttonEnabled === false) {
+      return true; // Botão desabilitado
+    }
+
+    // Se não estiver definido, usa o comportamento padrão (segue o estado do campo)
+    return this.isFieldDisabled();
   }
 
   onButtonClick(): void {

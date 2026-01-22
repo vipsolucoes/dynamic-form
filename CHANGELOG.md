@@ -5,6 +5,22 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
+## [v1.0.10] - 2026-01-22
+
+### Adicionado
+
+- **Controle independente do botão no campo `input-button`**: Nova propriedade `buttonEnabled` na interface `buttonConfig` que permite controlar o estado habilitado/desabilitado do botão independentemente do estado do campo:
+  - `buttonEnabled: true` - Botão permanece habilitado mesmo quando o input está desabilitado (útil para ações em campos somente leitura)
+  - `buttonEnabled: false` - Botão fica desabilitado mesmo quando o input está habilitado
+  - `buttonEnabled` não especificado - Botão segue o estado do campo (comportamento padrão, retrocompatível)
+- Método `isButtonDisabled()` no `InputButtonFieldComponent` para gerenciar o estado do botão baseado na propriedade `buttonEnabled`
+
+### Documentação
+
+- Adicionada seção de exemplo mostrando uso de `buttonEnabled: true` com campo desabilitado
+- Documentação atualizada na seção `InputButtonFieldComponent` com explicação do comportamento
+- Exemplo prático adicionado no componente de teste demonstrando campo CEP desabilitado com botão habilitado
+
 ## [v1.0.9] - 2026-01-17
 
 ### Adicionado

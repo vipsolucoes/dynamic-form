@@ -988,6 +988,29 @@ export class TestFormComponent implements OnInit {
         await this.buscarProduto(value);
       },
     } as any,
+    {
+      key: 'cepReadonly',
+      controlType: 'input-button' as any,
+      label: 'CEP (Somente Leitura)',
+      placeholder: '00000-000',
+      disabled: true, // Input desabilitado
+      value: '01310-100',
+      hint: 'Este campo está desabilitado, mas o botão permanece habilitado para buscar o endereço',
+      buttonConfig: {
+        icon: 'pi pi-search',
+        tooltip: 'Buscar endereço pelo CEP (botão habilitado mesmo com campo desabilitado)',
+        position: 'right',
+        severity: 'info',
+        buttonEnabled: true, // Botão habilitado independente do campo
+      },
+      buttonCallback: async (fieldKey: string, value: any) => {
+        if (value) {
+          await this.buscarCep(value);
+        } else {
+          alert('CEP não informado');
+        }
+      },
+    } as any,
   ]);
 
   async buscarCep(cep: string): Promise<void> {
