@@ -354,8 +354,35 @@ Propriedades do `buttonConfig`:
 - `tooltip`: Texto do tooltip ao passar o mouse
 - `position`: Posição do botão ('left' | 'right'), padrão 'right'
 - `severity`: Estilo do botão, padrão 'primary'
+- `buttonEnabled`: Controla o estado do botão independentemente do campo. Quando `true`, o botão permanece habilitado mesmo se o campo estiver desabilitado. Quando `false`, o botão fica desabilitado mesmo se o campo estiver habilitado. Quando não especificado, o botão segue o estado do campo (padrão).
 
 A função `buttonCallback` é executada quando o botão é clicado e recebe a key do campo e o valor atual como parâmetros.
+
+#### Exemplo: Input Desabilitado com Botão Habilitado
+
+```typescript
+{
+  key: 'cep',
+  controlType: 'input-button',
+  label: 'CEP',
+  placeholder: '00000-000',
+  disabled: true, // Input desabilitado (somente leitura)
+  value: '01310-100',
+  buttonConfig: {
+    icon: 'pi pi-search',
+    tooltip: 'Buscar endereço pelo CEP',
+    position: 'right',
+    severity: 'info',
+    buttonEnabled: true, // Botão habilitado mesmo com campo desabilitado
+  },
+  buttonCallback: async (fieldKey: string, value: any) => {
+    // Buscar endereço pelo CEP
+    if (value) {
+      await this.buscarEnderecoPorCep(value);
+    }
+  },
+}
+```
 
 ### Campos Condicionais
 
@@ -497,6 +524,7 @@ interface iFormConfig {
       | 'danger'
       | 'help'
       | 'contrast'; // Estilo do botão
+    buttonEnabled?: boolean; // Controla o estado do botão independentemente do campo. Quando true, botão habilitado mesmo com campo desabilitado. Quando false, botão desabilitado mesmo com campo habilitado. Quando undefined, segue o estado do campo (padrão).
   };
   buttonCallback?: (fieldKey: string, fieldValue: any) => void | Promise<void>; // Callback executado ao clicar no botão
   numberConfig?: {

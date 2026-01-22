@@ -171,15 +171,52 @@ Renderiza um campo de input text combinado com um botão usando `p-inputgroup`.
   - `tooltip`: Tooltip do botão
   - `position`: Posição do botão ('left' | 'right'), padrão 'right'
   - `severity`: Estilo do botão ('primary' | 'secondary' | 'success' | 'info' | 'warning' | 'danger' | 'help' | 'contrast'), padrão 'primary'
+  - `buttonEnabled`: Controla o estado habilitado/desabilitado do botão independentemente do estado do campo. Quando `true`, o botão permanece habilitado mesmo se o campo estiver desabilitado. Quando `false`, o botão fica desabilitado mesmo se o campo estiver habilitado. Quando não especificado (undefined), o botão segue o estado do campo (comportamento padrão).
 - `buttonCallback`: Função executada no click do botão, recebe `(fieldKey: string, fieldValue: any) => void | Promise<void>`
 
 **Comportamento**:
 
 - O botão pode ser posicionado à esquerda ou direita do input
-- O botão é desabilitado quando o campo está desabilitado
+- Por padrão, o botão é desabilitado quando o campo está desabilitado
+- Com `buttonEnabled: true`, o botão pode permanecer habilitado mesmo quando o input está desabilitado, permitindo ações como busca em campos somente leitura
 - Ao clicar no botão, executa a função `buttonCallback` passando a key e o valor atual do campo
 - Utiliza IftaLabel para manter consistência visual com outros campos
 - Utiliza InputGroup do PrimeNG para agrupar o input e o botão
+
+#### Exemplo de Uso: Input Desabilitado com Botão Habilitado
+
+O exemplo abaixo demonstra como usar `buttonEnabled: true` para manter o botão habilitado mesmo quando o input está desabilitado, útil para casos como busca em campos somente leitura:
+
+```typescript
+{
+  key: 'cep',
+  controlType: 'input-button',
+  label: 'CEP',
+  placeholder: '00000-000',
+  disabled: true, // Input desabilitado (somente leitura)
+  validators: [Validators.pattern(/^\d{5}-?\d{3}$/)],
+  hint: 'O CEP não pode ser editado, mas você pode buscar o endereço',
+  buttonConfig: {
+    icon: 'pi pi-search',
+    tooltip: 'Buscar endereço pelo CEP',
+    position: 'right',
+    severity: 'primary',
+    buttonEnabled: true, // Botão permanece habilitado mesmo com input desabilitado
+  },
+  buttonCallback: async (fieldKey: string, value: any) => {
+    // Buscar endereço pelo CEP
+    if (value) {
+      await this.buscarEnderecoPorCep(value);
+    }
+  },
+}
+```
+
+#### Comportamento do `buttonEnabled`
+
+- **`buttonEnabled: true`**: O botão permanece habilitado mesmo se o campo estiver desabilitado. Útil para ações em campos somente leitura.
+- **`buttonEnabled: false`**: O botão fica desabilitado mesmo se o campo estiver habilitado. Útil para desabilitar temporariamente a ação do botão.
+- **`buttonEnabled` não especificado (undefined)**: O botão segue o estado do campo (comportamento padrão). Se o campo estiver desabilitado, o botão também fica desabilitado.
 
 ### 3. `DynamicFormErrorComponent`
 
@@ -257,6 +294,7 @@ export interface iFormConfig {
       | 'danger'
       | 'help'
       | 'contrast'; // Estilo do botão
+    buttonEnabled?: boolean; // Controla o estado do botão independentemente do campo. Quando true, botão habilitado mesmo com campo desabilitado. Quando false, botão desabilitado mesmo com campo habilitado. Quando undefined, segue o estado do campo (padrão).
   };
   buttonCallback?: (fieldKey: string, fieldValue: any) => void | Promise<void>; // Callback executado ao clicar no botão
   radioLayout?: 'horizontal' | 'vertical'; // Para controlType: 'radiobutton'. Default: 'vertical'
@@ -288,7 +326,7 @@ export interface iFormConfig {
 - `toggleTrueValue?`: Valor quando o toggle switch está ativado. Default: `true`. Aplicável apenas para `controlType: 'toggleswitch'`.
 - `toggleFalseValue?`: Valor quando o toggle switch está desativado. Default: `false`. Aplicável apenas para `controlType: 'toggleswitch'`.
 - `radioLayout?`: Orientação do layout dos radio buttons. Opções: `'horizontal'` (opções lado a lado) ou `'vertical'` (opções uma abaixo da outra). Default: `'vertical'`. Aplicável apenas para `controlType: 'radiobutton'`.
-- `buttonConfig?`: Configuração do botão para campos do tipo `'input-button'`. Contém propriedades para personalizar o botão (ícone, label, tooltip, posição, severity).
+- `buttonConfig?`: Configuração do botão para campos do tipo `'input-button'`. Contém propriedades para personalizar o botão (ícone, label, tooltip, posição, severity, buttonEnabled). A propriedade `buttonEnabled` permite controlar o estado do botão independentemente do estado do campo.
 - `buttonCallback?`: Função callback executada ao clicar no botão do campo `'input-button'`. Recebe a key do campo e o valor atual como parâmetros. Pode ser síncrona ou assíncrona (`Promise<void>`).
 - `textTransform?`: Transformação de texto para o campo. Opções: `'uppercase'` | `'lowercase'`. Aplicável apenas para campos de texto (text, email, textarea, input-button). Quando definido, o texto é transformado automaticamente conforme o usuário digita.
 - `numberConfig?`: Configuração específica para campos do tipo `'number'`. Permite configurar modo (decimal/currency), formatação, prefixo/sufixo, validações min/max, botões de incremento/decremento, localização e outras opções. Aplicável apenas para `controlType: 'number'`. Veja a seção "Campos de Number (InputNumber)" para detalhes completos e exemplos.

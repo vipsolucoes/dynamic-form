@@ -159,6 +159,14 @@ export interface iFormConfig {
      * Severity do botão. Default: 'primary'
      */
     severity?: ButtonSeverity;
+    /**
+     * Controla o estado habilitado/desabilitado do botão independentemente do estado do campo.
+     * Quando `true`, o botão permanece habilitado mesmo se o campo estiver desabilitado.
+     * Quando `false`, o botão fica desabilitado mesmo se o campo estiver habilitado.
+     * Quando não especificado (undefined), o botão segue o estado do campo (comportamento padrão).
+     * Aplicável apenas para controlType 'input-button'.
+     */
+    buttonEnabled?: boolean;
   };
   /**
    * Função callback executada ao clicar no botão do campo 'input-button'.
