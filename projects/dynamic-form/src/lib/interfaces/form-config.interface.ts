@@ -30,6 +30,7 @@ export interface iFormConfig {
     | 'textarea'
     | 'toggleswitch'
     | 'input-button'
+    | 'select-button'
     | 'divider'
     | 'radiobutton';
   /**
@@ -69,40 +70,47 @@ export interface iFormConfig {
    */
   styleClass?: string;
   /**
-   * Array de opções, obrigatório para o controlType 'select' e 'radiobutton'.
+   * Array de opções, obrigatório para os controlTypes 'select', 'select-button' e 'radiobutton'.
    */
   options?: iFieldOption[] | unknown[];
   /**
    * Nome do campo do objeto a ser usado como label no select.
    * Default: 'label'. Suporta dot notation para campos aninhados (ex: 'endereco.cidade').
-   * Aplicável apenas para controlType 'select'.
+   * Aplicável para controlType 'select' e 'select-button'.
    * Quando definido, permite usar dados de API diretamente sem mapeamento manual.
    */
   optionLabel?: string;
   /**
    * Nome do campo do objeto a ser usado como value no select.
    * Default: 'value'. Suporta dot notation para campos aninhados (ex: 'id').
-   * Aplicável apenas para controlType 'select'.
+   * Aplicável para controlType 'select' e 'select-button'.
    * Quando definido, permite usar dados de API diretamente sem mapeamento manual.
    */
   optionValue?: string;
   /**
    * Função para mapear cada item da opção para o formato { label, value }.
    * Útil quando label precisa ser uma combinação de campos ou transformação complexa.
-   * Aplicável apenas para controlType 'select'.
+   * Aplicável para controlType 'select' e 'select-button'.
    * Se definido, tem prioridade sobre optionLabel/optionValue.
    */
   optionMapper?: (item: any) => iFieldOption;
   /**
    * Habilita filtro de busca nas opções do select.
-   * Aplicável apenas para controlType 'select'.
+   * Aplicável para controlType 'select' e 'select-button'.
    */
   optionFilter?: boolean;
   /**
    * Exibe botão para limpar a seleção do select.
-   * Aplicável apenas para controlType 'select'.
+   * Aplicável para controlType 'select' e 'select-button'.
    */
   optionShowClear?: boolean;
+  /**
+   * Onde anexar o painel de opções do select. Use 'body' quando o select estiver dentro de
+   * um p-dialog (ou container com overflow) para evitar que o painel seja cortado.
+   * Default: undefined (comportamento padrão do PrimeNG).
+   * Aplicável para controlType 'select' e 'select-button'.
+   */
+  optionAppendTo?: 'body' | null;
   /**
    * Array de funções de validação a serem aplicadas ao campo.
    */
@@ -136,7 +144,7 @@ export interface iFormConfig {
    */
   toggleFalseValue?: any;
   /**
-   * Configuração do botão para campos do tipo 'input-button'
+   * Configuração do botão para campos do tipo 'input-button' e 'select-button'
    */
   buttonConfig?: {
     /**
@@ -164,12 +172,12 @@ export interface iFormConfig {
      * Quando `true`, o botão permanece habilitado mesmo se o campo estiver desabilitado.
      * Quando `false`, o botão fica desabilitado mesmo se o campo estiver habilitado.
      * Quando não especificado (undefined), o botão segue o estado do campo (comportamento padrão).
-     * Aplicável apenas para controlType 'input-button'.
+     * Aplicável para controlType 'input-button' e 'select-button'.
      */
     buttonEnabled?: boolean;
   };
   /**
-   * Função callback executada ao clicar no botão do campo 'input-button'.
+   * Função callback executada ao clicar no botão dos campos 'input-button' e 'select-button'.
    * Recebe a key do campo e o valor atual como parâmetros.
    */
   buttonCallback?: (fieldKey: string, fieldValue: any) => void | Promise<void>;

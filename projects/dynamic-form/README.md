@@ -118,6 +118,9 @@ A biblioteca suporta os seguintes tipos de campos:
 - `textarea` - Área de texto
 - `toggleswitch` - Switch/Toggle
 - `input-button` - Campo de texto com botão de ação
+- `select-button` - Dropdown/Select com botão de ação
+- `radiobutton` - Grupo de botões de rádio
+- `divider` - Divisor visual (não cria FormControl)
 
 ## 🎯 Exemplos de Configuração
 
@@ -201,6 +204,7 @@ this.service.loadCidades().subscribe(cidades => {
 - `optionMapper?`: Função para mapear itens (tem prioridade sobre optionLabel/optionValue)
 - `optionFilter?`: Habilita filtro de busca
 - `optionShowClear?`: Mostra botão para limpar seleção
+- `optionAppendTo?`: `'body'` para anexar o painel ao `body` (use dentro de `p-dialog` ou containers com overflow)
 
 ### Campo Number
 
@@ -383,6 +387,39 @@ A função `buttonCallback` é executada quando o botão é clicado e recebe a k
   },
 }
 ```
+
+### Select com Botão (`select-button`)
+
+O campo `select-button` combina um select com um botão de ação (mesmo padrão do `input-button`). Aceita as propriedades do `select` (`options`, `optionLabel`, `optionValue`, `optionMapper`, `optionFilter`, `optionShowClear`, `placeholder`) e o `buttonConfig`. O `buttonCallback` recebe a key do campo e o valor selecionado atual (pode ser `null`).
+
+```typescript
+{
+  key: 'favorecidoId',
+  controlType: 'select-button',
+  label: 'Favorecido',
+  options: [],
+  optionFilter: true,
+  optionShowClear: true,
+  buttonConfig: { icon: 'pi pi-plus', tooltip: 'Novo favorecido', severity: 'secondary' },
+  buttonCallback: (key, valor) => this.abrirNovoFavorecido(),
+  styleClass: 'grid-col-6',
+}
+```
+
+Fluxo típico: abrir diálogo de cadastro, atualizar as `options` do campo e selecionar o novo valor:
+
+```typescript
+abrirNovoFavorecido() {
+  this.dialog.open(NovoFavorecidoComponent).onClose.subscribe((novo) => {
+    if (!novo) return;
+    // novo array/objeto para o campo refletir as opções atualizadas
+    this.atualizarCampo('favorecidoId', { options: [...this.favorecidos, novo] });
+    this.form.get('favorecidoId')?.setValue(novo.id);
+  });
+}
+```
+
+Quando o select estiver dentro de um `p-dialog` (ou container com overflow), use `optionAppendTo: 'body'` para que o painel de opções não seja cortado. A propriedade também vale para o `select`.
 
 ### Campos Condicionais
 

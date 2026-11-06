@@ -8,7 +8,7 @@ Biblioteca Angular para criação de formulários dinâmicos e reativos usando P
 ## Características
 
 - ✅ **Formulários Reativos**: Baseado em Angular Reactive Forms
-- ✅ **Múltiplos Tipos de Campo**: Text, Email, Password, Number (com suporte a decimais, monetários, prefixo/sufixo), Select, Datepicker, Textarea, ToggleSwitch
+- ✅ **Múltiplos Tipos de Campo**: Text, Email, Password, Number (com suporte a decimais, monetários, prefixo/sufixo), Select, Select com Botão, Datepicker, Textarea, ToggleSwitch, Input com Botão, RadioButton, Divider
 - ✅ **Validação Integrada**: Suporte completo a validadores do Angular Forms
 - ✅ **Dependências entre Campos**: Campos condicionais baseados em toggle switches
 - ✅ **Layout Customizado**: Suporte a classes CSS customizadas para layouts flexíveis
@@ -84,6 +84,43 @@ Para documentação detalhada, exemplos avançados e referência completa da API
 - **Datepicker**: Seletor de data com suporte a diferentes visualizações (date, month, year)
 - **Textarea**: Área de texto com redimensionamento automático opcional
 - **ToggleSwitch**: Switch liga/desliga com valores customizados
+- **Input-Button** (`input-button`): Campo de texto com botão de ação acoplado
+- **Select-Button** (`select-button`): Select com botão de ação acoplado
+- **RadioButton** (`radiobutton`): Grupo de botões de rádio
+- **Divider** (`divider`): Divisor visual (não cria FormControl)
+
+### Select com Botão (`select-button`)
+
+O campo `select-button` combina um select com um botão de ação (mesmo padrão do `input-button`). Aceita as propriedades do `select` (`options`, `optionLabel`, `optionValue`, `optionMapper`, `optionFilter`, `optionShowClear`, `placeholder`) e o `buttonConfig`. O `buttonCallback` recebe a key do campo e o valor selecionado atual (pode ser `null`).
+
+```typescript
+{
+  key: 'favorecidoId',
+  controlType: 'select-button',
+  label: 'Favorecido',
+  options: [],
+  optionFilter: true,
+  optionShowClear: true,
+  buttonConfig: { icon: 'pi pi-plus', tooltip: 'Novo favorecido', severity: 'secondary' },
+  buttonCallback: (key, valor) => this.abrirNovoFavorecido(),
+  styleClass: 'grid-col-6',
+}
+```
+
+Fluxo típico: abrir diálogo de cadastro, atualizar as `options` do campo e selecionar o novo valor:
+
+```typescript
+abrirNovoFavorecido() {
+  this.dialog.open(NovoFavorecidoComponent).onClose.subscribe((novo) => {
+    if (!novo) return;
+    // novo array/objeto para o campo refletir as opções atualizadas
+    this.atualizarCampo('favorecidoId', { options: [...this.favorecidos, novo] });
+    this.form.get('favorecidoId')?.setValue(novo.id);
+  });
+}
+```
+
+Quando o select estiver dentro de um `p-dialog` (ou container com overflow), use `optionAppendTo: 'body'` para que o painel de opções não seja cortado. A propriedade também vale para o `select`.
 
 ### Campos Condicionais
 

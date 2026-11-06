@@ -1990,4 +1990,88 @@ export class TestFormComponent implements OnInit {
       console.log('Formulário inválido. Verifique os campos.');
     }
   }
+
+  // ============================================
+  // EXEMPLO 22: Select com Botão (select-button)
+  // Demonstra o botão acoplado ao select, com callback que simula o cadastro de um novo item
+  // ============================================
+  @ViewChild('selectButtonForm') selectButtonForm!: DynamicFormComponent;
+  selectButtonResult = signal<any>(null);
+  private selectButtonFormGroup?: FormGroup;
+  private proximoIdCategoria = 4;
+
+  selectButtonFormConfig = signal<iFormConfig[]>([
+    {
+      key: 'categoria',
+      label: 'Categoria',
+      controlType: 'select-button',
+      placeholder: 'Selecione uma categoria',
+      options: [
+        { id: 1, nome: 'Eletrônicos' },
+        { id: 2, nome: 'Livros' },
+        { id: 3, nome: 'Roupas' },
+      ],
+      optionLabel: 'nome',
+      optionValue: 'id',
+      optionFilter: true,
+      optionShowClear: true,
+      validators: [Validators.required],
+      hint: 'O botão simula o cadastro de uma nova categoria e a seleciona',
+      buttonConfig: {
+        icon: 'pi pi-plus',
+        tooltip: 'Cadastrar nova categoria',
+        buttonEnabled: true,
+      },
+      buttonCallback: () => this.cadastrarCategoria(),
+    },
+    {
+      key: 'fornecedor',
+      label: 'Fornecedor',
+      controlType: 'select-button',
+      placeholder: 'Selecione um fornecedor',
+      options: [
+        { label: 'Fornecedor A', value: 'A' },
+        { label: 'Fornecedor B', value: 'B' },
+      ],
+      optionAppendTo: 'body',
+      buttonConfig: {
+        icon: 'pi pi-search',
+        tooltip: 'Consultar fornecedor selecionado',
+        position: 'left',
+        severity: 'secondary',
+      },
+      buttonCallback: (_key: string, value: any) => {
+        console.log('Fornecedor selecionado:', value);
+      },
+    },
+  ]);
+
+  onSelectButtonFormReady(form: FormGroup): void {
+    this.selectButtonFormGroup = form;
+  }
+
+  /**
+   * Simula o cadastro de um novo item: adiciona à lista de options (novo array/novo objeto)
+   * e seleciona o novo valor no control.
+   */
+  private cadastrarCategoria(): void {
+    const id = this.proximoIdCategoria++;
+    const nova = { id, nome: `Nova categoria ${id}` };
+
+    this.selectButtonFormConfig.update((config) =>
+      config.map((field) =>
+        field.key === 'categoria' ? { ...field, options: [...(field.options ?? []), nova] } : field
+      )
+    );
+    this.selectButtonFormGroup?.get('categoria')?.setValue(id);
+  }
+
+  onSubmitSelectButtonForm(): void {
+    if (this.selectButtonFormGroup?.valid) {
+      this.selectButtonResult.set(this.selectButtonFormGroup.value);
+    } else {
+      this.selectButtonFormGroup?.markAllAsTouched();
+      this.selectButtonResult.set(null);
+    }
+  }
 }

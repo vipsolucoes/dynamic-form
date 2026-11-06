@@ -650,4 +650,37 @@
     </div>
     }
   </section>
+
+  <!-- ============================================ -->
+  <!-- EXEMPLO 22: Select com Botão (select-button) -->
+  <!-- ============================================ -->
+  <section id="exemplo-22" class="example-section">
+    <h2>22. Select com Botão (select-button)</h2>
+    <p class="section-description">
+      Demonstra o <code>controlType: 'select-button'</code>: um select com botão acoplado. O primeiro
+      campo simula o cadastro de um novo item (adiciona à lista de opções e seleciona o novo valor);
+      o segundo usa o botão à esquerda e <code>optionAppendTo: 'body'</code>.
+    </p>
+    <div class="form-container">
+      <vp-dynamic-form
+        #selectButtonForm
+        [config]="selectButtonFormConfig()"
+        (formReady)="onSelectButtonFormReady($event)"
+      />
+    </div>
+    <div class="submit-actions">
+      <p-button
+        label="Salvar Formulário"
+        icon="pi pi-save"
+        (onClick)="onSubmitSelectButtonForm()"
+        [disabled]="!selectButtonForm || selectButtonForm.form.invalid"
+      />
+    </div>
+    @if (selectButtonResult()) {
+    <div class="result-container">
+      <h3>Resultado do Formulário:</h3>
+      <pre class="json-result">{{ selectButtonResult() | json }}</pre>
+    </div>
+    }
+  </section>
 </div>
