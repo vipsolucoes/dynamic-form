@@ -74,6 +74,7 @@ A arquitetura do sistema de formulário dinâmico é modular e desacoplada, cent
       datepicker: DatePickerFieldComponent,
       textarea: TextareaFieldComponent,
       toggleswitch: ToggleSwitchFieldComponent,
+      'select-button': SelectButtonFieldComponent,
     };
     ```
 
@@ -93,11 +94,11 @@ A arquitetura do sistema de formulário dinâmico é modular e desacoplada, cent
 - `private setupFieldDependencies(config: iFormConfig[]): void`
   - Configura dependências entre campos usando a propriedade `enabledWhen`. Quando um campo tem `enabledWhen` definido, ele é habilitado/desabilitado automaticamente baseado no estado do toggleSwitch referenciado. Quando o toggle é desativado, o campo dependente é limpo antes de ser desabilitado.
 - `private getResetValueForFieldType(controlType: string): any`
-  - Retorna o valor padrão de reset para cada tipo de campo. Usado quando um campo dependente é desabilitado e precisa ser limpo. Campos de texto retornam string vazia `''`, enquanto campos numéricos, select e datepicker retornam `null`.
+  - Retorna o valor padrão de reset para cada tipo de campo. Usado quando um campo dependente é desabilitado e precisa ser limpo. Campos de texto retornam string vazia `''`, enquanto campos numéricos, select, select-button e datepicker retornam `null`.
 
 ### 2. Componentes de Campo Específicos
 
-Exemplos: `InputTextFieldComponent`, `PasswordFieldComponent`, `NumberInputFieldComponent`, `SelectFieldComponent`, `DatePickerFieldComponent`, `TextareaFieldComponent`, `ToggleSwitchFieldComponent`, `InputButtonFieldComponent`, `RadioButtonFieldComponent`.
+Exemplos: `InputTextFieldComponent`, `PasswordFieldComponent`, `NumberInputFieldComponent`, `SelectFieldComponent`, `DatePickerFieldComponent`, `TextareaFieldComponent`, `ToggleSwitchFieldComponent`, `InputButtonFieldComponent`, `SelectButtonFieldComponent`, `RadioButtonFieldComponent`.
 
 **Características Comuns**:
 
@@ -183,6 +184,28 @@ Renderiza um campo de input text combinado com um botão usando `p-inputgroup`.
 - Utiliza IftaLabel para manter consistência visual com outros campos
 - Utiliza InputGroup do PrimeNG para agrupar o input e o botão
 
+#### `SelectButtonFieldComponent`
+
+**Seletor**: `vp-select-button-field`
+**Tipo**: Standalone Component
+**Módulos PrimeNG Utilizados**: `SelectModule`, `InputGroupModule`, `ButtonModule`, `IftaLabelModule`, `TooltipModule`
+
+Renderiza um `p-select` combinado com um `p-button` usando `p-inputgroup`, no mesmo padrão do `InputButtonFieldComponent`.
+
+**Configuração Específica (`iFormConfig`)**:
+
+- Opções do select: `options`, `optionLabel`, `optionValue`, `optionMapper`, `optionFilter`, `optionShowClear`, `optionAppendTo` e `placeholder` (default `'Selecione'`)
+- `buttonConfig`: `icon`, `label`, `tooltip`, `position` ('left' | 'right', padrão 'right'), `severity` (padrão 'primary') e `buttonEnabled`
+- `buttonCallback`: `(fieldKey: string, fieldValue: any) => void | Promise<void>`; recebe o valor selecionado atual (pode ser `null`)
+
+**Comportamento**:
+
+- O botão é `type="button"` e não submete formulários
+- Regra de `buttonEnabled` igual à do `input-button`: `true` mantém o botão sempre habilitado, `false` mantém sempre desabilitado e `undefined` segue o estado do control
+- Quando desabilitado via `enabledWhen`, o valor é resetado para `null`
+- Lógica de opções e de botão compartilhada com `select` e `input-button` por meio de utilitários
+- Use `optionAppendTo: 'body'` quando o select estiver dentro de um `p-dialog`
+
 #### Exemplo de Uso: Input Desabilitado com Botão Habilitado
 
 O exemplo abaixo demonstra como usar `buttonEnabled: true` para manter o botão habilitado mesmo quando o input está desabilitado, útil para casos como busca em campos somente leitura:
@@ -261,7 +284,9 @@ export interface iFormConfig {
     | 'textarea'
     | 'toggleswitch'
     | 'input-button'
-    | 'radiobutton';
+    | 'select-button'
+    | 'radiobutton'
+    | 'divider';
   label: string;
   value?: any;
   placeholder?: string;
@@ -270,7 +295,8 @@ export interface iFormConfig {
   visible?: boolean; // Indica se o campo deve estar visível. Default: true. Quando false, o campo não é renderizado, mas ainda é criado no FormGroup.
   enabledWhen?: string; // Chave (key) do campo toggleSwitch que controla a habilitação deste campo.
   styleClass?: string;
-  options?: iFieldOption[] | unknown[]; // Necessário para controlType: 'select' e 'radiobutton'
+  options?: iFieldOption[] | unknown[]; // Necessário para controlType: 'select', 'select-button' e 'radiobutton'
+  optionAppendTo?: 'body' | null; // Para controlType: 'select' e 'select-button'. Use 'body' dentro de p-dialog
   validators?: ValidatorFn[]; // Array de ValidatorFn diretamente
   dateFormat?: string; // Para controlType: 'datepicker'
   dateViewType?: 'date' | 'month' | 'year'; // Para controlType: 'datepicker'
@@ -280,7 +306,7 @@ export interface iFormConfig {
   toggleTrueValue?: any; // Para controlType: 'toggleswitch'
   toggleFalseValue?: any; // Para controlType: 'toggleswitch'
   buttonConfig?: {
-    // Para controlType: 'input-button'
+    // Para controlType: 'input-button' e 'select-button'
     icon?: string; // Ícone do PrimeIcons
     label?: string; // Texto do botão
     tooltip?: string; // Tooltip do botão
@@ -311,12 +337,13 @@ export interface iFormConfig {
 - `visible?`: Indica se o campo deve estar visível. Quando `false`, o campo não é renderizado no template, mas ainda é criado no `FormGroup`. Default: `true`. Aplicável a todos os tipos de campo. Útil para formulários condicionais onde campos podem aparecer/desaparecer dinamicamente.
 - `enabledWhen?`: Chave (key) do campo toggleSwitch que controla a habilitação deste campo. Quando o toggle referenciado estiver ativado (true), este campo será habilitado. Quando desativado (false), este campo será desabilitado e seu valor será limpo automaticamente. Aplicável a todos os tipos de campo exceto `toggleswitch`. O campo referenciado deve existir no formulário e ser do tipo `toggleswitch`.
 - `styleClass?`: Classes CSS adicionais para o wrapper do campo. Útil para criar layouts customizados (ex: `'grid-col-6'` para campos lado a lado em um grid de 12 colunas).
-- `options?`: Necessário para `controlType: 'select'` e `controlType: 'radiobutton'`, fornecendo as opções do dropdown ou do grupo de radio buttons. Para `select`, pode ser um array de `iFieldOption` (formato padrão `{ label, value }`) ou dados brutos de API quando usado com `optionLabel`/`optionValue` ou `optionMapper`.
-- `optionLabel?`: Nome do campo do objeto a ser usado como label no select. Default: `'label'`. Suporta dot notation para campos aninhados (ex: `'endereco.cidade'`). Aplicável apenas para `controlType: 'select'`. Quando definido, permite usar dados de API diretamente sem mapeamento manual.
-- `optionValue?`: Nome do campo do objeto a ser usado como value no select. Default: `'value'`. Suporta dot notation para campos aninhados. Aplicável apenas para `controlType: 'select'`. Quando definido, permite usar dados de API diretamente sem mapeamento manual.
-- `optionMapper?`: Função para mapear cada item da opção para o formato `{ label, value }`. Útil quando label precisa ser uma combinação de campos ou transformação complexa. Aplicável apenas para `controlType: 'select'`. Se definido, tem prioridade sobre `optionLabel`/`optionValue`.
-- `optionFilter?`: Habilita filtro de busca nas opções do select. Aplicável apenas para `controlType: 'select'`.
-- `optionShowClear?`: Exibe botão para limpar a seleção do select. Aplicável apenas para `controlType: 'select'`.
+- `options?`: Necessário para `controlType: 'select'`, `'select-button'` e `'radiobutton'`, fornecendo as opções do dropdown ou do grupo de radio buttons. Para `select` e `select-button`, pode ser um array de `iFieldOption` (formato padrão `{ label, value }`) ou dados brutos de API quando usado com `optionLabel`/`optionValue` ou `optionMapper`.
+- `optionLabel?`: Nome do campo do objeto a ser usado como label no select. Default: `'label'`. Suporta dot notation para campos aninhados (ex: `'endereco.cidade'`). Aplicável a `controlType: 'select'` e `'select-button'`. Quando definido, permite usar dados de API diretamente sem mapeamento manual.
+- `optionValue?`: Nome do campo do objeto a ser usado como value no select. Default: `'value'`. Suporta dot notation para campos aninhados. Aplicável a `controlType: 'select'` e `'select-button'`. Quando definido, permite usar dados de API diretamente sem mapeamento manual.
+- `optionMapper?`: Função para mapear cada item da opção para o formato `{ label, value }`. Útil quando label precisa ser uma combinação de campos ou transformação complexa. Aplicável a `controlType: 'select'` e `'select-button'`. Se definido, tem prioridade sobre `optionLabel`/`optionValue`.
+- `optionFilter?`: Habilita filtro de busca nas opções do select. Aplicável a `controlType: 'select'` e `'select-button'`.
+- `optionShowClear?`: Exibe botão para limpar a seleção do select. Aplicável a `controlType: 'select'` e `'select-button'`.
+- `optionAppendTo?`: Define onde o painel de opções é anexado (repassado ao `appendTo` do `p-select`). Use `'body'` quando o select estiver dentro de um `p-dialog` ou container com overflow, para que o painel não seja cortado. Default: `undefined` (comportamento padrão do PrimeNG). Aplicável a `controlType: 'select'` e `'select-button'`.
 - `validators?`: Um array de funções `ValidatorFn` do Angular Forms, aplicadas diretamente ao `FormControl`.
 - `dateFormat?`: Formato de data customizado para `controlType: 'datepicker'`. Default: `'dd/mm/yy'` quando `dateViewType` é `'date'`. Para `'month'` e `'year'`, o formato é calculado automaticamente (`'mm/yy'` e `'yy'` respectivamente).
 - `dateViewType?`: Tipo de visualização do datepicker. Opções: `'date'` (data completa), `'month'` (mês/ano), `'year'` (ano). Default: `'date'`. O formato é ajustado automaticamente baseado neste valor.
@@ -326,8 +353,8 @@ export interface iFormConfig {
 - `toggleTrueValue?`: Valor quando o toggle switch está ativado. Default: `true`. Aplicável apenas para `controlType: 'toggleswitch'`.
 - `toggleFalseValue?`: Valor quando o toggle switch está desativado. Default: `false`. Aplicável apenas para `controlType: 'toggleswitch'`.
 - `radioLayout?`: Orientação do layout dos radio buttons. Opções: `'horizontal'` (opções lado a lado) ou `'vertical'` (opções uma abaixo da outra). Default: `'vertical'`. Aplicável apenas para `controlType: 'radiobutton'`.
-- `buttonConfig?`: Configuração do botão para campos do tipo `'input-button'`. Contém propriedades para personalizar o botão (ícone, label, tooltip, posição, severity, buttonEnabled). A propriedade `buttonEnabled` permite controlar o estado do botão independentemente do estado do campo.
-- `buttonCallback?`: Função callback executada ao clicar no botão do campo `'input-button'`. Recebe a key do campo e o valor atual como parâmetros. Pode ser síncrona ou assíncrona (`Promise<void>`).
+- `buttonConfig?`: Configuração do botão para campos do tipo `'input-button'` e `'select-button'`. Contém propriedades para personalizar o botão (ícone, label, tooltip, posição, severity, buttonEnabled). A propriedade `buttonEnabled` permite controlar o estado do botão independentemente do estado do campo.
+- `buttonCallback?`: Função callback executada ao clicar no botão do campo `'input-button'` ou `'select-button'`. Recebe a key do campo e o valor atual como parâmetros (no `select-button`, o valor selecionado, que pode ser `null`). Pode ser síncrona ou assíncrona (`Promise<void>`).
 - `textTransform?`: Transformação de texto para o campo. Opções: `'uppercase'` | `'lowercase'`. Aplicável apenas para campos de texto (text, email, textarea, input-button). Quando definido, o texto é transformado automaticamente conforme o usuário digita.
 - `numberConfig?`: Configuração específica para campos do tipo `'number'`. Permite configurar modo (decimal/currency), formatação, prefixo/sufixo, validações min/max, botões de incremento/decremento, localização e outras opções. Aplicável apenas para `controlType: 'number'`. Veja a seção "Campos de Number (InputNumber)" para detalhes completos e exemplos.
 
@@ -1061,7 +1088,7 @@ const dependencyFormConfig: iFormConfig[] = [
 #### Comportamento
 
 - Quando o toggle referenciado é ativado, o campo dependente é habilitado automaticamente através de uma subscription reativa no `valueChanges` do toggle.
-- Quando o toggle é desativado, o campo dependente é limpo (resetado para seu valor padrão) e depois desabilitado.
+- Quando o toggle é desativado, o campo dependente é limpo (resetado para seu valor padrão) e depois desabilitado. Campos `select`, `select-button`, `number` e `datepicker` são resetados para `null`; campos de texto, para `''`.
 - O estado inicial do campo dependente é determinado pelo estado inicial do toggle: se o toggle já estiver ativo na inicialização, o campo começa habilitado.
 - As subscriptions são gerenciadas automaticamente usando `takeUntilDestroyed`, garantindo que não haja vazamentos de memória.
 - A propriedade `enabledWhen` pode ser combinada com `disabled`: se `disabled: true` for definido explicitamente, o campo permanecerá desabilitado independente do estado do toggle.
@@ -1554,6 +1581,9 @@ const formConfig: iFormConfig[] = [
 
 - **`optionFilter`**: Habilita campo de busca para filtrar opções
 - **`optionShowClear`**: Exibe botão para limpar a seleção atual
+- **`optionAppendTo`**: `'body'` anexa o painel de opções ao `body` (use dentro de `p-dialog` ou containers com overflow)
+
+Todas essas propriedades também se aplicam ao `controlType: 'select-button'`.
 
 #### Exemplo Completo: Select Dependente com API
 
@@ -1626,6 +1656,61 @@ export class MeuComponente {
 }
 ```
 
+### Select com Botão (select-button)
+
+O `controlType: 'select-button'` combina um select com um botão de ação (ex.: "+" para cadastrar um novo registro), usando `p-inputgroup`. Aceita as propriedades do `select` e o `buttonConfig`/`buttonCallback` do `input-button`.
+
+```typescript
+{
+  key: 'favorecidoId',
+  controlType: 'select-button',
+  label: 'Favorecido',
+  options: [],
+  optionFilter: true,
+  optionShowClear: true,
+  buttonConfig: { icon: 'pi pi-plus', tooltip: 'Novo favorecido', severity: 'secondary' },
+  buttonCallback: (key, valor) => this.abrirNovoFavorecido(),
+  styleClass: 'grid-col-6',
+}
+```
+
+O `buttonCallback` recebe a key do campo e o valor selecionado atual (pode ser `null` quando nada está selecionado).
+
+#### Fluxo: Cadastro em Diálogo
+
+Após o cadastro, a aplicação atualiza as `options` do campo (novo objeto de campo/novo array) e seleciona o novo valor no control:
+
+```typescript
+abrirNovoFavorecido() {
+  this.dialogService.open(NovoFavorecidoComponent, { header: 'Novo favorecido' }).onClose
+    .subscribe((novo) => {
+      if (!novo) return;
+      this.favorecidos = [...this.favorecidos, novo];
+      // Novo objeto de campo para que o select receba as opções atualizadas
+      this.formConfig = this.formConfig.map((f) =>
+        f.key === 'favorecidoId' ? { ...f, options: this.favorecidos } : f,
+      );
+      this.myForm.form.get('favorecidoId')?.setValue(novo.id);
+    });
+}
+```
+
+#### Uso Dentro de `p-dialog`
+
+Quando o select estiver dentro de um `p-dialog` (ou de qualquer container com overflow), use `optionAppendTo: 'body'` para que o painel de opções não seja cortado. A propriedade também é aceita pelo `select`. Sem ela (`undefined`), vale o comportamento padrão do PrimeNG.
+
+```typescript
+{
+  key: 'planoContasId',
+  controlType: 'select-button',
+  label: 'Plano de Contas',
+  options: [],
+  optionAppendTo: 'body',
+  buttonConfig: { icon: 'pi pi-plus', tooltip: 'Novo plano de contas', severity: 'secondary' },
+  buttonCallback: () => this.abrirNovoPlanoContas(),
+}
+```
+
 ## Melhorias Implementadas
 
 As seguintes melhorias foram implementadas na versão atual:
@@ -1645,6 +1730,7 @@ As seguintes melhorias foram implementadas na versão atual:
 - **Transformação de Texto (`textTransform`)**: Adicionado suporte para transformação automática de texto em uppercase ou lowercase através da propriedade `textTransform` na `iFormConfig`. A transformação ocorre em tempo real enquanto o usuário digita, preservando a posição do cursor. Aplicável apenas para campos de texto (text, email, textarea, input-button). Implementado através de uma diretiva standalone (`TextTransformDirective`) que funciona perfeitamente com Reactive Forms.
 - **Select com Dados de API (Sem Mapeamento Manual)**: Adicionado suporte para usar dados de API diretamente no select sem necessidade de mapeamento manual através das propriedades `optionLabel`, `optionValue` e `optionMapper`. Isso elimina a necessidade de fazer `map()` no service, permitindo passar dados brutos da API diretamente para o componente. Suporta dot notation para campos aninhados e inclui propriedades adicionais como `optionFilter` e `optionShowClear` para melhor UX.
 - **Campo de Number Aprimorado**: O campo `number` foi completamente refatorado e expandido com suporte a números decimais, monetários (currency), prefixo/sufixo, validações min/max, botões de incremento/decremento, localização, formatação customizada e muitas outras funcionalidades através da propriedade `numberConfig`. Mantém compatibilidade retroativa com campos sem `numberConfig` (comportamento padrão para inteiros).
+- **Campo Select com Botão (`select-button`)**: Adicionado o `controlType: 'select-button'` (`SelectButtonFieldComponent`), que acopla um `p-button` ao `p-select` via `p-inputgroup`, no mesmo padrão do `input-button`. Reutiliza `options`, `optionLabel`, `optionValue`, `optionMapper`, `optionFilter`, `optionShowClear`, `buttonConfig` e `buttonCallback`. Inclui a nova propriedade `optionAppendTo` (também disponível para `select`) para uso dentro de `p-dialog`.
 - **ChangeDetectionStrategy.OnPush**: Todos os componentes utilizam `OnPush` para otimização de performance.
 - **FieldRegistryService**: Sistema de registro de campos customizados para extensibilidade.
 - **Mensagens de Erro Customizáveis**: Suporte a mensagens de erro customizadas via `provideDynamicFormConfig`.

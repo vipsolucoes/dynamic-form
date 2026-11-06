@@ -11,6 +11,7 @@ export { DynamicFormErrorComponent } from './lib/components/form-field-error/for
 export { InputTextFieldComponent } from './lib/fields/input-text-field.component';
 export { InputButtonFieldComponent } from './lib/fields/input-button-field.component';
 export { SelectFieldComponent } from './lib/fields/select-field.component';
+export { SelectButtonFieldComponent } from './lib/fields/select-button-field.component';
 export { DatePickerFieldComponent } from './lib/fields/datepicker-field.component';
 export { NumberInputFieldComponent } from './lib/fields/number-input-field.component';
 export { PasswordFieldComponent } from './lib/fields/password-field.component';

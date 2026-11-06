@@ -11,6 +11,7 @@ import { InputButtonFieldComponent } from '../../fields/input-button-field.compo
 import { NumberInputFieldComponent } from '../../fields/number-input-field.component';
 import { PasswordFieldComponent } from '../../fields/password-field.component';
 import { RadioButtonFieldComponent } from '../../fields/radiobutton-field.component';
+import { SelectButtonFieldComponent } from '../../fields/select-button-field.component';
 import { SelectFieldComponent } from '../../fields/select-field.component';
 import { TextareaFieldComponent } from '../../fields/textarea-field.component';
 import { ToggleSwitchFieldComponent } from '../../fields/toggleswitch-field.component';
@@ -44,6 +45,7 @@ export class DynamicFormComponent implements OnInit {
     textarea: TextareaFieldComponent,
     toggleswitch: ToggleSwitchFieldComponent,
     'input-button': InputButtonFieldComponent,
+    'select-button': SelectButtonFieldComponent,
     divider: DividerFieldComponent,
     radiobutton: RadioButtonFieldComponent,
   };
@@ -167,6 +169,8 @@ export class DynamicFormComponent implements OnInit {
       case 'number':
         return null;
       case 'select':
+        return null;
+      case 'select-button':
         return null;
       case 'radiobutton':
         return null;

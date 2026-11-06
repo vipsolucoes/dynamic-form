@@ -3,7 +3,12 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { IftaLabelModule } from 'primeng/iftalabel';
 import { SelectModule } from 'primeng/select';
 
-import { iFieldOption, iFormConfig } from '../interfaces/form-config.interface';
+import { iFormConfig } from '../interfaces/form-config.interface';
+import {
+  mapSelectOptions,
+  resolveOptionLabel,
+  resolveOptionValue,
+} from './shared/select-options.util';
 
 @Component({
   selector: 'vp-select-field',
@@ -22,6 +27,7 @@ import { iFieldOption, iFormConfig } from '../interfaces/form-config.interface';
           [optionValue]="effectiveOptionValue()"
           [filter]="field().optionFilter ?? false"
           [showClear]="field().optionShowClear ?? false"
+          [appendTo]="field().optionAppendTo ?? undefined"
           class="w-full"
         />
         <label [for]="field().key">{{ field().label }}</label>
@@ -52,37 +58,19 @@ export class SelectFieldComponent {
    * Aplica optionMapper se existir, caso contrário retorna as opções originais.
    * Prioridade: optionMapper > optionLabel/optionValue > label/value padrão
    */
-  mappedOptions = computed(() => {
-    const options = this.field().options ?? [];
-    const mapper = this.field().optionMapper;
-
-    if (mapper) {
-      return options.map(mapper);
-    }
-    return options;
-  });
+  mappedOptions = computed(() => mapSelectOptions(this.field()));
 
   /**
    * Determina o optionLabel efetivo a ser usado.
    * Se optionMapper estiver definido, usa 'label' (pois mapper já transformou).
    * Caso contrário, usa optionLabel configurado ou 'label' como padrão.
    */
-  effectiveOptionLabel = computed(() => {
-    if (this.field().optionMapper) {
-      return 'label';
-    }
-    return this.field().optionLabel ?? 'label';
-  });
+  effectiveOptionLabel = computed(() => resolveOptionLabel(this.field()));
 
   /**
    * Determina o optionValue efetivo a ser usado.
    * Se optionMapper estiver definido, usa 'value' (pois mapper já transformou).
    * Caso contrário, usa optionValue configurado ou 'value' como padrão.
    */
-  effectiveOptionValue = computed(() => {
-    if (this.field().optionMapper) {
-      return 'value';
-    }
-    return this.field().optionValue ?? 'value';
-  });
+  effectiveOptionValue = computed(() => resolveOptionValue(this.field()));
 }

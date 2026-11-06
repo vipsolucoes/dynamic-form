@@ -9,6 +9,11 @@ import { TooltipModule } from 'primeng/tooltip';
 
 import { iFormConfig } from '../interfaces/form-config.interface';
 import { TextTransformDirective } from '../directives/text-transform.directive';
+import {
+  invokeFieldButtonCallback,
+  isFieldButtonDisabled,
+  resolveButtonPosition,
+} from './shared/field-button.util';
 
 @Component({
   selector: 'vp-input-button-field',
@@ -91,7 +96,7 @@ export class InputButtonFieldComponent {
   }
 
   buttonPosition(): 'left' | 'right' {
-    return this.buttonConfig()?.position || 'right';
+    return resolveButtonPosition(this.field());
   }
 
   isFieldDisabled(): boolean {
@@ -100,27 +105,10 @@ export class InputButtonFieldComponent {
   }
 
   isButtonDisabled(): boolean {
-    const buttonEnabled = this.buttonConfig()?.buttonEnabled;
-
-    // Se buttonEnabled está explicitamente definido, usa esse valor
-    if (buttonEnabled === true) {
-      return false; // Botão habilitado
-    }
-    if (buttonEnabled === false) {
-      return true; // Botão desabilitado
-    }
-
-    // Se não estiver definido, usa o comportamento padrão (segue o estado do campo)
-    return this.isFieldDisabled();
+    return isFieldButtonDisabled(this.form(), this.field());
   }
 
   onButtonClick(): void {
-    const control = this.form().get(this.field().key);
-    const value = control?.value;
-    const callback = this.field().buttonCallback;
-
-    if (callback) {
-      callback(this.field().key, value);
-    }
+    invokeFieldButtonCallback(this.form(), this.field());
   }
 }

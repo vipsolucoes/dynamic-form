@@ -5,6 +5,24 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
+## [v1.1.0] - 2026-11-06
+
+### Adicionado
+
+- **Novo controlType `select-button`**: Campo select com botão de ação acoplado via `p-inputgroup` (`SelectButtonFieldComponent`, seletor `vp-select-button-field`), no mesmo padrão do `input-button`. Reutiliza `options`, `optionLabel`, `optionValue`, `optionMapper`, `optionFilter`, `optionShowClear`, `placeholder`, `buttonConfig` (incluindo `buttonEnabled`) e `buttonCallback`, que recebe o valor selecionado atual.
+- **Propriedade `optionAppendTo`** (`'body' | null`) para `select` e `select-button`, repassada ao `appendTo` do `p-select`. Use `'body'` quando o select estiver dentro de `p-dialog` ou container com overflow.
+- Testes unitários do novo componente `SelectButtonFieldComponent`
+
+### Alterado
+
+- Lógica de opções e de botão extraída para utilitários compartilhados usados por `select`, `input-button` e `select-button`, sem mudança de comportamento
+
+### Documentação
+
+- Adicionada seção "Select com Botão (`select-button`)" no `README.md`, no `projects/dynamic-form/README.md` e em `docs/dynamic-form.md`, com exemplo de fluxo de cadastro em diálogo (abrir diálogo, atualizar `options`, `setValue`)
+- Documentada a propriedade `optionAppendTo` e atualizadas as descrições das propriedades de select e botão
+- Incluídos `divider`, `radiobutton` e `input-button` nas listas de tipos de campo
+
 ## [v1.0.10] - 2026-01-22
 
 ### Adicionado

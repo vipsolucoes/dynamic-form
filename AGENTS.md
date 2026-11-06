@@ -46,7 +46,7 @@ npm run release      # build:lib + npm publish (NÃO execute sem pedido explíci
 
 Observações:
 - `npm run lint:lib` existe no `package.json`, mas **não há target `lint` no `angular.json`** — o comando falha. Não o use como validação.
-- A lib ainda **não tem arquivos `*.spec.ts`**; validação mínima de qualquer mudança é `npm run build:lib` sem erros.
+- Validação mínima de qualquer mudança: `npm run build:lib` e `npm run test:lib` passando.
 - Publicação no npm é feita pelo GitHub Actions (`.github/workflows/publish.yml`) ao criar uma release.
 
 ## Arquitetura
@@ -69,6 +69,7 @@ Mapa `controlType` → componente (`dynamic-form.component.ts`):
 | `textarea` | `TextareaFieldComponent` |
 | `toggleswitch` | `ToggleSwitchFieldComponent` (`toggleTrueValue`/`toggleFalseValue`) |
 | `input-button` | `InputButtonFieldComponent` (`buttonConfig`, `buttonCallback`) |
+| `select-button` | `SelectButtonFieldComponent` (`buttonConfig`, `buttonCallback`, opções do select, `optionAppendTo`) |
 | `radiobutton` | `RadioButtonFieldComponent` (`radioLayout`) |
 | `divider` | `DividerFieldComponent` (`dividerConfig`) — **não cria FormControl** |
 
