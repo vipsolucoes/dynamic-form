@@ -12,7 +12,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/vipsolucoes/dynamic-form.git"
+    "url": "git+https://github.com/vipsolucoes/dynamic-form.git"
   },
   "peerDependencies": {
     "@angular/common": "^19.0.0 || ^20.0.0 || ^21.0.0",
